@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-18 — Phase 3 : Élèves (CRUD)
+
+- Liste recherchable des élèves (actifs / archivés).
+- Fiche élève ; création, modification.
+- Archivage / désarchivage et suppression définitive (RGPD, avec confirmation).
+- Pages et Server Actions protégées par `requireCoach()` (ADR 0005).
+
 ## 2026-06-18 — Phase 2 : Authentification
 
 - Connexion email/mot de passe (Auth.js v5, Credentials, sessions JWT).

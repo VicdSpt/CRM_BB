@@ -18,7 +18,7 @@ export default async function ModifierElevePage({ params }: { params: Promise<{ 
       <Link href={`/eleves/${id}`} className="text-muted-foreground text-sm">
         ← Retour à la fiche
       </Link>
-      <h1 className="mt-2 mb-4 text-2xl font-semibold">Modifier l'élève</h1>
+      <h1 className="mt-2 mb-4 text-2xl font-semibold">Modifier l&apos;élève</h1>
       <EleveForm action={action} initial={eleve} submitLabel="Enregistrer" />
     </main>
   );
