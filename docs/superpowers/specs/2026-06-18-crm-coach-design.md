@@ -26,18 +26,18 @@ confortable aussi sur PC (le soir).
 
 ## 2. Stack technique (Approche A — Next.js full-stack)
 
-| Domaine            | Choix                                                        |
-|--------------------|-------------------------------------------------------------|
-| Framework          | **Next.js** (App Router), **React**, **TypeScript**         |
-| UI                 | **Tailwind CSS** + **shadcn/ui**, mobile-first              |
-| Back-end           | Server Actions / Route Handlers Next.js (pas de serveur séparé) |
-| Base de données    | **PostgreSQL** hébergée chez **Neon**                       |
-| ORM                | **Prisma** (typage, migrations versionnées)                 |
-| Authentification   | **Auth.js (NextAuth)** — email + mot de passe               |
-| Validation         | **Zod** (validation côté serveur)                           |
-| Tests              | **Vitest** (unitaires + composants)                         |
-| Qualité            | ESLint + Prettier + TypeScript strict                       |
-| Hébergement        | **Vercel** (HTTPS auto, déploiement sur push)               |
+| Domaine          | Choix                                                           |
+| ---------------- | --------------------------------------------------------------- |
+| Framework        | **Next.js** (App Router), **React**, **TypeScript**             |
+| UI               | **Tailwind CSS** + **shadcn/ui**, mobile-first                  |
+| Back-end         | Server Actions / Route Handlers Next.js (pas de serveur séparé) |
+| Base de données  | **PostgreSQL** hébergée chez **Neon**                           |
+| ORM              | **Prisma** (typage, migrations versionnées)                     |
+| Authentification | **Auth.js (NextAuth)** — email + mot de passe                   |
+| Validation       | **Zod** (validation côté serveur)                               |
+| Tests            | **Vitest** (unitaires + composants)                             |
+| Qualité          | ESLint + Prettier + TypeScript strict                           |
+| Hébergement      | **Vercel** (HTTPS auto, déploiement sur push)                   |
 
 Dépôt Git unique, déployable et maintenable par une seule personne.
 
@@ -96,21 +96,25 @@ soit un **pack** (achat du pack).
 Navigation : barre en bas (mobile) / latérale (PC). 4 espaces.
 
 ### 4.1 🔐 Connexion
+
 Login email + mot de passe. Tout le reste est protégé (redirection si non connecté).
 
 ### 4.2 📅 Planning (écran principal)
+
 - Vue **agenda jour / semaine**, séances codées couleur privé/collectif. (Vue mois : évolution future.)
 - Créer une séance : type, date/heure, durée, lieu, prix, puis ajout du/des élève(s).
-- Sur une séance : marquer *réalisée* / *annulée* ; pour chaque élève, noter le
+- Sur une séance : marquer _réalisée_ / _annulée_ ; pour chaque élève, noter le
   règlement (payé cash, à régler, ou décompté d'un pack).
 
 ### 4.3 👤 Élèves
+
 - Liste recherchable.
 - Fiche élève : infos, historique de séances, packs en cours (séances restantes),
   montant dû éventuel.
 - Ajouter / modifier / archiver un élève ; lui créer un pack.
 
 ### 4.4 💶 Finances
+
 - Sélecteur de période : **jour / semaine / mois / année**.
 - **Total encaissé** sur la période + **filtre par méthode** (espèces / CB / virement).
 - **Répartition privé vs collectif**.
