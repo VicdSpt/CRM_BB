@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TypeSeance {
+  PRIVE
+  COLLECTIF
+}
+
+enum StatutSeance {
+  PLANIFIEE
+  REALISEE
+  ANNULEE
+}
+
+enum StatutReglement {
+  A_REGLER
+  PAYE
+  COUVERT_PAR_PACK
+}
+
+enum MethodePaiement {
+  ESPECES
+  CB
+  VIREMENT
+}
+
+model Coach {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  motDePasse String
+  nom        String
+  createdAt  DateTime @default(now())
+}
+
+model Eleve {
+  id             String          @id @default(cuid())
+  prenom         String
+  nom            String
+  telephone      String?
+  email          String?
+  notes          String?
+  archive        Boolean         @default(false)
+  dateAjout      DateTime        @default(now())
+  participations Participation[]
+  packs          Pack[]
+  paiements      Paiement[]
+}
+
+model Seance {
+  id             String          @id @default(cuid())
+  type           TypeSeance
+  dateHeureDebut DateTime
+  dureeMinutes   Int
+  lieu           String?
+  prixReference  Decimal         @db.Decimal(10, 2)
+  statut         StatutSeance    @default(PLANIFIEE)
+  createdAt      DateTime        @default(now())
+  participations Participation[]
+}
+
+model Participation {
+  id              String          @id @default(cuid())
+  seance          Seance          @relation(fields: [seanceId], references: [id], onDelete: Cascade)
+  seanceId        String
+  eleve           Eleve           @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  eleveId         String
+  statutReglement StatutReglement @default(A_REGLER)
+  montant         Decimal         @db.Decimal(10, 2)
+  pack            Pack?           @relation(fields: [packId], references: [id])
+  packId          String?
+  paiement        Paiement?
+
+  @@unique([seanceId, eleveId])
+}
+
+model Pack {
+  id                 String          @id @default(cuid())
+  eleve              Eleve           @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  eleveId            String
+  nbSeancesTotal     Int
+  nbSeancesRestantes Int
+  montantPaye        Decimal         @db.Decimal(10, 2)
+  dateAchat          DateTime        @default(now())
+  participations     Participation[]
+  paiement           Paiement?
+}
+
+model Paiement {
+  id              String          @id @default(cuid())
+  montant         Decimal         @db.Decimal(10, 2)
+  date            DateTime        @default(now())
+  methode         MethodePaiement
+  eleve           Eleve           @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  eleveId         String
+  participation   Participation?  @relation(fields: [participationId], references: [id])
+  participationId String?         @unique
+  pack            Pack?           @relation(fields: [packId], references: [id])
+  packId          String?         @unique
+}
