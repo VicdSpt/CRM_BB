@@ -11,6 +11,13 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
   const eleve = await prisma.eleve.findUnique({ where: { id } });
   if (!eleve) notFound();
 
+  const [nbParticipations, nbPacks, nbPaiements] = await Promise.all([
+    prisma.participation.count({ where: { eleveId: eleve.id } }),
+    prisma.pack.count({ where: { eleveId: eleve.id } }),
+    prisma.paiement.count({ where: { eleveId: eleve.id } }),
+  ]);
+  const peutSupprimer = nbParticipations + nbPacks + nbPaiements === 0;
+
   return (
     <main className="mx-auto w-full max-w-md p-4">
       <Link href="/eleves" className="text-muted-foreground text-sm">
@@ -35,7 +42,7 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
         <Info label="Notes" value={eleve.notes} />
       </dl>
 
-      <ActionsEleve id={eleve.id} archive={eleve.archive} />
+      <ActionsEleve id={eleve.id} archive={eleve.archive} peutSupprimer={peutSupprimer} />
     </main>
   );
 }
