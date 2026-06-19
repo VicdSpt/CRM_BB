@@ -31,9 +31,7 @@ export default async function ElevesPage({
     <main className="mx-auto w-full max-w-2xl p-4">
       <div className="mb-4 flex items-center justify-between gap-2">
         <h1 className="text-2xl font-semibold">Élèves</h1>
-        <Button render={<Link href="/eleves/nouveau" />}>
-          Nouvel élève
-        </Button>
+        <Button render={<Link href="/eleves/nouveau" />}>Nouvel élève</Button>
       </div>
 
       <div className="mb-3">
