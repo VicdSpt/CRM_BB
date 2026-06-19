@@ -11,6 +11,7 @@ export default async function HomePage() {
       <h1 className="text-2xl font-semibold">CRM-BB</h1>
       <p className="text-muted-foreground">Connecté en tant que {session?.user?.email ?? "—"}</p>
       <Button render={<Link href="/eleves" />}>Gérer les élèves</Button>
+      <Button render={<Link href="/planning" />}>Planning</Button>
       <form
         action={async () => {
           "use server";

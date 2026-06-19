@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-19 — Phase 4 : Planning (séances)
+
+- Création/modification/suppression de séances (privées / collectives).
+- Rattachement des élèves participants ; statut planifiée / réalisée / annulée.
+- Agenda vue jour / semaine (mobile-first) avec navigation.
+- Pages et Server Actions protégées par `requireCoach()` ; helpers de dates testés (TDD).
+
 ## 2026-06-18 — Phase 3 : Élèves (CRUD)
 
 - Liste recherchable des élèves (actifs / archivés).
