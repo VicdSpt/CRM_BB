@@ -5,13 +5,15 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { formatJourFr, formatHeureFr } from "@/lib/planning/format";
 import { ActionsSeance } from "./actions-seance";
+import { formatEuros } from "@/lib/finances/format";
+import { ReglementParticipation } from "./reglement-participation";
 
 export default async function FicheSeancePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
   const { id } = await params;
   const seance = await prisma.seance.findUnique({
     where: { id },
-    include: { participations: { include: { eleve: true } } },
+    include: { participations: { include: { eleve: true, paiement: true } } },
   });
   if (!seance) notFound();
 
@@ -42,11 +44,21 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
       <h2 className="mb-2 text-sm font-semibold">Élèves ({seance.participations.length})</h2>
       <ul className="mb-6 divide-y rounded-md border">
         {seance.participations.map((p) => (
-          <li key={p.id} className="flex items-center justify-between p-3 text-sm">
+          <li
+            key={p.id}
+            className="flex flex-col gap-2 p-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+          >
             <Link href={`/eleves/${p.eleveId}`} className="font-medium hover:underline">
               {p.eleve.prenom} {p.eleve.nom}
             </Link>
-            <span className="text-muted-foreground">{p.montant.toString()} € · à régler</span>
+            <span className="flex items-center gap-3">
+              <span className="text-muted-foreground">{formatEuros(p.montant.toString())}</span>
+              <ReglementParticipation
+                participationId={p.id}
+                statut={p.statutReglement}
+                methode={p.paiement?.methode ?? null}
+              />
+            </span>
           </li>
         ))}
       </ul>

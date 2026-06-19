@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-19 — Phase 5a : Paiements
+
+- Marquer une participation payée (espèces / CB / virement) sur la fiche séance ; annuler un paiement.
+- Suppression d'un élève bloquée s'il a un historique (force l'archivage) — ADR 0007.
+- Helper de formatage monétaire (€) testé (TDD).
+
 ## 2026-06-19 — Phase 4 : Planning (séances)
 
 - Création/modification/suppression de séances (privées / collectives).
