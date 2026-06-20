@@ -62,9 +62,10 @@ export default async function FinancesPage({
       </section>
 
       <section>
-        <h2 className="mb-2 text-sm font-semibold">
-          Impayés ({formatEuros(totalImpayes.toString())})
-        </h2>
+        <h2 className="text-sm font-semibold">Impayés ({formatEuros(totalImpayes.toString())})</h2>
+        <p className="text-muted-foreground mb-2 text-xs">
+          État courant, indépendant de la période et de la méthode.
+        </p>
         {impayes.length === 0 ? (
           <p className="text-muted-foreground text-sm">Aucun impayé. 🎉</p>
         ) : (
