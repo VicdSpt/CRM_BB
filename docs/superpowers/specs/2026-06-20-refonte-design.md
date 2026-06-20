@@ -27,24 +27,28 @@ Tout découle de jetons définis en **variables CSS** (deux jeux de valeurs : cl
 ce qui garantit la cohérence et rend la bascule de thème gratuite.
 
 ### Couleurs
+
 - **Accent corail** (≈ `#F1542E`) — réservé aux **actions principales** et éléments à mettre
   en avant ; utilisé avec parcimonie pour guider l'œil.
 - **Neutres chauds** :
-  - *Clair* : fond `#FAFAF9`, cartes blanches, bordures discrètes.
-  - *Sombre* : fond `#0C0A09`, cartes gris foncé, bordures subtiles.
+  - _Clair_ : fond `#FAFAF9`, cartes blanches, bordures discrètes.
+  - _Sombre_ : fond `#0C0A09`, cartes gris foncé, bordures subtiles.
 - **Couleurs sémantiques (statuts)**, harmonisées et **toujours doublées d'un texte/icône**
   (jamais la couleur seule) : payé = vert, à régler = ambre, annulé = rouge atténué,
   couvert par pack = corail/bleu.
 
 ### Typographie
+
 - Sans-serif moderne et lisible : **Geist Sans** (via `next/font`), parfaitement adaptée à Next.js.
 - Titres légèrement marqués ; **chiffres en tabulaire** pour les montants (alignement finances).
 
 ### Formes & espacement
+
 - Coins **arrondis moyens** (≈ 10–12 px) sur cartes/boutons/champs.
 - Espacement généreux et cohérent ; ombres légères sur les cartes pour la profondeur.
 
 ### Icônes
+
 - **`lucide-react`** (léger, cohérent) pour la navigation et les actions.
 
 ---
@@ -54,16 +58,19 @@ ce qui garantit la cohérence et rend la bascule de thème gratuite.
 Une coquille de layout unique enveloppe toutes les pages connectées.
 
 ### Mobile — barre d'onglets en bas (toujours visible)
+
 - 4 onglets icône + label : **Accueil · Planning · Élèves · Finances**.
 - Onglet actif en **corail** ; changement de section en un tap (pas de menu à ouvrir).
 - Fine **barre du haut** : nom « CRM-BB » + **bascule clair/sombre**.
 - **Déconnexion** rangée en bas du tableau de bord (action rare).
 
 ### PC — barre latérale gauche
+
 - **Sidebar** fixe : 4 sections + bascule thème + déconnexion en bas.
 - Section active en corail ; contenu à droite dans une largeur confortable.
 
 ### Commun
+
 - Plus de liens « ← retour » comme navigation principale ; retours contextuels fins conservés
   (ex. fiche → liste).
 - La page **connexion** reste hors coquille, plein écran épuré.
@@ -73,6 +80,7 @@ Une coquille de layout unique enveloppe toutes les pages connectées.
 ## 4. Accueil = tableau de bord du jour
 
 De haut en bas :
+
 1. **En-tête de bienvenue** : « Bonjour 👋 » + date du jour.
 2. **Cours d'aujourd'hui** (cœur) : carte listant les séances du jour triées par heure
    (heure, type, élève(s), badge de statut) ; le **prochain cours** est mis en avant
@@ -86,6 +94,7 @@ De haut en bas :
 ## 5. Restyle des écrans existants
 
 Mêmes patterns partout (un seul langage visuel) :
+
 - **Cartes** arrondies + ombre légère ; **listes** aérées, lignes cliquables, états au survol/pression.
 - **Badges de statut** couleur + texte.
 - **Boutons** : principale = corail plein, secondaire = contour, destructif = rouge ; cibles ≥ 44 px.
@@ -93,6 +102,7 @@ Mêmes patterns partout (un seul langage visuel) :
 - **États vides** soignés (message + action).
 
 Par écran :
+
 - **Planning** : barre jour/semaine + flèches plus visuelles ; séances en **cartes colorées par
   type** (privé/collectif) ; fiche séance avec participants + boutons de règlement corail.
 - **Élèves** : recherche en évidence ; liste en lignes avec **initiales en pastille** ; fiche
@@ -105,11 +115,13 @@ Par écran :
 ## 6. Mode sombre, technique & accessibilité
 
 ### Mode sombre
+
 - **Variables CSS** (deux jeux de jetons) + **`next-themes`**.
 - Suit le réglage système au départ (clair jour / sombre soir) ; bouton clair/sombre/auto ;
   choix mémorisé ; pas de flash au chargement.
 
 ### Technique (sans casser l'existant)
+
 - On **garde shadcn/ui + Tailwind** ; personnalisation du thème (jetons, rayons, typo).
 - Police via `next/font` ; icônes via `lucide-react`.
 - Nouvelle **coquille de layout** (sidebar PC / onglets mobile / barre du haut) dans le layout
@@ -118,6 +130,7 @@ Par écran :
   sécurité, calculs : inchangés.
 
 ### Accessibilité & qualité
+
 - Contrastes suffisants (corail testé sur clair **et** sombre).
 - Statuts = couleur **+ texte/icône**.
 - Cibles tactiles ≥ 44 px ; focus clavier visible ; libellés de formulaire reliés.
