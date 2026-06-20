@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 1 : Système de design + mode sombre
+
+- Accent corail, neutres chauds, police Geist appliquée (jetons CSS).
+- Mode sombre (next-themes) : suit le système, bascule mémorisée — ADR 0010.
+
 ## 2026-06-20 — Phase 5c : Tableau de bord finances
 
 - Page Finances : revenus par période (jour/semaine/mois/année) par date d'encaissement, filtre par méthode.
