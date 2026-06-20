@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
+import { formatEuros } from "@/lib/finances/format";
 import { ActionsEleve } from "./actions-eleve";
+import { PackForm } from "./pack-form";
 
 export default async function FicheElevePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
@@ -17,6 +19,11 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
     prisma.paiement.count({ where: { eleveId: eleve.id } }),
   ]);
   const peutSupprimer = nbParticipations + nbPacks + nbPaiements === 0;
+
+  const packs = await prisma.pack.findMany({
+    where: { eleveId: eleve.id },
+    orderBy: { dateAchat: "desc" },
+  });
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
@@ -41,6 +48,25 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
         <Info label="Email" value={eleve.email} />
         <Info label="Notes" value={eleve.notes} />
       </dl>
+
+      <section className="mb-6">
+        <h2 className="mb-2 text-sm font-semibold">Packs</h2>
+        {packs.length === 0 ? (
+          <p className="text-muted-foreground mb-3 text-sm">Aucun pack.</p>
+        ) : (
+          <ul className="mb-3 divide-y rounded-md border">
+            {packs.map((p) => (
+              <li key={p.id} className="flex items-center justify-between p-3 text-sm">
+                <span>
+                  {p.nbSeancesRestantes}/{p.nbSeancesTotal} séances restantes
+                </span>
+                <span className="text-muted-foreground">{formatEuros(p.montantPaye.toString())}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <PackForm eleveId={eleve.id} />
+      </section>
 
       <ActionsEleve id={eleve.id} archive={eleve.archive} peutSupprimer={peutSupprimer} />
     </main>
