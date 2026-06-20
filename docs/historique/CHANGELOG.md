@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Phase 5c : Tableau de bord finances
+
+- Page Finances : revenus par période (jour/semaine/mois/année) par date d'encaissement, filtre par méthode.
+- Répartition privé / collectif / packs ; liste des impayés par élève.
+- Sommes calculées en SQL (Decimal exact) ; prix de séance fiabilisé en chaîne décimale — ADR 0009.
+
 ## 2026-06-19 — Phase 5b : Packs
 
 - Création de packs prépayés sur la fiche élève (= un paiement à l'achat) ; suivi des séances restantes.
