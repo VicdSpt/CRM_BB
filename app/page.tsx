@@ -12,6 +12,7 @@ export default async function HomePage() {
       <p className="text-muted-foreground">Connecté en tant que {session?.user?.email ?? "—"}</p>
       <Button render={<Link href="/eleves" />}>Gérer les élèves</Button>
       <Button render={<Link href="/planning" />}>Planning</Button>
+      <Button render={<Link href="/finances" />}>Finances</Button>
       <form
         action={async () => {
           "use server";

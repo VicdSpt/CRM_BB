@@ -12,7 +12,7 @@ describe("seanceSchema", () => {
     type: "COLLECTIF" as const,
     dateHeureDebut: new Date(2026, 5, 20, 18, 0),
     dureeMinutes: 60,
-    prixReference: 15,
+    prixReference: "15",
     eleveIds: ["e1", "e2"],
   };
 
@@ -25,7 +25,7 @@ describe("seanceSchema", () => {
   });
 
   it("rejette un prix négatif", () => {
-    expect(seanceSchema.safeParse({ ...base, prixReference: -5 }).success).toBe(false);
+    expect(seanceSchema.safeParse({ ...base, prixReference: "-5" }).success).toBe(false);
   });
 
   it("rejette une séance sans élève", () => {

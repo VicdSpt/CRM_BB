@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { montantSchema } from "@/lib/finances/money";
 
 export const seanceSchema = z
   .object({
@@ -10,7 +11,7 @@ export const seanceSchema = z
       .trim()
       .optional()
       .transform((v) => (v ? v : undefined)),
-    prixReference: z.coerce.number().min(0, "Le prix ne peut pas être négatif"),
+    prixReference: montantSchema,
     eleveIds: z.array(z.string().min(1)).min(1, "Sélectionnez au moins un élève"),
   })
   .refine((v) => v.type !== "PRIVE" || v.eleveIds.length === 1, {
