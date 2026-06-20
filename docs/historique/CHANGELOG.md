@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-19 — Phase 5b : Packs
+
+- Création de packs prépayés sur la fiche élève (= un paiement à l'achat) ; suivi des séances restantes.
+- Régler une participation avec un pack : décompte automatique du pack le plus ancien (ADR 0008) ; annulation re-crédite.
+- Montants saisis validés en chaîne décimale (Decimal sans flottant) ; durcissement du double-clic de paiement (P2002).
+
 ## 2026-06-19 — Phase 5a : Paiements
 
 - Marquer une participation payée (espèces / CB / virement) sur la fiche séance ; annuler un paiement.
