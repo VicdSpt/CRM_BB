@@ -20,6 +20,8 @@ export async function getRepartition(
   fin: Date,
 ): Promise<{ prive: Prisma.Decimal; collectif: Prisma.Decimal; pack: Prisma.Decimal }> {
   const periode = { gte: debut, lte: fin };
+  // Invariant : un Paiement a soit participationId (marquerPaye), soit packId (creerPack),
+  // jamais les deux — les trois catégories sont donc mutuellement exclusives.
   const [prive, collectif, pack] = await Promise.all([
     prisma.paiement.aggregate({
       _sum: { montant: true },
