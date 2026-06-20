@@ -60,7 +60,9 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
                 <span>
                   {p.nbSeancesRestantes}/{p.nbSeancesTotal} séances restantes
                 </span>
-                <span className="text-muted-foreground">{formatEuros(p.montantPaye.toString())}</span>
+                <span className="text-muted-foreground">
+                  {formatEuros(p.montantPaye.toString())}
+                </span>
               </li>
             ))}
           </ul>
