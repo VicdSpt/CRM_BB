@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 6 : Restyle Finances (fin de la refonte)
+
+- Total encaissé mis en avant ; répartition (privé / collectif / packs) en barres de proportion.
+- Impayés avec pastilles ; filtres de période en corail. La refonte du design est terminée.
+
 ## 2026-06-20 — Design 5 : Restyle Planning
 
 - Séances en cartes codées couleur par type (privé / collectif) ; badges de statut colorés.
