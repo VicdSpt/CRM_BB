@@ -36,7 +36,7 @@ export function PackForm({ eleveId }: { eleveId: string }) {
           id="methode"
           name="methode"
           defaultValue="ESPECES"
-          className="h-9 rounded-md border bg-transparent px-3 text-sm"
+          className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
         >
           <option value="ESPECES">Espèces</option>
           <option value="CB">CB</option>

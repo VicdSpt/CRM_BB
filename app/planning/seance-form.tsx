@@ -36,7 +36,7 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
           id="type"
           name="type"
           defaultValue={initial?.type ?? "PRIVE"}
-          className="h-9 rounded-md border bg-transparent px-3 text-sm"
+          className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
         >
           <option value="PRIVE">Cours privé</option>
           <option value="COLLECTIF">Cours collectif</option>
