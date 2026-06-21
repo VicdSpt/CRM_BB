@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 5 : Restyle Planning
+
+- Séances en cartes codées couleur par type (privé / collectif) ; badges de statut colorés.
+- Navigation jour/semaine avec icônes ; fiche séance restylée (type + statut, carte d'infos).
+
 ## 2026-06-20 — Design 4 : Restyle Élèves
 
 - Liste des élèves en cartes avec pastilles d'initiales ; recherche avec icône.
