@@ -43,7 +43,7 @@ export function FiltresFinances({
           <button
             key={value}
             onClick={() => naviguer({ periode: value })}
-            className={`rounded-md border px-3 py-1 text-sm ${
+            className={`cursor-pointer rounded-md border px-3 py-1 text-sm ${
               periode === value
                 ? "bg-primary text-primary-foreground border-primary"
                 : "hover:bg-muted"
