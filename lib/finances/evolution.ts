@@ -5,9 +5,7 @@ import { startOfMonth, endOfMonth } from "@/lib/finances/periode";
 export type Granularite = "heure" | "jour" | "mois";
 export type Bucket = { debut: Date; fin: Date; label: string };
 
-export function granulariteParPeriode(
-  periode: "jour" | "semaine" | "mois" | "annee",
-): Granularite {
+export function granulariteParPeriode(periode: "jour" | "semaine" | "mois" | "annee"): Granularite {
   if (periode === "jour") return "heure";
   if (periode === "annee") return "mois";
   return "jour";
