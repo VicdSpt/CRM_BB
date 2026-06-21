@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-21 — Correctif : menus déroulants en mode sombre
+
+- `color-scheme` (light/dark) ajouté aux thèmes pour que les contrôles natifs (select, date) s'affichent correctement.
+- Fond explicite (`bg-background`) sur les `<select>` et l'input date — fini le blanc sur blanc en sombre.
+
 ## 2026-06-21 — Finances : graphiques
 
 - Répartition affichée en camembert (privé / collectif / packs).
