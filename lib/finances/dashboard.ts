@@ -1,5 +1,6 @@
 import { Prisma, type MethodePaiement } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { genererBuckets, agregerParBucket, type Granularite } from "@/lib/finances/evolution";
 
 const ZERO = new Prisma.Decimal(0);
 
@@ -66,4 +67,20 @@ export async function getImpayes(): Promise<
     }))
     .filter((x) => x.total.greaterThan(0))
     .sort((a, b) => b.total.comparedTo(a.total));
+}
+
+export async function getEvolution(
+  debut: Date,
+  fin: Date,
+  granularite: Granularite,
+): Promise<{ label: string; total: number }[]> {
+  const paiements = await prisma.paiement.findMany({
+    where: { date: { gte: debut, lte: fin } },
+    select: { date: true, montant: true },
+  });
+  const buckets = genererBuckets(debut, fin, granularite);
+  return agregerParBucket(paiements, buckets).map((b) => ({
+    label: b.label,
+    total: Number(b.total),
+  }));
 }
