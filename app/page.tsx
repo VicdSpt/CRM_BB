@@ -1,28 +1,96 @@
 import Link from "next/link";
-
-import { auth, signOut } from "@/auth";
+import { CalendarPlus, UserPlus } from "lucide-react";
+import { Prisma } from "@prisma/client";
+import { requireCoach } from "@/lib/auth/require-coach";
+import { prisma } from "@/lib/prisma";
+import { startOfDay, endOfDay } from "@/lib/planning/dates";
+import { rangePeriode } from "@/lib/finances/periode";
+import { getRevenuTotal, getImpayes } from "@/lib/finances/dashboard";
+import { formatJourFr, formatHeureFr } from "@/lib/planning/format";
+import { formatEuros } from "@/lib/finances/format";
+import { prochaineSeance } from "@/lib/accueil";
 import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
-  const session = await auth();
+  await requireCoach();
+  const maintenant = new Date();
+
+  const seancesDuJour = await prisma.seance.findMany({
+    where: { dateHeureDebut: { gte: startOfDay(maintenant), lte: endOfDay(maintenant) } },
+    orderBy: { dateHeureDebut: "asc" },
+    include: { participations: { include: { eleve: true } } },
+  });
+  const prochaine = prochaineSeance(seancesDuJour, maintenant);
+
+  const { debut, fin } = rangePeriode("mois", maintenant);
+  const [encaisseMois, impayes] = await Promise.all([getRevenuTotal(debut, fin), getImpayes()]);
+  const totalImpayes = impayes.reduce((acc, i) => acc.add(i.total), new Prisma.Decimal(0));
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-4">
-      <h1 className="text-2xl font-semibold">CRM-BB</h1>
-      <p className="text-muted-foreground">Connecté en tant que {session?.user?.email ?? "—"}</p>
-      <Button render={<Link href="/eleves" />}>Gérer les élèves</Button>
-      <Button render={<Link href="/planning" />}>Planning</Button>
-      <Button render={<Link href="/finances" />}>Finances</Button>
-      <form
-        action={async () => {
-          "use server";
-          await signOut({ redirectTo: "/login" });
-        }}
-      >
-        <Button type="submit" variant="outline">
-          Se déconnecter
+    <main className="mx-auto w-full max-w-2xl p-4">
+      <header className="mb-6">
+        <h1 className="text-2xl font-semibold">Bonjour 👋</h1>
+        <p className="text-muted-foreground text-sm capitalize">{formatJourFr(maintenant)}</p>
+      </header>
+
+      <section className="mb-6">
+        <h2 className="mb-2 text-sm font-semibold">Aujourd&apos;hui</h2>
+        {seancesDuJour.length === 0 ? (
+          <div className="rounded-lg border p-4 text-sm">
+            <p className="text-muted-foreground mb-3">Aucune séance prévue aujourd&apos;hui.</p>
+            <Button render={<Link href="/planning/nouvelle" />}>Planifier une séance</Button>
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {seancesDuJour.map((s) => {
+              const estProchaine = prochaine?.id === s.id;
+              return (
+                <li key={s.id}>
+                  <Link
+                    href={`/planning/${s.id}`}
+                    className={`hover:bg-muted flex items-center justify-between rounded-lg border p-3 ${
+                      estProchaine ? "border-primary bg-primary/5" : ""
+                    }`}
+                  >
+                    <span className="flex flex-col">
+                      <span className="font-medium">
+                        {formatHeureFr(s.dateHeureDebut)} ·{" "}
+                        {s.type === "PRIVE" ? "Privé" : "Collectif"}
+                        {estProchaine ? (
+                          <span className="text-primary font-semibold"> · prochain</span>
+                        ) : null}
+                      </span>
+                      <span className="text-muted-foreground text-sm">
+                        {s.participations.map((p) => p.eleve.prenom).join(", ") || "Aucun élève"}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+
+      <section className="mb-6 grid grid-cols-2 gap-3">
+        <Button render={<Link href="/planning/nouvelle" />}>
+          <CalendarPlus className="size-4" /> Nouvelle séance
         </Button>
-      </form>
+        <Button variant="outline" render={<Link href="/eleves/nouveau" />}>
+          <UserPlus className="size-4" /> Nouvel élève
+        </Button>
+      </section>
+
+      <section className="grid grid-cols-2 gap-3">
+        <Link href="/finances" className="hover:bg-muted rounded-lg border p-4">
+          <p className="text-muted-foreground text-xs">Encaissé ce mois</p>
+          <p className="text-xl font-semibold">{formatEuros(encaisseMois.toString())}</p>
+        </Link>
+        <Link href="/finances" className="hover:bg-muted rounded-lg border p-4">
+          <p className="text-muted-foreground text-xs">Impayés</p>
+          <p className="text-xl font-semibold">{formatEuros(totalImpayes.toString())}</p>
+        </Link>
+      </section>
     </main>
   );
 }
