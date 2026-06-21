@@ -7,6 +7,8 @@ import { formatJourFr, formatHeureFr } from "@/lib/planning/format";
 import { ActionsSeance } from "./actions-seance";
 import { formatEuros } from "@/lib/finances/format";
 import { ReglementParticipation } from "./reglement-participation";
+import { BadgeStatut } from "@/components/badge-statut";
+import { libelleType } from "@/lib/planning/libelles";
 
 export default async function FicheSeancePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
@@ -30,15 +32,16 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
         ← Retour au planning
       </Link>
       <div className="mt-2 mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-2xl font-semibold capitalize">
-          {seance.type === "PRIVE" ? "Cours privé" : "Cours collectif"}
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold">{libelleType(seance.type)}</h1>
+          <BadgeStatut statut={seance.statut} />
+        </div>
         <Button variant="outline" render={<Link href={`/planning/${seance.id}/modifier`} />}>
           Modifier
         </Button>
       </div>
 
-      <dl className="mb-6 flex flex-col gap-2 text-sm">
+      <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
         <Info
           label="Date"
           value={`${formatJourFr(seance.dateHeureDebut)} à ${formatHeureFr(seance.dateHeureDebut)}`}
