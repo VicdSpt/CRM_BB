@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 2 : Coquille de navigation
+
+- Navigation persistante : onglets en bas (mobile) + barre latérale (PC) + barre du haut.
+- Section active en corail ; bascule de thème et déconnexion intégrées ; page de connexion hors coquille.
+
 ## 2026-06-20 — Design 1 : Système de design + mode sombre
 
 - Accent corail, neutres chauds, police Geist appliquée (jetons CSS).

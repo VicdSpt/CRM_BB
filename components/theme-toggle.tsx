@@ -1,11 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const [monte, setMonte] = useState(false);
+
+  // Pattern « monté » canonique de next-themes : on n'affiche l'icône qu'après
+  // hydratation pour éviter un mismatch serveur/client (le thème système est inconnu côté serveur).
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMonte(true), []);
+
   const estSombre = resolvedTheme === "dark";
 
   return (
@@ -16,7 +24,15 @@ export function ThemeToggle() {
       aria-label={estSombre ? "Passer en clair" : "Passer en sombre"}
       onClick={() => setTheme(estSombre ? "light" : "dark")}
     >
-      {estSombre ? <Sun className="size-4" /> : <Moon className="size-4" />}
+      {monte ? (
+        estSombre ? (
+          <Sun className="size-4" />
+        ) : (
+          <Moon className="size-4" />
+        )
+      ) : (
+        <span className="size-4" />
+      )}
     </Button>
   );
 }
