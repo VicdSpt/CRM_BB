@@ -2,11 +2,13 @@ import Link from "next/link";
 import type { MethodePaiement } from "@prisma/client";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { rangePeriode, type Periode } from "@/lib/finances/periode";
-import { getRevenuTotal, getRepartition, getImpayes } from "@/lib/finances/dashboard";
+import { getRevenuTotal, getRepartition, getImpayes, getEvolution } from "@/lib/finances/dashboard";
 import { formatEuros } from "@/lib/finances/format";
 import { parseDateParam, toDateParam } from "@/lib/planning/format";
+import { granulariteParPeriode } from "@/lib/finances/evolution";
 import { FiltresFinances } from "./filtres";
-import { BarreRepartition } from "@/components/barre-repartition";
+import { CamembertRepartition } from "@/components/finances/camembert-repartition";
+import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
 
 const METHODES_VALIDES = ["ESPECES", "CB", "VIREMENT"] as const;
@@ -29,18 +31,14 @@ export default async function FinancesPage({
     : undefined;
 
   const { debut, fin } = rangePeriode(periode, ref);
-  const [total, repartition, impayes] = await Promise.all([
+  const [total, repartition, impayes, evolution] = await Promise.all([
     getRevenuTotal(debut, fin, methode),
     getRepartition(debut, fin),
     getImpayes(),
+    getEvolution(debut, fin, granulariteParPeriode(periode)),
   ]);
 
   const totalImpayes = impayes.reduce((acc, i) => acc.add(i.total), repartition.prive.mul(0));
-
-  const totalRepartition = repartition.prive
-    .add(repartition.collectif)
-    .add(repartition.pack)
-    .toString();
 
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
@@ -64,22 +62,19 @@ export default async function FinancesPage({
       </section>
 
       <section className="mb-6">
+        <h2 className="mb-3 text-sm font-semibold">Évolution du revenu</h2>
+        <div className="rounded-lg border p-4">
+          <CourbeEvolution data={evolution} />
+        </div>
+      </section>
+
+      <section className="mb-6">
         <h2 className="mb-3 text-sm font-semibold">Répartition (toutes méthodes)</h2>
-        <div className="flex flex-col gap-4 rounded-lg border p-4">
-          <BarreRepartition
-            label="Cours privés"
-            montant={repartition.prive.toString()}
-            total={totalRepartition}
-          />
-          <BarreRepartition
-            label="Cours collectifs"
-            montant={repartition.collectif.toString()}
-            total={totalRepartition}
-          />
-          <BarreRepartition
-            label="Packs"
-            montant={repartition.pack.toString()}
-            total={totalRepartition}
+        <div className="rounded-lg border p-4">
+          <CamembertRepartition
+            prive={repartition.prive.toString()}
+            collectif={repartition.collectif.toString()}
+            pack={repartition.pack.toString()}
           />
         </div>
       </section>

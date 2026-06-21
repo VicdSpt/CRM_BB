@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-21 — Finances : graphiques
+
+- Répartition affichée en camembert (privé / collectif / packs).
+- Courbe d'évolution du revenu sur la période (granularité selon le sélecteur) ; agrégation Decimal exacte.
+
 ## 2026-06-20 — Design 6 : Restyle Finances (fin de la refonte)
 
 - Total encaissé mis en avant ; répartition (privé / collectif / packs) en barres de proportion.
