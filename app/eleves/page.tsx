@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
+import { ChevronRight } from "lucide-react";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
+import { Initiales } from "@/components/initiales";
 import { RechercheEleves } from "./recherche";
 
 export default async function ElevesPage({
@@ -38,31 +40,42 @@ export default async function ElevesPage({
         <RechercheEleves />
       </div>
 
-      <div className="mb-4 text-sm">
+      <div className="mb-4">
         <Link
           href={showArchived ? "/eleves" : "/eleves?archives=1"}
-          className="text-muted-foreground underline"
+          className="text-muted-foreground hover:text-foreground text-sm underline-offset-4 hover:underline"
         >
           {showArchived ? "← Voir les élèves actifs" : "Voir les élèves archivés"}
         </Link>
       </div>
 
       {eleves.length === 0 ? (
-        <p className="text-muted-foreground">
-          Aucun élève {showArchived ? "archivé" : ""} pour le moment.
-        </p>
+        <div className="rounded-lg border p-6 text-center">
+          <p className="text-muted-foreground mb-3 text-sm">
+            Aucun élève {showArchived ? "archivé" : ""} pour le moment.
+          </p>
+          {!showArchived ? (
+            <Button render={<Link href="/eleves/nouveau" />}>Ajouter un élève</Button>
+          ) : null}
+        </div>
       ) : (
-        <ul className="divide-y rounded-md border">
+        <ul className="flex flex-col gap-2">
           {eleves.map((e) => (
             <li key={e.id}>
               <Link
                 href={`/eleves/${e.id}`}
-                className="hover:bg-muted flex items-center justify-between p-3"
+                className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3"
               >
-                <span className="font-medium">
-                  {e.prenom} {e.nom}
+                <Initiales prenom={e.prenom} nom={e.nom} />
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate font-medium">
+                    {e.prenom} {e.nom}
+                  </span>
+                  {e.telephone ? (
+                    <span className="text-muted-foreground text-sm">{e.telephone}</span>
+                  ) : null}
                 </span>
-                <span className="text-muted-foreground text-sm">{e.telephone ?? ""}</span>
+                <ChevronRight className="text-muted-foreground ml-auto size-5" />
               </Link>
             </li>
           ))}
