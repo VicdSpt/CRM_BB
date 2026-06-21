@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 3 : Tableau de bord d'accueil
+
+- Accueil refondu : séances du jour (prochain cours en avant), raccourcis, aperçu finances (encaissé du mois / impayés).
+- Doublon de déconnexion retiré de l'accueil (présent dans la coquille de navigation).
+
 ## 2026-06-20 — Design 2 : Coquille de navigation
 
 - Navigation persistante : onglets en bas (mobile) + barre latérale (PC) + barre du haut.
