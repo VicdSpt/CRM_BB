@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { formatEuros } from "@/lib/finances/format";
 import { ActionsEleve } from "./actions-eleve";
 import { PackForm } from "./pack-form";
+import { Initiales } from "@/components/initiales";
+import { JaugePack } from "@/components/jauge-pack";
 
 export default async function FicheElevePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
@@ -30,20 +32,20 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
       <Link href="/eleves" className="text-muted-foreground text-sm">
         ← Retour à la liste
       </Link>
-      <div className="mt-2 mb-4 flex items-center justify-between gap-2">
-        <h1 className="text-2xl font-semibold">
-          {eleve.prenom} {eleve.nom}
-        </h1>
+      <div className="mt-2 mb-4 flex items-center gap-3">
+        <Initiales prenom={eleve.prenom} nom={eleve.nom} className="size-12 text-base" />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <h1 className="truncate text-2xl font-semibold">
+            {eleve.prenom} {eleve.nom}
+          </h1>
+          {eleve.archive ? <span className="text-muted-foreground text-xs">Archivé</span> : null}
+        </div>
         <Button variant="outline" render={<Link href={`/eleves/${eleve.id}/modifier`} />}>
           Modifier
         </Button>
       </div>
 
-      {eleve.archive ? (
-        <p className="bg-muted mb-4 inline-block rounded px-2 py-1 text-sm">Archivé</p>
-      ) : null}
-
-      <dl className="mb-6 flex flex-col gap-2 text-sm">
+      <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
         <Info label="Téléphone" value={eleve.telephone} />
         <Info label="Email" value={eleve.email} />
         <Info label="Notes" value={eleve.notes} />
@@ -54,13 +56,16 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
         {packs.length === 0 ? (
           <p className="text-muted-foreground mb-3 text-sm">Aucun pack.</p>
         ) : (
-          <ul className="mb-3 divide-y rounded-md border">
+          <ul className="mb-3 flex flex-col gap-2">
             {packs.map((p) => (
-              <li key={p.id} className="flex items-center justify-between p-3 text-sm">
-                <span>
-                  {p.nbSeancesRestantes}/{p.nbSeancesTotal} séances restantes
-                </span>
-                <span className="text-muted-foreground">
+              <li
+                key={p.id}
+                className="flex items-center justify-between gap-4 rounded-lg border p-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <JaugePack restantes={p.nbSeancesRestantes} total={p.nbSeancesTotal} />
+                </div>
+                <span className="text-muted-foreground text-sm">
                   {formatEuros(p.montantPaye.toString())}
                 </span>
               </li>

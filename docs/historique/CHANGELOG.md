@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-20 — Design 4 : Restyle Élèves
+
+- Liste des élèves en cartes avec pastilles d'initiales ; recherche avec icône.
+- Fiche élève restylée : en-tête avec pastille, carte d'infos, packs avec jauge de séances restantes.
+
 ## 2026-06-20 — Design 3 : Tableau de bord d'accueil
 
 - Accueil refondu : séances du jour (prochain cours en avant), raccourcis, aperçu finances (encaissé du mois / impayés).
