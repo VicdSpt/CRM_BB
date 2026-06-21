@@ -9,6 +9,9 @@ export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [monte, setMonte] = useState(false);
 
+  // Pattern « monté » canonique de next-themes : on n'affiche l'icône qu'après
+  // hydratation pour éviter un mismatch serveur/client (le thème système est inconnu côté serveur).
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMonte(true), []);
 
   const estSombre = resolvedTheme === "dark";
