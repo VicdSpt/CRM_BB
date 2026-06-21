@@ -12,6 +12,8 @@ import {
 } from "@/lib/planning/dates";
 import { formatJourFr, formatHeureFr, toDateParam, parseDateParam } from "@/lib/planning/format";
 import { PlanningNavigation } from "./navigation";
+import { BadgeStatut } from "@/components/badge-statut";
+import { libelleType } from "@/lib/planning/libelles";
 
 export default async function PlanningPage({
   searchParams,
@@ -72,19 +74,20 @@ export default async function PlanningPage({
                     <li key={s.id}>
                       <Link
                         href={`/planning/${s.id}`}
-                        className="hover:bg-muted flex items-center justify-between rounded-md border p-3"
+                        className={`hover:bg-muted flex items-center justify-between gap-3 rounded-lg border border-l-4 p-3 ${
+                          s.type === "PRIVE" ? "border-l-primary" : "border-l-sky-500"
+                        }`}
                       >
-                        <span className="flex flex-col">
+                        <span className="flex min-w-0 flex-col">
                           <span className="font-medium">
-                            {formatHeureFr(s.dateHeureDebut)} ·{" "}
-                            {s.type === "PRIVE" ? "Privé" : "Collectif"}
+                            {formatHeureFr(s.dateHeureDebut)} · {libelleType(s.type)}
                           </span>
-                          <span className="text-muted-foreground text-sm">
+                          <span className="text-muted-foreground truncate text-sm">
                             {s.participations.map((p) => p.eleve.prenom).join(", ") ||
                               "Aucun élève"}
                           </span>
                         </span>
-                        <StatutBadge statut={s.statut} />
+                        <BadgeStatut statut={s.statut} />
                       </Link>
                     </li>
                   ))}
@@ -96,10 +99,4 @@ export default async function PlanningPage({
       </div>
     </main>
   );
-}
-
-function StatutBadge({ statut }: { statut: "PLANIFIEE" | "REALISEE" | "ANNULEE" }) {
-  const label =
-    statut === "PLANIFIEE" ? "Planifiée" : statut === "REALISEE" ? "Réalisée" : "Annulée";
-  return <span className="bg-muted rounded px-2 py-0.5 text-xs">{label}</span>;
 }
