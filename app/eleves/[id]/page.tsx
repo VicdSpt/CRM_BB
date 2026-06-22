@@ -3,11 +3,10 @@ import { notFound } from "next/navigation";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { formatEuros } from "@/lib/finances/format";
 import { ActionsEleve } from "./actions-eleve";
 import { PackForm } from "./pack-form";
+import { PackItem } from "./pack-item";
 import { Initiales } from "@/components/initiales";
-import { JaugePack } from "@/components/jauge-pack";
 
 export default async function FicheElevePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
@@ -25,6 +24,7 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
   const packs = await prisma.pack.findMany({
     where: { eleveId: eleve.id },
     orderBy: { dateAchat: "desc" },
+    include: { paiement: true },
   });
 
   return (
@@ -58,17 +58,16 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
         ) : (
           <ul className="mb-3 flex flex-col gap-2">
             {packs.map((p) => (
-              <li
+              <PackItem
                 key={p.id}
-                className="flex items-center justify-between gap-4 rounded-lg border p-3"
-              >
-                <div className="min-w-0 flex-1">
-                  <JaugePack restantes={p.nbSeancesRestantes} total={p.nbSeancesTotal} />
-                </div>
-                <span className="text-muted-foreground text-sm">
-                  {formatEuros(p.montantPaye.toString())}
-                </span>
-              </li>
+                pack={{
+                  id: p.id,
+                  nbSeancesTotal: p.nbSeancesTotal,
+                  nbSeancesRestantes: p.nbSeancesRestantes,
+                  montantPaye: p.montantPaye.toString(),
+                  methode: p.paiement?.methode ?? "ESPECES",
+                }}
+              />
             ))}
           </ul>
         )}

@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Packs : modifier et supprimer
+
+- Sur la fiche élève, chaque pack peut être **modifié** (nb de séances, montant, méthode) — utile pour corriger une saisie ; le nombre de séances déjà utilisées est préservé et ne peut pas être dépassé.
+- Chaque pack peut être **supprimé** (avec confirmation) ; les séances déjà couvertes par ce pack repassent en « à régler » et le paiement d'achat est retiré.
+
 ## 2026-06-22 — Paiements : retrait de la méthode « Virement »
 
 - « Virement » retiré partout (réglement séance, création de pack, filtre finances) ; seules « Espèces » et « CB » restent.
