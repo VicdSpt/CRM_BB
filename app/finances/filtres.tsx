@@ -14,7 +14,6 @@ const METHODES: Array<[string, string]> = [
   ["", "Toutes méthodes"],
   ["ESPECES", "Espèces"],
   ["CB", "CB"],
-  ["VIREMENT", "Virement"],
 ];
 
 export function FiltresFinances({

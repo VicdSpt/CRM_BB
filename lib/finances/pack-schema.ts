@@ -4,7 +4,7 @@ import { montantSchema } from "./money";
 export const packSchema = z.object({
   nbSeancesTotal: z.coerce.number().int().min(1, "Au moins 1 séance"),
   montantPaye: montantSchema,
-  methode: z.enum(["ESPECES", "CB", "VIREMENT"]),
+  methode: z.enum(["ESPECES", "CB"]),
 });
 
 export type PackInput = z.infer<typeof packSchema>;

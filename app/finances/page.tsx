@@ -11,7 +11,7 @@ import { CamembertRepartition } from "@/components/finances/camembert-repartitio
 import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
 
-const METHODES_VALIDES = ["ESPECES", "CB", "VIREMENT"] as const;
+const METHODES_VALIDES = ["ESPECES", "CB"] as const;
 
 function parsePeriode(v?: string): Periode {
   return v === "jour" || v === "semaine" || v === "annee" ? v : "mois";
