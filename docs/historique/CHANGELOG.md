@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Planning : libellé de la période affiché
+
+- À côté des flèches de navigation, affichage de la période courante : « Semaine du X au Y » en vue semaine, le jour complet en vue jour.
+- Helper pur `formatPlageSemaine` testé (gère les semaines à cheval sur deux mois).
+
 ## 2026-06-22 — Performance : états de chargement (navigation fluide)
 
 - Ajout d'un composant `Skeleton` et d'un `loading.tsx` par section (accueil, planning, élèves, finances).

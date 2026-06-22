@@ -10,7 +10,13 @@ import {
   addDays,
   eachDayOfWeek,
 } from "@/lib/planning/dates";
-import { formatJourFr, formatHeureFr, toDateParam, parseDateParam } from "@/lib/planning/format";
+import {
+  formatJourFr,
+  formatHeureFr,
+  formatPlageSemaine,
+  toDateParam,
+  parseDateParam,
+} from "@/lib/planning/format";
 import { PlanningNavigation } from "./navigation";
 import { BadgeStatut } from "@/components/badge-statut";
 import { libelleType } from "@/lib/planning/libelles";
@@ -40,6 +46,9 @@ export default async function PlanningPage({
   const nextParam = toDateParam(addDays(ref, vue === "semaine" ? 7 : 1));
   const todayParam = toDateParam(new Date());
 
+  const libelle =
+    vue === "semaine" ? `Semaine ${formatPlageSemaine(debut, fin)}` : formatJourFr(ref);
+
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
       <div className="mb-4 flex items-center justify-between gap-2">
@@ -50,6 +59,7 @@ export default async function PlanningPage({
       <div className="mb-4">
         <PlanningNavigation
           vue={vue}
+          libelle={libelle}
           prevParam={prevParam}
           nextParam={nextParam}
           todayParam={todayParam}
