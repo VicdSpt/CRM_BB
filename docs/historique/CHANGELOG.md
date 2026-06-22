@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Performance : états de chargement (navigation fluide)
+
+- Ajout d'un composant `Skeleton` et d'un `loading.tsx` par section (accueil, planning, élèves, finances).
+- La navigation entre onglets affiche désormais un squelette instantané pendant les requêtes serveur/DB, au lieu de figer l'écran sur la page précédente.
+
 ## 2026-06-21 — Correctif : menus déroulants en mode sombre
 
 - `color-scheme` (light/dark) ajouté aux thèmes pour que les contrôles natifs (select, date) s'affichent correctement.
