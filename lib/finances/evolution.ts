@@ -3,7 +3,11 @@ import { startOfDay, endOfDay, addDays } from "@/lib/planning/dates";
 import { startOfMonth, endOfMonth } from "@/lib/finances/periode";
 
 export type Granularite = "heure" | "jour" | "mois";
-export type Bucket = { debut: Date; fin: Date; label: string };
+// `label` : libellé court de l'axe X. `labelLong` : libellé complet pour le tooltip.
+export type Bucket = { debut: Date; fin: Date; label: string; labelLong: string };
+
+const jourMoisLong = (d: Date) =>
+  new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" }).format(d);
 
 export function granulariteParPeriode(periode: "jour" | "semaine" | "mois" | "annee"): Granularite {
   if (periode === "jour") return "heure";
@@ -29,6 +33,7 @@ export function genererBuckets(debut: Date, fin: Date, granularite: Granularite)
         debut: new Date(t),
         fin: new Date(t.getTime() + 3_600_000 - 1),
         label: `${t.getHours()}h`,
+        labelLong: `${jourMoisLong(t)} · ${t.getHours()}h`,
       });
     }
     return buckets;
@@ -36,15 +41,26 @@ export function genererBuckets(debut: Date, fin: Date, granularite: Granularite)
 
   if (granularite === "jour") {
     for (let d = startOfDay(debut); d <= fin; d = addDays(d, 1)) {
-      buckets.push({ debut: d, fin: endOfDay(d), label: `${d.getDate()}` });
+      buckets.push({
+        debut: d,
+        fin: endOfDay(d),
+        label: `${d.getDate()}`,
+        labelLong: jourMoisLong(d),
+      });
     }
     return buckets;
   }
 
   // mois
   const formatMois = new Intl.DateTimeFormat("fr-FR", { month: "short" });
+  const formatMoisLong = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" });
   for (let m = startOfMonth(debut); m <= fin; m = startOfMonth(addDays(endOfMonth(m), 1))) {
-    buckets.push({ debut: m, fin: endOfMonth(m), label: formatMois.format(m) });
+    buckets.push({
+      debut: m,
+      fin: endOfMonth(m),
+      label: formatMois.format(m),
+      labelLong: formatMoisLong.format(m),
+    });
   }
   return buckets;
 }
@@ -52,11 +68,11 @@ export function genererBuckets(debut: Date, fin: Date, granularite: Granularite)
 export function agregerParBucket(
   paiements: { date: Date; montant: Prisma.Decimal }[],
   buckets: Bucket[],
-): { label: string; total: Prisma.Decimal }[] {
+): { label: string; labelLong: string; total: Prisma.Decimal }[] {
   return buckets.map((b) => {
     const total = paiements
       .filter((p) => p.date >= b.debut && p.date <= b.fin)
       .reduce((acc, p) => acc.add(p.montant), new Prisma.Decimal(0));
-    return { label: b.label, total };
+    return { label: b.label, labelLong: b.labelLong, total };
   });
 }

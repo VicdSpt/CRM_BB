@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Finances : tooltip de la courbe plus lisible
+
+- Le tooltip de la courbe d'évolution affiche désormais la date complète (« 15 juin », « juin 2026 », « 15 juin · 14h ») au lieu du seul numéro de jour, sans alourdir l'axe X.
+
 ## 2026-06-22 — Planning : libellé de la période affiché
 
 - À côté des flèches de navigation, affichage de la période courante : « Semaine du X au Y » en vue semaine, le jour complet en vue jour.

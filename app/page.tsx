@@ -29,7 +29,7 @@ export default async function HomePage() {
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Bonjour 👋</h1>
+        <h1 className="text-2xl font-semibold">Bonjour Bart !</h1>
         <p className="text-muted-foreground text-sm capitalize">{formatJourFr(maintenant)}</p>
       </header>
 
