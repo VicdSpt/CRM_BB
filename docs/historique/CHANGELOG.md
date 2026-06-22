@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Finances : tooltip du camembert plus lisible
+
+- Tooltip de la répartition : « : » ajouté après le libellé et montant affiché en euros formatés (au lieu du nombre brut collé au nom).
+
 ## 2026-06-22 — Finances : tooltip de la courbe plus lisible
 
 - Le tooltip de la courbe d'évolution affiche désormais la date complète (« 15 juin », « juin 2026 », « 15 juin · 14h ») au lieu du seul numéro de jour, sans alourdir l'axe X.
