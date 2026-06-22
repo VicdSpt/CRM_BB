@@ -6,12 +6,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Props = {
   vue: "jour" | "semaine";
+  libelle: string;
   prevParam: string;
   nextParam: string;
   todayParam: string;
 };
 
-export function PlanningNavigation({ vue, prevParam, nextParam, todayParam }: Props) {
+export function PlanningNavigation({ vue, libelle, prevParam, nextParam, todayParam }: Props) {
   const router = useRouter();
   const go = (date: string, v: "jour" | "semaine") =>
     router.push(`/planning?date=${date}&vue=${v}`);
@@ -33,6 +34,7 @@ export function PlanningNavigation({ vue, prevParam, nextParam, todayParam }: Pr
         <Button variant="outline" size="sm" onClick={() => go(nextParam, vue)} aria-label="Suivant">
           <ChevronRight className="size-4" />
         </Button>
+        <span className="ml-2 self-center text-sm font-medium capitalize">{libelle}</span>
       </div>
       <div className="flex gap-1">
         <Button
