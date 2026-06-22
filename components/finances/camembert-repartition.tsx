@@ -44,7 +44,29 @@ export function CamembertRepartition({
     <div className="flex flex-col items-center gap-4 sm:flex-row">
       <ChartContainer config={config} className="aspect-square h-[180px]">
         <PieChart>
-          <ChartTooltip content={<ChartTooltipContent nameKey="cle" hideLabel />} />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                nameKey="cle"
+                hideLabel
+                formatter={(value, _name, item) => {
+                  const cle = item.payload?.cle as "prive" | "collectif" | "pack";
+                  return (
+                    <div className="flex w-full items-center gap-2">
+                      <span
+                        className="size-2.5 shrink-0 rounded-xs"
+                        style={{ backgroundColor: item.payload?.fill }}
+                      />
+                      <span className="text-muted-foreground">{config[cle].label} :</span>
+                      <span className="text-foreground ml-auto font-mono font-medium tabular-nums">
+                        {formatEuros(Number(value))}
+                      </span>
+                    </div>
+                  );
+                }}
+              />
+            }
+          />
           <Pie data={data} dataKey="montant" nameKey="cle" innerRadius={45} />
         </PieChart>
       </ChartContainer>
