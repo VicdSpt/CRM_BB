@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Paiements : retrait de la méthode « Virement »
+
+- « Virement » retiré partout (réglement séance, création de pack, filtre finances) ; seules « Espèces » et « CB » restent.
+- Valeur `VIREMENT` supprimée de l'enum en base ; les paiements existants en virement sont convertis en CB (migration) — voir ADR 0011.
+
 ## 2026-06-22 — Finances : montants ronds sans décimales
 
 - `formatEuros` n'affiche plus « ,00 » pour les montants ronds (« 40 € ») ; les centimes restent affichés quand il y en a (« 45,50 € »). S'applique partout (cartes, listes, tooltips).

@@ -40,7 +40,6 @@ export function PackForm({ eleveId }: { eleveId: string }) {
         >
           <option value="ESPECES">Espèces</option>
           <option value="CB">CB</option>
-          <option value="VIREMENT">Virement</option>
         </select>
       </div>
       {state.errors?.montantPaye ? (

@@ -7,13 +7,11 @@ import { Button } from "@/components/ui/button";
 const METHODES: Array<[MethodePaiement, string]> = [
   ["ESPECES", "Espèces"],
   ["CB", "CB"],
-  ["VIREMENT", "Virement"],
 ];
 
 const LIBELLE_METHODE: Record<MethodePaiement, string> = {
   ESPECES: "Espèces",
   CB: "CB",
-  VIREMENT: "Virement",
 };
 
 export function ReglementParticipation({
