@@ -73,7 +73,7 @@ export async function getEvolution(
   debut: Date,
   fin: Date,
   granularite: Granularite,
-): Promise<{ label: string; total: number }[]> {
+): Promise<{ label: string; labelLong: string; total: number }[]> {
   const paiements = await prisma.paiement.findMany({
     where: { date: { gte: debut, lte: fin } },
     select: { date: true, montant: true },
@@ -81,6 +81,7 @@ export async function getEvolution(
   const buckets = genererBuckets(debut, fin, granularite);
   return agregerParBucket(paiements, buckets).map((b) => ({
     label: b.label,
+    labelLong: b.labelLong,
     total: Number(b.total),
   }));
 }

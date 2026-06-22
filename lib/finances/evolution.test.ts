@@ -28,6 +28,9 @@ describe("genererBuckets", () => {
     expect(b).toHaveLength(7);
     expect(b[0].label).toBe("15");
     expect(b[6].label).toBe("21");
+    // labelLong : libellé complet (avec le mois) pour le tooltip
+    expect(b[0].labelLong).toBe("15 juin");
+    expect(b[6].labelLong).toBe("21 juin");
   });
 
   it("génère un intervalle par mois sur une année", () => {
