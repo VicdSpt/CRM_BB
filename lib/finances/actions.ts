@@ -94,6 +94,60 @@ export async function creerPack(
   return { message: "Pack créé." };
 }
 
+export async function modifierPack(
+  packId: string,
+  _prev: PackFormState,
+  formData: FormData,
+): Promise<PackFormState> {
+  await requireCoach();
+  const result = parsePackForm(formData);
+  if (!result.success) {
+    return { errors: result.errors };
+  }
+  const { nbSeancesTotal, montantPaye, methode } = result.data;
+
+  const pack = await prisma.pack.findUnique({ where: { id: packId } });
+  if (!pack) return { errors: { nbSeancesTotal: "Pack introuvable." } };
+
+  // On ne peut pas descendre le total sous le nombre de séances déjà consommées.
+  const consommees = pack.nbSeancesTotal - pack.nbSeancesRestantes;
+  if (nbSeancesTotal < consommees) {
+    return {
+      errors: { nbSeancesTotal: `Déjà ${consommees} séance(s) utilisée(s) sur ce pack.` },
+    };
+  }
+
+  await prisma.$transaction([
+    prisma.pack.update({
+      where: { id: packId },
+      data: { nbSeancesTotal, nbSeancesRestantes: nbSeancesTotal - consommees, montantPaye },
+    }),
+    // Le paiement d'achat lié suit le montant et la méthode du pack.
+    prisma.paiement.updateMany({ where: { packId }, data: { montant: montantPaye, methode } }),
+  ]);
+
+  revalidatePath(`/eleves/${pack.eleveId}`);
+  return { message: "Pack modifié." };
+}
+
+export async function supprimerPack(packId: string): Promise<void> {
+  await requireCoach();
+  const pack = await prisma.pack.findUnique({ where: { id: packId } });
+  if (!pack) return;
+
+  await prisma.$transaction([
+    // Les séances couvertes par ce pack repassent en « à régler ».
+    prisma.participation.updateMany({
+      where: { packId },
+      data: { statutReglement: "A_REGLER", packId: null },
+    }),
+    prisma.paiement.deleteMany({ where: { packId } }),
+    prisma.pack.delete({ where: { id: packId } }),
+  ]);
+
+  revalidatePath(`/eleves/${pack.eleveId}`);
+}
+
 export async function reglerAvecPack(participationId: string): Promise<void> {
   await requireCoach();
   const participation = await prisma.participation.findUnique({ where: { id: participationId } });
