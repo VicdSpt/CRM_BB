@@ -30,6 +30,14 @@ export default async function ElevesPage({
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
   });
 
+  // Liens d'onglets (on conserve la recherche en cours).
+  const actifsHref = q ? `/eleves?q=${encodeURIComponent(q)}` : "/eleves";
+  const archivesHref = `/eleves?${new URLSearchParams({ archives: "1", ...(q ? { q } : {}) }).toString()}`;
+  const ongletClass = (actif: boolean) =>
+    `cursor-pointer rounded-md border px-3 py-1.5 text-sm ${
+      actif ? "bg-primary text-primary-foreground border-primary" : "hover:bg-muted"
+    }`;
+
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
       <div className="mb-4 flex items-center justify-between gap-2">
@@ -41,12 +49,12 @@ export default async function ElevesPage({
         <RechercheEleves />
       </div>
 
-      <div className="mb-4">
-        <Link
-          href={showArchived ? "/eleves" : "/eleves?archives=1"}
-          className="text-muted-foreground hover:text-foreground text-sm underline-offset-4 hover:underline"
-        >
-          {showArchived ? "← Voir les élèves actifs" : "Voir les élèves archivés"}
+      <div className="mb-4 flex gap-2">
+        <Link href={actifsHref} className={ongletClass(!showArchived)}>
+          Actifs
+        </Link>
+        <Link href={archivesHref} className={ongletClass(showArchived)}>
+          Archivés
         </Link>
       </div>
 
