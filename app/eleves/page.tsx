@@ -5,6 +5,7 @@ import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Initiales } from "@/components/initiales";
+import { AnimItem } from "@/components/anim-item";
 import { RechercheEleves } from "./recherche";
 
 export default async function ElevesPage({
@@ -60,11 +61,11 @@ export default async function ElevesPage({
         </div>
       ) : (
         <ul className="flex flex-col gap-2">
-          {eleves.map((e) => (
-            <li key={e.id}>
+          {eleves.map((e, i) => (
+            <AnimItem key={e.id} index={i}>
               <Link
                 href={`/eleves/${e.id}`}
-                className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3"
+                className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
               >
                 <Initiales prenom={e.prenom} nom={e.nom} />
                 <span className="flex min-w-0 flex-col">
@@ -77,7 +78,7 @@ export default async function ElevesPage({
                 </span>
                 <ChevronRight className="text-muted-foreground ml-auto size-5" />
               </Link>
-            </li>
+            </AnimItem>
           ))}
         </ul>
       )}

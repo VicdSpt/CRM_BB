@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-22 — Animations : interface plus dynamique
+
+- Transition d'entrée de page en fondu doux (`template.tsx`).
+- Listes (séances, élèves, impayés) qui apparaissent en cascade (fade + slide-up décalé) via le composant `AnimItem`.
+- Léger lift + ombre au survol des cartes cliquables.
+- Tout est neutralisé si l'utilisateur a activé « réduire les animations » (`prefers-reduced-motion`).
+
 ## 2026-06-22 — Packs : modifier et supprimer
 
 - Sur la fiche élève, chaque pack peut être **modifié** (nb de séances, montant, méthode) — utile pour corriger une saisie ; le nombre de séances déjà utilisées est préservé et ne peut pas être dépassé.
