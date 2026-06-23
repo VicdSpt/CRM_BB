@@ -10,6 +10,7 @@ import { FiltresFinances } from "./filtres";
 import { CamembertRepartition } from "@/components/finances/camembert-repartition";
 import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
+import { AnimItem } from "@/components/anim-item";
 
 const METHODES_VALIDES = ["ESPECES", "CB"] as const;
 
@@ -88,11 +89,11 @@ export default async function FinancesPage({
           <p className="text-muted-foreground text-sm">Aucun impayé. 🎉</p>
         ) : (
           <ul className="flex flex-col gap-2">
-            {impayes.map((i) => (
-              <li key={i.eleveId}>
+            {impayes.map((i, idx) => (
+              <AnimItem key={i.eleveId} index={idx}>
                 <Link
                   href={`/eleves/${i.eleveId}`}
-                  className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm"
+                  className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                 >
                   <Initiales prenom={i.nom} nom="" />
                   <span className="font-medium">{i.nom}</span>
@@ -100,7 +101,7 @@ export default async function FinancesPage({
                     {formatEuros(i.total.toString())}
                   </span>
                 </Link>
-              </li>
+              </AnimItem>
             ))}
           </ul>
         )}

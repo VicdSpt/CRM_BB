@@ -19,6 +19,7 @@ import {
 } from "@/lib/planning/format";
 import { PlanningNavigation } from "./navigation";
 import { BadgeStatut } from "@/components/badge-statut";
+import { AnimItem } from "@/components/anim-item";
 import { libelleType } from "@/lib/planning/libelles";
 
 export default async function PlanningPage({
@@ -80,11 +81,11 @@ export default async function PlanningPage({
                 <p className="text-muted-foreground text-sm">Aucune séance.</p>
               ) : (
                 <ul className="flex flex-col gap-2">
-                  {duJour.map((s) => (
-                    <li key={s.id}>
+                  {duJour.map((s, i) => (
+                    <AnimItem key={s.id} index={i}>
                       <Link
                         href={`/planning/${s.id}`}
-                        className={`hover:bg-muted flex items-center justify-between gap-3 rounded-lg border border-l-4 p-3 ${
+                        className={`hover:bg-muted flex items-center justify-between gap-3 rounded-lg border border-l-4 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
                           s.type === "PRIVE" ? "border-l-primary" : "border-l-sky-500"
                         }`}
                       >
@@ -99,7 +100,7 @@ export default async function PlanningPage({
                         </span>
                         <BadgeStatut statut={s.statut} />
                       </Link>
-                    </li>
+                    </AnimItem>
                   ))}
                 </ul>
               )}
