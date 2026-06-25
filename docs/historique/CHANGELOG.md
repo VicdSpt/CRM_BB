@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-25 — Planning : dupliquer une séance
+
+- Bouton « Dupliquer (semaine suivante) » sur la fiche séance : recrée une séance identique (type, heure, durée, lieu, tarif) 7 jours plus tard, **sans les élèves** (chaque séance n'a pas forcément les mêmes participants), puis ouvre sa page de modification.
+
 ## 2026-06-25 — Robustesse : pages d'erreur + middleware → proxy
 
 - Ajout de `app/error.tsx` (boundary avec bouton « Réessayer ») et `app/not-found.tsx` (404) — fini les écrans blancs en cas de pépin.
