@@ -13,41 +13,25 @@ import { PackItem } from "./pack-item";
 import { Initiales } from "@/components/initiales";
 import { AnimItem } from "@/components/anim-item";
 
-export default async function FicheElevePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function FicheElevePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ onglet?: string }>;
+}) {
   await requireCoach();
   const { id } = await params;
+  const { onglet } = await searchParams;
   const eleve = await prisma.eleve.findUnique({ where: { id } });
   if (!eleve) notFound();
 
-  const [nbParticipations, nbPacks, nbPaiements] = await Promise.all([
-    prisma.participation.count({ where: { eleveId: eleve.id } }),
-    prisma.pack.count({ where: { eleveId: eleve.id } }),
-    prisma.paiement.count({ where: { eleveId: eleve.id } }),
-  ]);
-  const peutSupprimer = nbParticipations + nbPacks + nbPaiements === 0;
+  const ongletHistorique = onglet === "historique";
 
-  const packs = await prisma.pack.findMany({
-    where: { eleveId: eleve.id },
-    orderBy: { dateAchat: "desc" },
-    include: { paiement: true },
-  });
-
-  // Récap financier : total encaissé (séances + packs) et reste dû (séances à régler).
-  const [totalPayeAgg, totalDuAgg, historique] = await Promise.all([
-    prisma.paiement.aggregate({ _sum: { montant: true }, where: { eleveId: eleve.id } }),
-    prisma.participation.aggregate({
-      _sum: { montant: true },
-      where: { eleveId: eleve.id, statutReglement: "A_REGLER" },
-    }),
-    prisma.participation.findMany({
-      where: { eleveId: eleve.id },
-      orderBy: { seance: { dateHeureDebut: "desc" } },
-      include: { seance: true },
-      take: 50,
-    }),
-  ]);
-  const totalPaye = totalPayeAgg._sum.montant ?? new Prisma.Decimal(0);
-  const totalDu = totalDuAgg._sum.montant ?? new Prisma.Decimal(0);
+  const ongletClass = (actif: boolean) =>
+    `cursor-pointer rounded-md border px-3 py-1.5 text-sm ${
+      actif ? "bg-primary text-primary-foreground border-primary" : "hover:bg-muted"
+    }`;
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
@@ -67,6 +51,56 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
         </Button>
       </div>
 
+      <div className="mb-4 flex gap-2">
+        <Link href={`/eleves/${eleve.id}`} className={ongletClass(!ongletHistorique)}>
+          Fiche
+        </Link>
+        <Link
+          href={`/eleves/${eleve.id}?onglet=historique`}
+          className={ongletClass(ongletHistorique)}
+        >
+          Historique
+        </Link>
+      </div>
+
+      {ongletHistorique ? <OngletHistorique eleveId={eleve.id} /> : <OngletFiche eleve={eleve} />}
+    </main>
+  );
+}
+
+async function OngletFiche({
+  eleve,
+}: {
+  eleve: {
+    id: string;
+    telephone: string | null;
+    email: string | null;
+    notes: string | null;
+    archive: boolean;
+  };
+}) {
+  const [nbParticipations, nbPacks, nbPaiements, packs, totalPayeAgg, totalDuAgg] =
+    await Promise.all([
+      prisma.participation.count({ where: { eleveId: eleve.id } }),
+      prisma.pack.count({ where: { eleveId: eleve.id } }),
+      prisma.paiement.count({ where: { eleveId: eleve.id } }),
+      prisma.pack.findMany({
+        where: { eleveId: eleve.id },
+        orderBy: { dateAchat: "desc" },
+        include: { paiement: true },
+      }),
+      prisma.paiement.aggregate({ _sum: { montant: true }, where: { eleveId: eleve.id } }),
+      prisma.participation.aggregate({
+        _sum: { montant: true },
+        where: { eleveId: eleve.id, statutReglement: "A_REGLER" },
+      }),
+    ]);
+  const peutSupprimer = nbParticipations + nbPacks + nbPaiements === 0;
+  const totalPaye = totalPayeAgg._sum.montant ?? new Prisma.Decimal(0);
+  const totalDu = totalDuAgg._sum.montant ?? new Prisma.Decimal(0);
+
+  return (
+    <>
       <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
         <Info label="Téléphone" value={eleve.telephone} />
         <Info label="Email" value={eleve.email} />
@@ -82,37 +116,6 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
           <p className="text-muted-foreground text-xs">Reste dû</p>
           <p className="text-xl font-semibold tabular-nums">{formatEuros(totalDu.toString())}</p>
         </div>
-      </section>
-
-      <section className="mb-6">
-        <h2 className="mb-2 text-sm font-semibold">Historique des séances</h2>
-        {historique.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Aucune séance.</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {historique.map((p, i) => (
-              <AnimItem key={p.id} index={i}>
-                <Link
-                  href={`/planning/${p.seanceId}`}
-                  className="hover:bg-muted flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
-                >
-                  <span className="flex min-w-0 flex-col">
-                    <span className="font-medium capitalize">
-                      {formatJourFr(p.seance.dateHeureDebut)}
-                    </span>
-                    <span className="text-muted-foreground">{libelleType(p.seance.type)}</span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-2">
-                    <BadgeReglement statut={p.statutReglement} />
-                    <span className="text-muted-foreground tabular-nums">
-                      {formatEuros(p.montant.toString())}
-                    </span>
-                  </span>
-                </Link>
-              </AnimItem>
-            ))}
-          </ul>
-        )}
       </section>
 
       <section className="mb-6">
@@ -139,7 +142,45 @@ export default async function FicheElevePage({ params }: { params: Promise<{ id:
       </section>
 
       <ActionsEleve id={eleve.id} archive={eleve.archive} peutSupprimer={peutSupprimer} />
-    </main>
+    </>
+  );
+}
+
+async function OngletHistorique({ eleveId }: { eleveId: string }) {
+  const historique = await prisma.participation.findMany({
+    where: { eleveId },
+    orderBy: { seance: { dateHeureDebut: "desc" } },
+    include: { seance: true },
+  });
+
+  if (historique.length === 0) {
+    return <p className="text-muted-foreground text-sm">Aucune séance.</p>;
+  }
+
+  return (
+    <ul className="flex flex-col gap-2">
+      {historique.map((p, i) => (
+        <AnimItem key={p.id} index={i}>
+          <Link
+            href={`/planning/${p.seanceId}`}
+            className="hover:bg-muted flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+          >
+            <span className="flex min-w-0 flex-col">
+              <span className="font-medium capitalize">
+                {formatJourFr(p.seance.dateHeureDebut)}
+              </span>
+              <span className="text-muted-foreground">{libelleType(p.seance.type)}</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-2">
+              <BadgeReglement statut={p.statutReglement} />
+              <span className="text-muted-foreground tabular-nums">
+                {formatEuros(p.montant.toString())}
+              </span>
+            </span>
+          </Link>
+        </AnimItem>
+      ))}
+    </ul>
   );
 }
 

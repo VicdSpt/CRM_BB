@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-25 — Fiche élève : onglets Fiche / Historique
+
+- L'historique des séances passe dans un onglet dédié (« Historique »), pour ne pas allonger la fiche des élèves fidèles. L'onglet « Fiche » garde infos, récap et packs.
+- L'historique n'est chargé que lorsqu'on ouvre son onglet (requête évitée sinon).
+
 ## 2026-06-25 — Planning : dupliquer une séance
 
 - Bouton « Dupliquer (semaine suivante) » sur la fiche séance : recrée une séance identique (type, heure, durée, lieu, tarif) 7 jours plus tard, **sans les élèves** (chaque séance n'a pas forcément les mêmes participants), puis ouvre sa page de modification.
