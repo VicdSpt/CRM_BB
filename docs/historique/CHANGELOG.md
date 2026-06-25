@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-25 — Robustesse : pages d'erreur + middleware → proxy
+
+- Ajout de `app/error.tsx` (boundary avec bouton « Réessayer ») et `app/not-found.tsx` (404) — fini les écrans blancs en cas de pépin.
+- `middleware.ts` renommé en `proxy.ts` (convention Next 16 ; l'avertissement de dépréciation disparaît). Comportement de protection des routes inchangé.
+
 ## 2026-06-25 — Fiche élève enrichie
 
 - Récap financier par élève : total **payé** (séances + packs) et **reste dû** (séances à régler), en sommes Decimal exactes.
