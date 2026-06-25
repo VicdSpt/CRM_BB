@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-06-25 — Fiche élève enrichie
+
+- Récap financier par élève : total **payé** (séances + packs) et **reste dû** (séances à régler), en sommes Decimal exactes.
+- **Historique des séances** de l'élève (date, type, statut de réglement coloré, montant), cliquable vers la séance.
+
 ## 2026-06-22 — Élèves : onglets Actifs / Archivés
 
 - La bascule par lien est remplacée par deux onglets « Actifs » / « Archivés » (segmented control corail), plus clairs. La recherche en cours est conservée au changement d'onglet.
