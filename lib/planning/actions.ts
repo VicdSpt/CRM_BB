@@ -66,6 +66,39 @@ export async function updateSeance(
   redirect(`/planning/${id}`);
 }
 
+export async function dupliquerSeance(id: string): Promise<void> {
+  await requireCoach();
+  const source = await prisma.seance.findUnique({ where: { id } });
+  if (!source) return;
+
+  // Duplique vers la semaine suivante, à la même heure locale, SANS les élèves :
+  // chaque séance n'a pas forcément les mêmes participants. On construit la date
+  // à partir des composants locaux pour éviter toute dérive d'heure (DST).
+  const d = source.dateHeureDebut;
+  const dateHeureDebut = new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    d.getDate() + 7,
+    d.getHours(),
+    d.getMinutes(),
+    0,
+    0,
+  );
+
+  const nouvelle = await prisma.seance.create({
+    data: {
+      type: source.type,
+      dateHeureDebut,
+      dureeMinutes: source.dureeMinutes,
+      lieu: source.lieu,
+      prixReference: source.prixReference,
+    },
+  });
+
+  revalidatePath("/planning");
+  redirect(`/planning/${nouvelle.id}/modifier`);
+}
+
 export async function setStatutSeance(id: string, statut: StatutSeance): Promise<void> {
   await requireCoach();
   await prisma.seance.update({ where: { id }, data: { statut } });

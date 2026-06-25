@@ -1,6 +1,6 @@
 "use client";
 
-import { setStatutSeance, deleteSeance } from "@/lib/planning/actions";
+import { setStatutSeance, deleteSeance, dupliquerSeance } from "@/lib/planning/actions";
 import { Button } from "@/components/ui/button";
 
 export function ActionsSeance({
@@ -29,16 +29,23 @@ export function ActionsSeance({
           </Button>
         </form>
       </div>
-      <form
-        action={() => deleteSeance(id)}
-        onSubmit={(e) => {
-          if (!confirm("Supprimer définitivement cette séance ?")) e.preventDefault();
-        }}
-      >
-        <Button type="submit" variant="destructive" size="sm">
-          Supprimer la séance
-        </Button>
-      </form>
+      <div className="flex flex-wrap gap-2">
+        <form action={() => dupliquerSeance(id)}>
+          <Button type="submit" variant="outline" size="sm">
+            Dupliquer (semaine suivante)
+          </Button>
+        </form>
+        <form
+          action={() => deleteSeance(id)}
+          onSubmit={(e) => {
+            if (!confirm("Supprimer définitivement cette séance ?")) e.preventDefault();
+          }}
+        >
+          <Button type="submit" variant="destructive" size="sm">
+            Supprimer la séance
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
