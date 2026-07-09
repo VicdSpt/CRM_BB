@@ -6,6 +6,15 @@ import { prisma } from "@/lib/prisma";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parsePackForm } from "@/lib/finances/pack-schema";
 
+// Un réglement change la fiche séance, le planning, le dashboard finances
+// et le récap payé/dû de la fiche élève.
+function revaliderApresReglement(seanceId: string, eleveId: string): void {
+  revalidatePath(`/planning/${seanceId}`);
+  revalidatePath("/planning");
+  revalidatePath("/finances");
+  revalidatePath(`/eleves/${eleveId}`);
+}
+
 export async function marquerPaye(
   participationId: string,
   methode: MethodePaiement,
@@ -43,8 +52,7 @@ export async function marquerPaye(
     throw error;
   }
 
-  revalidatePath(`/planning/${participation.seanceId}`);
-  revalidatePath("/planning");
+  revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
 export async function annulerPaiement(participationId: string): Promise<void> {
@@ -60,8 +68,7 @@ export async function annulerPaiement(participationId: string): Promise<void> {
     }),
   ]);
 
-  revalidatePath(`/planning/${participation.seanceId}`);
-  revalidatePath("/planning");
+  revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
 export type PackFormState = { errors?: Record<string, string>; message?: string };
@@ -91,6 +98,7 @@ export async function creerPack(
   });
 
   revalidatePath(`/eleves/${eleveId}`);
+  revalidatePath("/finances");
   return { message: "Pack créé." };
 }
 
@@ -127,6 +135,7 @@ export async function modifierPack(
   ]);
 
   revalidatePath(`/eleves/${pack.eleveId}`);
+  revalidatePath("/finances");
   return { message: "Pack modifié." };
 }
 
@@ -146,6 +155,8 @@ export async function supprimerPack(packId: string): Promise<void> {
   ]);
 
   revalidatePath(`/eleves/${pack.eleveId}`);
+  revalidatePath("/finances");
+  revalidatePath("/planning");
 }
 
 export async function reglerAvecPack(participationId: string): Promise<void> {
@@ -170,8 +181,7 @@ export async function reglerAvecPack(participationId: string): Promise<void> {
     }),
   ]);
 
-  revalidatePath(`/planning/${participation.seanceId}`);
-  revalidatePath("/planning");
+  revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
 export async function annulerPack(participationId: string): Promise<void> {
@@ -196,6 +206,5 @@ export async function annulerPack(participationId: string): Promise<void> {
     }),
   ]);
 
-  revalidatePath(`/planning/${participation.seanceId}`);
-  revalidatePath("/planning");
+  revaliderApresReglement(participation.seanceId, participation.eleveId);
 }

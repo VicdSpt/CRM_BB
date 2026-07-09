@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-09 — Finitions suite au health check
+
+- Les réglements (payer, annuler, pack) et les opérations de pack revalident aussi `/finances` et la fiche élève — plus de chiffres en retard après une action.
+- `.env.example` complété avec `AUTH_TRUST_HOST` et `TZ` (requis pour Vercel).
+
 ## 2026-06-25 — Fiche élève : onglets Fiche / Historique
 
 - L'historique des séances passe dans un onglet dédié (« Historique »), pour ne pas allonger la fiche des élèves fidèles. L'onglet « Fiche » garde infos, récap et packs.
