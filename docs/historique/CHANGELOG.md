@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Animations : cadence des sections espacée
+
+- Les sections (`AnimBloc`) ont désormais leur propre rythme (120 ms d'écart au lieu de 45 ms) : sur Finances et ailleurs, les blocs arrivent en séquence lisible au lieu de tous en même temps.
+- La section Impayés rejoint le flux de la page Finances (bloc n°4) ; sa cascade interne est retirée pour éviter la double animation.
+
 ## 2026-07-16 — Formulaire élève : fade-up Motion
 
 - Les champs du formulaire d'informations (Nouvel élève / Modifier l'élève) apparaissent en cascade champ par champ.
