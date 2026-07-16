@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Fiche élève : fade-up Motion
+
+- Les sections de l'onglet Fiche (infos, récap payé/dû, packs, actions) apparaissent en fade-up cascadé, comme l'accueil et les finances.
+
 ## 2026-07-16 — Animations : passage à Motion (fade-up)
 
 - Les animations d'apparition passent de CSS (tw-animate-css) à **Motion** : fade-up fluide des listes en cascade et des sections de pages (accueil, finances), transition de page en fondu.
