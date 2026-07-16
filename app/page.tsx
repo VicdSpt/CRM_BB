@@ -10,7 +10,7 @@ import { formatJourFr, formatHeureFr } from "@/lib/planning/format";
 import { formatEuros } from "@/lib/finances/format";
 import { prochaineSeance } from "@/lib/accueil";
 import { Button } from "@/components/ui/button";
-import { AnimItem } from "@/components/anim-item";
+import { AnimItem, AnimBloc } from "@/components/anim-item";
 
 export default async function HomePage() {
   await requireCoach();
@@ -29,10 +29,12 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Bonjour Bart !</h1>
-        <p className="text-muted-foreground text-sm capitalize">{formatJourFr(maintenant)}</p>
-      </header>
+      <AnimBloc index={0}>
+        <header className="mb-6">
+          <h1 className="text-2xl font-semibold">Bonjour Bart !</h1>
+          <p className="text-muted-foreground text-sm capitalize">{formatJourFr(maintenant)}</p>
+        </header>
+      </AnimBloc>
 
       <section className="mb-6">
         <h2 className="mb-2 text-sm font-semibold">Aujourd&apos;hui</h2>
@@ -73,31 +75,35 @@ export default async function HomePage() {
         )}
       </section>
 
-      <section className="mb-6 grid grid-cols-2 gap-3">
-        <Button render={<Link href="/planning/nouvelle" />}>
-          <CalendarPlus className="size-4" /> Nouvelle séance
-        </Button>
-        <Button variant="outline" render={<Link href="/eleves/nouveau" />}>
-          <UserPlus className="size-4" /> Nouvel élève
-        </Button>
-      </section>
+      <AnimBloc index={3}>
+        <section className="mb-6 grid grid-cols-2 gap-3">
+          <Button render={<Link href="/planning/nouvelle" />}>
+            <CalendarPlus className="size-4" /> Nouvelle séance
+          </Button>
+          <Button variant="outline" render={<Link href="/eleves/nouveau" />}>
+            <UserPlus className="size-4" /> Nouvel élève
+          </Button>
+        </section>
+      </AnimBloc>
 
-      <section className="grid grid-cols-2 gap-3">
-        <Link
-          href="/finances"
-          className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
-        >
-          <p className="text-muted-foreground text-xs">Encaissé ce mois</p>
-          <p className="text-xl font-semibold">{formatEuros(encaisseMois.toString())}</p>
-        </Link>
-        <Link
-          href="/finances"
-          className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
-        >
-          <p className="text-muted-foreground text-xs">Impayés</p>
-          <p className="text-xl font-semibold">{formatEuros(totalImpayes.toString())}</p>
-        </Link>
-      </section>
+      <AnimBloc index={4}>
+        <section className="grid grid-cols-2 gap-3">
+          <Link
+            href="/finances"
+            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+          >
+            <p className="text-muted-foreground text-xs">Encaissé ce mois</p>
+            <p className="text-xl font-semibold">{formatEuros(encaisseMois.toString())}</p>
+          </Link>
+          <Link
+            href="/finances"
+            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+          >
+            <p className="text-muted-foreground text-xs">Impayés</p>
+            <p className="text-xl font-semibold">{formatEuros(totalImpayes.toString())}</p>
+          </Link>
+        </section>
+      </AnimBloc>
     </main>
   );
 }
