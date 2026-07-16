@@ -86,7 +86,7 @@ export function PackItem({ pack }: { pack: Pack }) {
             id={`methode-${pack.id}`}
             name="methode"
             defaultValue={pack.methode}
-            className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
+            className="bg-background text-foreground h-9 rounded-md border px-3 text-base md:text-sm"
           >
             <option value="ESPECES">Espèces</option>
             <option value="CB">CB</option>

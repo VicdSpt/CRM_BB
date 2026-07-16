@@ -66,10 +66,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Contenu (div, pas <main> : les pages ont déjà leur <main>) */}
-      <div className="flex-1 pb-20 md:pb-0 md:pl-60">{children}</div>
+      <div className="flex-1 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0 md:pl-60">
+        {children}
+      </div>
 
-      {/* Onglets (mobile) */}
-      <nav className="bg-background fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t md:hidden">
+      {/* Onglets (mobile) — pb-[env(...)] : reste au-dessus de la barre d'accueil iPhone */}
+      <nav className="bg-background fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t pb-[env(safe-area-inset-bottom)] md:hidden">
         {ITEMS.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}

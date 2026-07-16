@@ -57,12 +57,12 @@ export function FiltresFinances({
           type="date"
           value={date}
           onChange={(e) => naviguer({ date: e.target.value })}
-          className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
+          className="bg-background text-foreground h-9 rounded-md border px-3 text-base md:text-sm"
         />
         <select
           value={methode}
           onChange={(e) => naviguer({ methode: e.target.value })}
-          className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
+          className="bg-background text-foreground h-9 rounded-md border px-3 text-base md:text-sm"
         >
           {METHODES.map(([value, label]) => (
             <option key={value} value={value}>
