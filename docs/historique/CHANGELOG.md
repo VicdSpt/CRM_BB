@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Mobile : bouton de déconnexion
+
+- La barre du haut (mobile) gagne un bouton de déconnexion à côté de la bascule de thème — il n'existait que dans la barre latérale PC.
+
 ## 2026-07-16 — Fluidité mobile
 
 - Fini le zoom iOS involontaire au focus : les selects natifs et l'input date passent à 16 px sur mobile.
