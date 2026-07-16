@@ -1,9 +1,24 @@
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+"use client";
 
-// Élément de liste avec entrée en cascade (fade + slide-up), décalée selon l'index.
+import type { ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
+
+// Fade-up d'apparition (Motion) : léger, ressort naturel, cascade par index.
 // Le délai est plafonné pour éviter une attente trop longue sur les grandes listes.
-// Le mouvement est neutralisé pour `prefers-reduced-motion` (cf. globals.css).
+// `useReducedMotion` : le CSS global ne neutralise pas les animations pilotées
+// en JS, donc on désactive le mouvement ici quand l'utilisateur le demande.
+const ENTREE = { opacity: 0, y: 14 };
+const VISIBLE = { opacity: 1, y: 0 };
+
+function transitionEntree(index: number) {
+  return {
+    delay: Math.min(index, 12) * 0.045,
+    duration: 0.45,
+    ease: [0.22, 1, 0.36, 1] as const,
+  };
+}
+
+// Élément de liste (li) en cascade.
 export function AnimItem({
   index = 0,
   className,
@@ -13,15 +28,40 @@ export function AnimItem({
   className?: string;
   children: ReactNode;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <li
-      className={cn(
-        "animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-300 ease-out",
-        className,
-      )}
-      style={{ animationDelay: `${Math.min(index, 12) * 40}ms` }}
+    <motion.li
+      className={className}
+      initial={reduceMotion ? false : ENTREE}
+      animate={VISIBLE}
+      transition={transitionEntree(index)}
     >
       {children}
-    </li>
+    </motion.li>
+  );
+}
+
+// Bloc/section de page en fade-up, avec le même rythme que les listes.
+export function AnimBloc({
+  index = 0,
+  className,
+  children,
+}: {
+  index?: number;
+  className?: string;
+  children: ReactNode;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      className={className}
+      initial={reduceMotion ? false : ENTREE}
+      animate={VISIBLE}
+      transition={transitionEntree(index)}
+    >
+      {children}
+    </motion.div>
   );
 }

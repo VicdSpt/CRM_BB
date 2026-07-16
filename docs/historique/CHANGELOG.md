@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Animations : passage à Motion (fade-up)
+
+- Les animations d'apparition passent de CSS (tw-animate-css) à **Motion** : fade-up fluide des listes en cascade et des sections de pages (accueil, finances), transition de page en fondu.
+- `AnimItem` garde la même API ; nouveau `AnimBloc` pour les sections. Mouvement désactivé via `useReducedMotion` (le CSS seul ne couvre pas les animations pilotées en JS).
+
 ## 2026-07-09 — Finitions suite au health check
 
 - Les réglements (payer, annuler, pack) et les opérations de pack revalident aussi `/finances` et la fiche élève — plus de chiffres en retard après une action.

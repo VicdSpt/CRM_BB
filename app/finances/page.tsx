@@ -10,7 +10,7 @@ import { FiltresFinances } from "./filtres";
 import { CamembertRepartition } from "@/components/finances/camembert-repartition";
 import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
-import { AnimItem } from "@/components/anim-item";
+import { AnimItem, AnimBloc } from "@/components/anim-item";
 
 const METHODES_VALIDES = ["ESPECES", "CB"] as const;
 
@@ -52,33 +52,39 @@ export default async function FinancesPage({
         <FiltresFinances periode={periode} date={toDateParam(ref)} methode={sp.methode ?? ""} />
       </div>
 
-      <section className="border-primary/30 from-primary/10 mb-6 rounded-xl border bg-linear-to-br to-transparent p-5">
-        <p className="text-muted-foreground text-sm">Encaissé sur la période</p>
-        <p className="text-4xl font-bold tracking-tight tabular-nums">
-          {formatEuros(total.toString())}
-        </p>
-        {methode ? (
-          <p className="text-muted-foreground mt-1 text-sm">Filtré : {sp.methode}</p>
-        ) : null}
-      </section>
+      <AnimBloc index={0}>
+        <section className="border-primary/30 from-primary/10 mb-6 rounded-xl border bg-linear-to-br to-transparent p-5">
+          <p className="text-muted-foreground text-sm">Encaissé sur la période</p>
+          <p className="text-4xl font-bold tracking-tight tabular-nums">
+            {formatEuros(total.toString())}
+          </p>
+          {methode ? (
+            <p className="text-muted-foreground mt-1 text-sm">Filtré : {sp.methode}</p>
+          ) : null}
+        </section>
+      </AnimBloc>
 
-      <section className="mb-6">
-        <h2 className="mb-3 text-sm font-semibold">Évolution du revenu</h2>
-        <div className="rounded-lg border p-4">
-          <CourbeEvolution data={evolution} />
-        </div>
-      </section>
+      <AnimBloc index={1}>
+        <section className="mb-6">
+          <h2 className="mb-3 text-sm font-semibold">Évolution du revenu</h2>
+          <div className="rounded-lg border p-4">
+            <CourbeEvolution data={evolution} />
+          </div>
+        </section>
+      </AnimBloc>
 
-      <section className="mb-6">
-        <h2 className="mb-3 text-sm font-semibold">Répartition (toutes méthodes)</h2>
-        <div className="rounded-lg border p-4">
-          <CamembertRepartition
-            prive={repartition.prive.toString()}
-            collectif={repartition.collectif.toString()}
-            pack={repartition.pack.toString()}
-          />
-        </div>
-      </section>
+      <AnimBloc index={2}>
+        <section className="mb-6">
+          <h2 className="mb-3 text-sm font-semibold">Répartition (toutes méthodes)</h2>
+          <div className="rounded-lg border p-4">
+            <CamembertRepartition
+              prive={repartition.prive.toString()}
+              collectif={repartition.collectif.toString()}
+              pack={repartition.pack.toString()}
+            />
+          </div>
+        </section>
+      </AnimBloc>
 
       <section>
         <h2 className="text-sm font-semibold">Impayés ({formatEuros(totalImpayes.toString())})</h2>
