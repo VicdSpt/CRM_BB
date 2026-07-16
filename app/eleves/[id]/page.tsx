@@ -11,7 +11,7 @@ import { ActionsEleve } from "./actions-eleve";
 import { PackForm } from "./pack-form";
 import { PackItem } from "./pack-item";
 import { Initiales } from "@/components/initiales";
-import { AnimItem } from "@/components/anim-item";
+import { AnimItem, AnimBloc } from "@/components/anim-item";
 
 export default async function FicheElevePage({
   params,
@@ -101,47 +101,57 @@ async function OngletFiche({
 
   return (
     <>
-      <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
-        <Info label="Téléphone" value={eleve.telephone} />
-        <Info label="Email" value={eleve.email} />
-        <Info label="Notes" value={eleve.notes} />
-      </dl>
+      <AnimBloc index={0}>
+        <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
+          <Info label="Téléphone" value={eleve.telephone} />
+          <Info label="Email" value={eleve.email} />
+          <Info label="Notes" value={eleve.notes} />
+        </dl>
+      </AnimBloc>
 
-      <section className="mb-6 grid grid-cols-2 gap-3">
-        <div className="rounded-lg border p-4">
-          <p className="text-muted-foreground text-xs">Payé</p>
-          <p className="text-xl font-semibold tabular-nums">{formatEuros(totalPaye.toString())}</p>
-        </div>
-        <div className="rounded-lg border p-4">
-          <p className="text-muted-foreground text-xs">Reste dû</p>
-          <p className="text-xl font-semibold tabular-nums">{formatEuros(totalDu.toString())}</p>
-        </div>
-      </section>
+      <AnimBloc index={1}>
+        <section className="mb-6 grid grid-cols-2 gap-3">
+          <div className="rounded-lg border p-4">
+            <p className="text-muted-foreground text-xs">Payé</p>
+            <p className="text-xl font-semibold tabular-nums">
+              {formatEuros(totalPaye.toString())}
+            </p>
+          </div>
+          <div className="rounded-lg border p-4">
+            <p className="text-muted-foreground text-xs">Reste dû</p>
+            <p className="text-xl font-semibold tabular-nums">{formatEuros(totalDu.toString())}</p>
+          </div>
+        </section>
+      </AnimBloc>
 
-      <section className="mb-6">
-        <h2 className="mb-2 text-sm font-semibold">Packs</h2>
-        {packs.length === 0 ? (
-          <p className="text-muted-foreground mb-3 text-sm">Aucun pack.</p>
-        ) : (
-          <ul className="mb-3 flex flex-col gap-2">
-            {packs.map((p) => (
-              <PackItem
-                key={p.id}
-                pack={{
-                  id: p.id,
-                  nbSeancesTotal: p.nbSeancesTotal,
-                  nbSeancesRestantes: p.nbSeancesRestantes,
-                  montantPaye: p.montantPaye.toString(),
-                  methode: p.paiement?.methode ?? "ESPECES",
-                }}
-              />
-            ))}
-          </ul>
-        )}
-        <PackForm eleveId={eleve.id} />
-      </section>
+      <AnimBloc index={2}>
+        <section className="mb-6">
+          <h2 className="mb-2 text-sm font-semibold">Packs</h2>
+          {packs.length === 0 ? (
+            <p className="text-muted-foreground mb-3 text-sm">Aucun pack.</p>
+          ) : (
+            <ul className="mb-3 flex flex-col gap-2">
+              {packs.map((p) => (
+                <PackItem
+                  key={p.id}
+                  pack={{
+                    id: p.id,
+                    nbSeancesTotal: p.nbSeancesTotal,
+                    nbSeancesRestantes: p.nbSeancesRestantes,
+                    montantPaye: p.montantPaye.toString(),
+                    methode: p.paiement?.methode ?? "ESPECES",
+                  }}
+                />
+              ))}
+            </ul>
+          )}
+          <PackForm eleveId={eleve.id} />
+        </section>
+      </AnimBloc>
 
-      <ActionsEleve id={eleve.id} archive={eleve.archive} peutSupprimer={peutSupprimer} />
+      <AnimBloc index={3}>
+        <ActionsEleve id={eleve.id} archive={eleve.archive} peutSupprimer={peutSupprimer} />
+      </AnimBloc>
     </>
   );
 }
