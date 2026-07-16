@@ -2,6 +2,7 @@
 
 import { setArchiveEleve, deleteEleve } from "@/lib/eleves/actions";
 import { Button } from "@/components/ui/button";
+import { BoutonSuppression } from "@/components/bouton-suppression";
 
 export function ActionsEleve({
   id,
@@ -20,18 +21,11 @@ export function ActionsEleve({
         </Button>
       </form>
       {peutSupprimer ? (
-        <form
+        <BoutonSuppression
           action={() => deleteEleve(id)}
-          onSubmit={(e) => {
-            if (!confirm("Supprimer définitivement cet élève ? Cette action est irréversible.")) {
-              e.preventDefault();
-            }
-          }}
-        >
-          <Button type="submit" variant="destructive">
-            Supprimer
-          </Button>
-        </form>
+          titre="Supprimer cet élève ?"
+          description="Cette action est irréversible : l'élève sera définitivement supprimé."
+        />
       ) : (
         <p className="text-muted-foreground text-sm">
           Suppression impossible : l&apos;élève a un historique. Archivez-le.

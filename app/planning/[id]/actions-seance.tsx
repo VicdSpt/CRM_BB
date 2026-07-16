@@ -2,6 +2,7 @@
 
 import { setStatutSeance, deleteSeance, dupliquerSeance } from "@/lib/planning/actions";
 import { Button } from "@/components/ui/button";
+import { BoutonSuppression } from "@/components/bouton-suppression";
 
 export function ActionsSeance({
   id,
@@ -35,16 +36,13 @@ export function ActionsSeance({
             Dupliquer (semaine suivante)
           </Button>
         </form>
-        <form
+        <BoutonSuppression
           action={() => deleteSeance(id)}
-          onSubmit={(e) => {
-            if (!confirm("Supprimer définitivement cette séance ?")) e.preventDefault();
-          }}
-        >
-          <Button type="submit" variant="destructive" size="sm">
-            Supprimer la séance
-          </Button>
-        </form>
+          titre="Supprimer cette séance ?"
+          description="Cette action est irréversible : la séance et ses participations seront supprimées."
+          label="Supprimer la séance"
+          size="sm"
+        />
       </div>
     </div>
   );
