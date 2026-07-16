@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Formulaire élève : fade-up Motion
+
+- Les champs du formulaire d'informations (Nouvel élève / Modifier l'élève) apparaissent en cascade champ par champ.
+
 ## 2026-07-16 — Fiche élève : fade-up Motion
 
 - Les sections de l'onglet Fiche (infos, récap payé/dû, packs, actions) apparaissent en fade-up cascadé, comme l'accueil et les finances.
