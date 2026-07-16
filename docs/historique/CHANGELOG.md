@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Suppressions : modale de confirmation
+
+- Les confirmations de suppression (élève, séance, pack) passent du `confirm()` natif du navigateur à une vraie modale stylée (alert-dialog shadcn), cohérente mobile/PC et avec le thème.
+- Composant réutilisable `BoutonSuppression` (titre, description, action).
+
 ## 2026-07-16 — Mobile : bouton de déconnexion
 
 - La barre du haut (mobile) gagne un bouton de déconnexion à côté de la bascule de thème — il n'existait que dans la barre latérale PC.

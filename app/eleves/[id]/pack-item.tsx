@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { JaugePack } from "@/components/jauge-pack";
+import { BoutonSuppression } from "@/components/bouton-suppression";
 import { formatEuros } from "@/lib/finances/format";
 
 type Pack = {
@@ -31,22 +32,12 @@ export function PackItem({ pack }: { pack: Pack }) {
           <Button variant="ghost" size="sm" onClick={() => setEdition(true)}>
             Modifier
           </Button>
-          <form
+          <BoutonSuppression
             action={() => supprimerPack(pack.id)}
-            onSubmit={(e) => {
-              if (
-                !confirm(
-                  "Supprimer ce pack ? Les séances déjà couvertes par ce pack repasseront en « à régler ».",
-                )
-              ) {
-                e.preventDefault();
-              }
-            }}
-          >
-            <Button type="submit" variant="destructive" size="sm">
-              Supprimer
-            </Button>
-          </form>
+            titre="Supprimer ce pack ?"
+            description="Les séances déjà couvertes par ce pack repasseront en « à régler » et le paiement d'achat sera retiré."
+            size="sm"
+          />
         </div>
       </li>
     );
