@@ -32,7 +32,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Link href="/" className="font-semibold">
           CRM-BB
         </Link>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <form action={deconnexion}>
+            <Button type="submit" variant="ghost" size="icon" aria-label="Se déconnecter">
+              <LogOut className="size-5" />
+            </Button>
+          </form>
+        </div>
       </header>
 
       {/* Sidebar (PC) */}
