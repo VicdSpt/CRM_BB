@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -17,6 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "CRM-BB",
   description: "CRM pour coach sportif — rendez-vous, élèves, finances.",
+};
+
+// viewportFit "cover" : nécessaire pour que env(safe-area-inset-*) fonctionne
+// sur iPhone (barre d'onglets au-dessus de la barre d'accueil iOS).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

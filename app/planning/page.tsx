@@ -85,7 +85,7 @@ export default async function PlanningPage({
                     <AnimItem key={s.id} index={i}>
                       <Link
                         href={`/planning/${s.id}`}
-                        className={`hover:bg-muted flex items-center justify-between gap-3 rounded-lg border border-l-4 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
+                        className={`hover:bg-muted flex items-center justify-between gap-3 rounded-lg border border-l-4 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98] ${
                           s.type === "PRIVE" ? "border-l-primary" : "border-l-sky-500"
                         }`}
                       >

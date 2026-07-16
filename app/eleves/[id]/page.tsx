@@ -173,7 +173,7 @@ async function OngletHistorique({ eleveId }: { eleveId: string }) {
         <AnimItem key={p.id} index={i}>
           <Link
             href={`/planning/${p.seanceId}`}
-            className="hover:bg-muted flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+            className="hover:bg-muted flex items-center justify-between gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
           >
             <span className="flex min-w-0 flex-col">
               <span className="font-medium capitalize">

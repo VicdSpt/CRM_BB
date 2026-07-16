@@ -129,6 +129,16 @@
   html {
     @apply font-sans;
   }
+  /* Tactile : supprime l'attente de double-tap-zoom sur les éléments
+     interactifs — les taps répondent immédiatement sur mobile. */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label {
+    touch-action: manipulation;
+  }
 }
 
 /* Accessibilité : neutralise animations et transitions si l'utilisateur préfère

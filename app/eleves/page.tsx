@@ -73,7 +73,7 @@ export default async function ElevesPage({
             <AnimItem key={e.id} index={i}>
               <Link
                 href={`/eleves/${e.id}`}
-                className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
               >
                 <Initiales prenom={e.prenom} nom={e.nom} />
                 <span className="flex min-w-0 flex-col">

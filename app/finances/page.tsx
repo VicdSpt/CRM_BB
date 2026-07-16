@@ -102,7 +102,7 @@ export default async function FinancesPage({
                 <li key={i.eleveId}>
                   <Link
                     href={`/eleves/${i.eleveId}`}
-                    className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                    className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
                   >
                     <Initiales prenom={i.nom} nom="" />
                     <span className="font-medium">{i.nom}</span>

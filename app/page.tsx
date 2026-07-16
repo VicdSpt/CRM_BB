@@ -51,7 +51,7 @@ export default async function HomePage() {
                 <AnimItem key={s.id} index={i}>
                   <Link
                     href={`/planning/${s.id}`}
-                    className={`hover:bg-muted flex items-center justify-between rounded-lg border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
+                    className={`hover:bg-muted flex items-center justify-between rounded-lg border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98] ${
                       estProchaine ? "border-primary bg-primary/5" : ""
                     }`}
                   >
@@ -90,14 +90,14 @@ export default async function HomePage() {
         <section className="grid grid-cols-2 gap-3">
           <Link
             href="/finances"
-            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
           >
             <p className="text-muted-foreground text-xs">Encaissé ce mois</p>
             <p className="text-xl font-semibold">{formatEuros(encaisseMois.toString())}</p>
           </Link>
           <Link
             href="/finances"
-            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+            className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
           >
             <p className="text-muted-foreground text-xs">Impayés</p>
             <p className="text-xl font-semibold">{formatEuros(totalImpayes.toString())}</p>

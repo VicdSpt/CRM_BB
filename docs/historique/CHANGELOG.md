@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-07-16 — Fluidité mobile
+
+- Fini le zoom iOS involontaire au focus : les selects natifs et l'input date passent à 16 px sur mobile.
+- Barre d'onglets au-dessus de la barre d'accueil iPhone (safe area + `viewportFit: cover`).
+- Taps immédiats : `touch-action: manipulation` sur les éléments interactifs (plus d'attente de double-tap).
+- Retour tactile : léger enfoncement (`active:scale`) des cartes cliquables au tap.
+
 ## 2026-07-16 — Animations : cadence des sections espacée
 
 - Les sections (`AnimBloc`) ont désormais leur propre rythme (120 ms d'écart au lieu de 45 ms) : sur Finances et ailleurs, les blocs arrivent en séquence lisible au lieu de tous en même temps.
