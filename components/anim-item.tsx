@@ -42,7 +42,9 @@ export function AnimItem({
   );
 }
 
-// Bloc/section de page en fade-up, avec le même rythme que les listes.
+// Bloc/section de page en fade-up. Cadence plus espacée que les listes :
+// une section est un gros élément visuel, il faut un vrai décalage pour que
+// l'œil perçoive la séquence (sinon tout semble arriver d'un coup).
 export function AnimBloc({
   index = 0,
   className,
@@ -59,7 +61,11 @@ export function AnimBloc({
       className={className}
       initial={reduceMotion ? false : ENTREE}
       animate={VISIBLE}
-      transition={transitionEntree(index)}
+      transition={{
+        delay: Math.min(index, 8) * 0.12,
+        duration: 0.55,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       {children}
     </motion.div>

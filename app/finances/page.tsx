@@ -10,7 +10,7 @@ import { FiltresFinances } from "./filtres";
 import { CamembertRepartition } from "@/components/finances/camembert-repartition";
 import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
-import { AnimItem, AnimBloc } from "@/components/anim-item";
+import { AnimBloc } from "@/components/anim-item";
 
 const METHODES_VALIDES = ["ESPECES", "CB"] as const;
 
@@ -86,32 +86,36 @@ export default async function FinancesPage({
         </section>
       </AnimBloc>
 
-      <section>
-        <h2 className="text-sm font-semibold">Impayés ({formatEuros(totalImpayes.toString())})</h2>
-        <p className="text-muted-foreground mb-2 text-xs">
-          État courant, indépendant de la période et de la méthode.
-        </p>
-        {impayes.length === 0 ? (
-          <p className="text-muted-foreground text-sm">Aucun impayé. 🎉</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {impayes.map((i, idx) => (
-              <AnimItem key={i.eleveId} index={idx}>
-                <Link
-                  href={`/eleves/${i.eleveId}`}
-                  className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
-                >
-                  <Initiales prenom={i.nom} nom="" />
-                  <span className="font-medium">{i.nom}</span>
-                  <span className="text-muted-foreground ml-auto tabular-nums">
-                    {formatEuros(i.total.toString())}
-                  </span>
-                </Link>
-              </AnimItem>
-            ))}
-          </ul>
-        )}
-      </section>
+      <AnimBloc index={3}>
+        <section>
+          <h2 className="text-sm font-semibold">
+            Impayés ({formatEuros(totalImpayes.toString())})
+          </h2>
+          <p className="text-muted-foreground mb-2 text-xs">
+            État courant, indépendant de la période et de la méthode.
+          </p>
+          {impayes.length === 0 ? (
+            <p className="text-muted-foreground text-sm">Aucun impayé. 🎉</p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {impayes.map((i) => (
+                <li key={i.eleveId}>
+                  <Link
+                    href={`/eleves/${i.eleveId}`}
+                    className="hover:bg-muted flex items-center gap-3 rounded-lg border p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                  >
+                    <Initiales prenom={i.nom} nom="" />
+                    <span className="font-medium">{i.nom}</span>
+                    <span className="text-muted-foreground ml-auto tabular-nums">
+                      {formatEuros(i.total.toString())}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </AnimBloc>
     </main>
   );
 }
