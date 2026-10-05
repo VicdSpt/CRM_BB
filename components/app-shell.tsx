@@ -77,7 +77,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {children}
       </div>
 
-      {/* Onglets (mobile) — pb-[env(...)] : reste au-dessus de la barre d'accueil iPhone */}
+      {/* Onglets (mobile) — marge safe-area : reste au-dessus de la barre d'accueil iPhone */}
       <nav className="bg-background fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t pb-[env(safe-area-inset-bottom)] md:hidden">
         {ITEMS.map(({ href, label, icon: Icon }) => (
           <Link
