@@ -1,7 +1,7 @@
 # Espace élève — inscription, validation, réservation des cours collectifs (V1)
 
 **Date :** 2026-10-27
-**Statut :** Design en revue (brainstorming)
+**Statut :** Design validé (brainstorming)
 **Auteur :** Victor
 
 ---
@@ -214,6 +214,10 @@ livré.
 - Les migrations Prisma doivent préserver les données existantes (fiches sans email,
   séances collectives existantes → capacité 4).
 - **Dépôt public** : aucun secret commité ; workflow branche → commits → push → PR → merge.
+- **Production** : l'app est déployée sur Vercel (https://crm-bb-kohl.vercel.app/), sur la
+  même base Neon. Les migrations doivent être appliquées à la base **avant** le
+  déploiement du code qui en dépend (cf. ADR 0011), et l'ouverture de l'inscription en
+  production ne doit arriver qu'avec la garde de rôle déjà en place.
 - Mettre à jour la doc d'historique : nouvelles **ADR** (au minimum : rôles et gardes ;
   comptes élèves sur la fiche `Eleve` ; ouverture de l'inscription publique, qui revient
   sur l'ADR 0004) et le **CHANGELOG**.
