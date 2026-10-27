@@ -23,6 +23,12 @@ enum StatutReglement {
   COUVERT_PAR_PACK
 }
 
+enum StatutCompte {
+  AUCUN
+  EN_ATTENTE
+  VALIDE
+}
+
 enum MethodePaiement {
   ESPECES
   CB
@@ -37,17 +43,21 @@ model Coach {
 }
 
 model Eleve {
-  id             String          @id @default(cuid())
-  prenom         String
-  nom            String
-  telephone      String?
-  email          String?
-  notes          String?
-  archive        Boolean         @default(false)
-  dateAjout      DateTime        @default(now())
-  participations Participation[]
-  packs          Pack[]
-  paiements      Paiement[]
+  id                 String          @id @default(cuid())
+  prenom             String
+  nom                String
+  telephone          String?
+  email              String?         @unique
+  adresse            String?
+  notes              String?
+  archive            Boolean         @default(false)
+  motDePasse         String?
+  statutCompte       StatutCompte    @default(AUCUN)
+  creeParInscription Boolean         @default(false)
+  dateAjout          DateTime        @default(now())
+  participations     Participation[]
+  packs              Pack[]
+  paiements          Paiement[]
 }
 
 model Seance {
@@ -58,6 +68,7 @@ model Seance {
   lieu           String?
   prixReference  Decimal         @db.Decimal(10, 2)
   statut         StatutSeance    @default(PLANIFIEE)
+  capacite       Int             @default(4)
   createdAt      DateTime        @default(now())
   participations Participation[]
 }
