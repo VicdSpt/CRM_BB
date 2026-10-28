@@ -20,8 +20,8 @@ const ITEMS = [
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
-  // La page de connexion reste hors coquille.
-  if (pathname === "/login") {
+  // Les pages publiques (connexion, inscription) restent hors coquille.
+  if (pathname === "/login" || pathname === "/inscription") {
     return <>{children}</>;
   }
 
