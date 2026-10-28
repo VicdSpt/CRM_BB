@@ -36,7 +36,8 @@ export default async function ElevesPage({
       orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     }),
     prisma.eleve.findMany({
-      where: { statutCompte: "EN_ATTENTE" },
+      // Une fiche archivée ne peut pas se connecter : inutile de la proposer à la validation.
+      where: { statutCompte: "EN_ATTENTE", archive: false },
       orderBy: { dateAjout: "asc" },
       select: {
         id: true,

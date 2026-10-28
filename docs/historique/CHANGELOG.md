@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-28 — Espace élève : durcissement après relecture
+
+- Inscription refusée avec l’email d’une fiche archivée ; fiches archivées exclues de « À valider ».
+- Email pris simultanément (inscription, profil, fiche coach) : message clair au lieu d’une erreur 500 ; deux rattachements simultanés à la même fiche : un seul réussit.
+- Réservation refusée au-delà de l’horizon de 4 semaines, même par un appel forgé ; identifiant de cours validé dans les actions élève.
+- L’email du compte coach ne peut plus être attribué à une fiche élève.
+
 ## 2026-10-28 — Espace élève V1
 
 - **Rôles coach / élève** : la session porte le rôle ; le proxy et les gardes serveur (`requireCoach`, `requireEleve`) le vérifient (ADR 0012). Un élève n'a accès à aucune page ni action coach.

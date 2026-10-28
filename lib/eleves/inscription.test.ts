@@ -56,6 +56,13 @@ describe("decideInscription", () => {
     expect(decideInscription({ id: "e1", statutCompte: "VALIDE" }, false)).toEqual(refus);
   });
 
+  it("refuse le rattachement à une fiche archivée", () => {
+    expect(decideInscription({ id: "e1", statutCompte: "AUCUN", archive: true }, false)).toEqual({
+      type: "refus",
+      message: "Ce compte n'est plus actif. Contacte ton coach.",
+    });
+  });
+
   it("refuse l'email du coach", () => {
     expect(decideInscription(null, true)).toEqual({
       type: "refus",

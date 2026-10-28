@@ -63,11 +63,15 @@ const COMPTE_EXISTANT = "Un compte existe déjà avec cet email.";
 // Une fiche créée par le coach (sans compte) est réutilisée plutôt que dupliquée ;
 // le coach valide de toute façon chaque inscription.
 export function decideInscription(
-  existant: { id: string; statutCompte: StatutCompte } | null,
+  existant: { id: string; statutCompte: StatutCompte; archive?: boolean } | null,
   emailEstCoach: boolean,
 ): DecisionInscription {
   if (emailEstCoach) return { type: "refus", message: COMPTE_EXISTANT };
   if (!existant) return { type: "creer" };
+  // Une fiche archivée ne peut pas se connecter : la rattacher créerait un compte inutilisable.
+  if (existant.archive) {
+    return { type: "refus", message: "Ce compte n'est plus actif. Contacte ton coach." };
+  }
   if (existant.statutCompte === "AUCUN") return { type: "rattacher", eleveId: existant.id };
   return { type: "refus", message: COMPTE_EXISTANT };
 }

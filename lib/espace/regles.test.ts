@@ -80,6 +80,13 @@ describe("peutSInscrire", () => {
     });
   });
 
+  it("refuse un cours au-delà de l'horizon de réservation (4 semaines)", () => {
+    expect(peutSInscrire(cours({ debut: dansHeures(29 * 24) }), now)).toEqual({
+      ok: false,
+      raison: "Ce cours n'est pas encore ouvert à la réservation.",
+    });
+  });
+
   it("refuse une double inscription", () => {
     expect(peutSInscrire(cours({ inscrit: true }), now)).toEqual({
       ok: false,

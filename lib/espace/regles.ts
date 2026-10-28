@@ -45,6 +45,9 @@ export function etatCours(c: Cours, now: Date): EtatCours {
 export function peutSInscrire(c: Cours, now: Date): Verdict {
   if (c.statut === "ANNULEE") return { ok: false, raison: "Ce cours est annulé." };
   if (commence(c, now)) return { ok: false, raison: "Ce cours a déjà commencé." };
+  if (c.debut.getTime() - now.getTime() > HORIZON_JOURS * 24 * HEURE_MS) {
+    return { ok: false, raison: "Ce cours n'est pas encore ouvert à la réservation." };
+  }
   if (c.inscrit) return { ok: false, raison: "Tu es déjà inscrit à ce cours." };
   if (placesRestantes(c.nbInscrits, c.capacite) === 0) {
     return { ok: false, raison: "Ce cours est complet." };
