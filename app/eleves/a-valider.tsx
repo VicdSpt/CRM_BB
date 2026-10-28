@@ -13,7 +13,9 @@ function ControleIdentite({ eleve }: { eleve: EleveAValider }) {
   });
   return (
     <div className="mt-1 flex flex-col gap-1 text-sm text-amber-600">
-      <span>Correspond à une fiche existante — vérifie qu&apos;il s&apos;agit bien de cet élève.</span>
+      <span>
+        Correspond à une fiche existante — vérifie qu&apos;il s&apos;agit bien de cet élève.
+      </span>
       {ecarts.length === 0 ? (
         <span className="text-muted-foreground">Identité saisie identique à la fiche.</span>
       ) : (

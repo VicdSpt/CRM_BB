@@ -18,7 +18,10 @@ export type CarteCoursProps = {
 };
 
 const PASTILLES: Partial<Record<EtatCours, { texte: string; classe: string }>> = {
-  inscrit: { texte: "Inscrit ✓", classe: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400" },
+  inscrit: {
+    texte: "Inscrit ✓",
+    classe: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+  },
   inscrit_verrouille: {
     texte: "Inscrit ✓",
     classe: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",

@@ -5,6 +5,7 @@ const now = new Date(2026, 10, 2, 12, 0);
 const dansHeures = (h: number) => new Date(now.getTime() + h * 3_600_000);
 
 const cours = (overrides: Partial<Cours> = {}): Cours => ({
+  type: "COLLECTIF",
   statut: "PLANIFIEE",
   debut: dansHeures(48),
   nbInscrits: 2,
@@ -100,6 +101,13 @@ describe("peutSeDesinscrire", () => {
 
   it("accepte à plus de 24 h si le cours n'est pas réglé", () => {
     expect(peutSeDesinscrire(inscrit(25, "A_REGLER"), now)).toEqual({ ok: true });
+  });
+
+  it("refuse une séance privée (gérée par le coach)", () => {
+    expect(peutSeDesinscrire({ ...inscrit(48, "A_REGLER"), type: "PRIVE" }, now)).toEqual({
+      ok: false,
+      raison: "Les séances privées se gèrent avec ton coach.",
+    });
   });
 
   it("refuse si le cours est déjà réglé", () => {

@@ -11,7 +11,9 @@ describe("ecartsIdentite", () => {
   });
 
   it("signale chaque champ qui diffère de la fiche existante", () => {
-    expect(ecartsIdentite(fiche, { prenom: "Alex", nom: "Dupont", telephone: "0499 00 00 00" })).toEqual([
+    expect(
+      ecartsIdentite(fiche, { prenom: "Alex", nom: "Dupont", telephone: "0499 00 00 00" }),
+    ).toEqual([
       { champ: "Prénom", fiche: "Sam", saisie: "Alex" },
       { champ: "Téléphone", fiche: "0470 12 34 56", saisie: "0499 00 00 00" },
     ]);

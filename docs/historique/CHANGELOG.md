@@ -7,6 +7,7 @@
 - **Côté coach** : section « À valider » dans Élèves (Valider / Refuser), champ adresse, email unique (minuscules), comptes en attente exclus des listes du planning.
 - **Cours collectifs** : nombre de places (4 par défaut), création sans élève, remplissage « n / c » dans le planning (ADR 0014).
 - **Espace élève** (`/espace`) : liste des cours collectifs des 4 prochaines semaines, inscription (sans dépassement, même en simultané), désinscription jusqu'à 24 h avant ; page profil (email, téléphone, adresse) ; page d'attente pour les comptes non validés.
+- **Accueil élève = profil** : coordonnées, prochains cours et cours passés (privés et collectifs, avec statut de règlement) ; catalogue des cours collectifs dans l’onglet « Réserver ». Le menu dépend du rôle de la session.
 - Paiement en ligne, packs côté élève et connexion Google : hors V1.
 
 ## 2026-07-16 — Suppressions : modale de confirmation

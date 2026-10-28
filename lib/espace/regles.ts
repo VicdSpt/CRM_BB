@@ -1,4 +1,4 @@
-import type { StatutReglement, StatutSeance } from "@prisma/client";
+import type { StatutReglement, StatutSeance, TypeSeance } from "@prisma/client";
 
 // Délai minimum avant le cours pour se désinscrire soi-même (à ajuster avec le coach).
 export const DELAI_DESINSCRIPTION_HEURES = 24;
@@ -6,6 +6,7 @@ export const DELAI_DESINSCRIPTION_HEURES = 24;
 export const HORIZON_JOURS = 28;
 
 export type Cours = {
+  type: TypeSeance;
   statut: StatutSeance;
   debut: Date;
   nbInscrits: number;
@@ -52,6 +53,10 @@ export function peutSInscrire(c: Cours, now: Date): Verdict {
 }
 
 export function peutSeDesinscrire(c: Cours, now: Date): Verdict {
+  // Les séances privées sont visibles dans l'historique mais restent gérées par le coach.
+  if (c.type === "PRIVE") {
+    return { ok: false, raison: "Les séances privées se gèrent avec ton coach." };
+  }
   if (dansLeDelai(c, now)) {
     return {
       ok: false,

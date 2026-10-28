@@ -4,9 +4,10 @@ import type { ReactNode } from "react";
 import { CalendarDays, User } from "lucide-react";
 import { Coquille } from "@/components/coquille";
 
+// Accueil élève = son profil et ses cours ; « Réserver » = catalogue des cours collectifs.
 const ONGLETS_ELEVE = [
-  { href: "/espace", label: "Cours", icon: CalendarDays },
-  { href: "/espace/profil", label: "Profil", icon: User },
+  { href: "/espace", label: "Profil", icon: User },
+  { href: "/espace/cours", label: "Réserver", icon: CalendarDays },
 ] as const;
 
 // Coquille de l'espace élève ; sans onglets sur la page d'attente.

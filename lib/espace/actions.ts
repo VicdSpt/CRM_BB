@@ -32,7 +32,7 @@ export async function updateProfil(_prev: ProfilState, formData: FormData): Prom
     where: { id: eleve.id },
     data: { email, telephone, adresse: adresse ?? null },
   });
-  revalidatePath("/espace/profil");
+  revalidatePath("/espace");
   return { message: "Profil enregistré." };
 }
 
@@ -40,7 +40,8 @@ export async function updateProfil(_prev: ProfilState, formData: FormData): Prom
 export async function reserverCours(seanceId: string): Promise<ResultatAction> {
   const { eleve } = await requireEleve();
   const resultat = await reserverDansTransaction(seanceId, eleve.id, new Date());
-  revalidatePath("/espace");
+  // Le profil (/espace) et le catalogue (/espace/cours) affichent tous deux les inscriptions.
+  revalidatePath("/espace", "layout");
   return resultat;
 }
 
@@ -48,12 +49,15 @@ export async function annulerReservation(seanceId: string): Promise<ResultatActi
   const { eleve } = await requireEleve();
   const participation = await prisma.participation.findUnique({
     where: { seanceId_eleveId: { seanceId, eleveId: eleve.id } },
-    include: { seance: { select: { dateHeureDebut: true, statut: true, capacite: true } } },
+    include: {
+      seance: { select: { type: true, dateHeureDebut: true, statut: true, capacite: true } },
+    },
   });
   if (!participation) return { erreur: "Tu n'es pas inscrit à ce cours." };
 
   const verdict = peutSeDesinscrire(
     {
+      type: participation.seance.type,
       statut: participation.seance.statut,
       debut: participation.seance.dateHeureDebut,
       nbInscrits: 0,
@@ -66,6 +70,6 @@ export async function annulerReservation(seanceId: string): Promise<ResultatActi
   if (!verdict.ok) return { erreur: verdict.raison };
 
   await prisma.participation.delete({ where: { id: participation.id } });
-  revalidatePath("/espace");
+  revalidatePath("/espace", "layout");
   return {};
 }

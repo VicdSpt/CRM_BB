@@ -1,10 +1,54 @@
-import type { StatutReglement, StatutSeance } from "@prisma/client";
+import type { StatutReglement, StatutSeance, TypeSeance } from "@prisma/client";
+
+export type MonCours = {
+  seanceId: string;
+  type: TypeSeance;
+  statut: StatutSeance;
+  debut: Date;
+  dureeMinutes: number;
+  lieu: string | null;
+  montant: string;
+  statutReglement: StatutReglement;
+};
+
+// Historique complet de l'élève (séances privées ET collectives) : uniquement ses
+// propres participations, jamais celles des autres.
+export async function mesCours(eleveId: string): Promise<MonCours[]> {
+  const participations = await prisma.participation.findMany({
+    where: { eleveId },
+    select: {
+      montant: true,
+      statutReglement: true,
+      seance: {
+        select: {
+          id: true,
+          type: true,
+          statut: true,
+          dateHeureDebut: true,
+          dureeMinutes: true,
+          lieu: true,
+        },
+      },
+    },
+  });
+  return participations.map((p) => ({
+    seanceId: p.seance.id,
+    type: p.seance.type,
+    statut: p.seance.statut,
+    debut: p.seance.dateHeureDebut,
+    dureeMinutes: p.seance.dureeMinutes,
+    lieu: p.seance.lieu,
+    montant: p.montant.toString(),
+    statutReglement: p.statutReglement,
+  }));
+}
 import { prisma } from "@/lib/prisma";
 import { addDays } from "@/lib/planning/dates";
 import { HORIZON_JOURS } from "./regles";
 
 export type CoursEleve = {
   id: string;
+  type: "COLLECTIF";
   debut: Date;
   dureeMinutes: number;
   lieu: string | null;
@@ -41,6 +85,7 @@ export async function coursAVenir(eleveId: string, now: Date): Promise<CoursElev
 
   return seances.map((s) => ({
     id: s.id,
+    type: "COLLECTIF" as const,
     debut: s.dateHeureDebut,
     dureeMinutes: s.dureeMinutes,
     lieu: s.lieu,

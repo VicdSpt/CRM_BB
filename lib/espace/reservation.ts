@@ -30,6 +30,7 @@ export async function reserverDansTransaction(
 
     const verdict = peutSInscrire(
       {
+        type: seance.type,
         statut: seance.statut,
         debut: seance.dateHeureDebut,
         nbInscrits: seance._count.participations,
