@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppShell } from "@/components/app-shell";
+import { auth } from "@/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +28,15 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Le rôle choisit le menu (coach ou élève), quelle que soit l'URL affichée.
+  const session = await auth();
+  const role = session?.user?.role ?? null;
+
   return (
     <html
       lang="fr"
@@ -45,7 +50,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AppShell>{children}</AppShell>
+          <AppShell role={role}>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

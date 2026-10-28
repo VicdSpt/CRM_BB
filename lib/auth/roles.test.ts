@@ -1,5 +1,33 @@
 import { describe, it, expect } from "vitest";
-import { routeAutorisee } from "./roles";
+import { accueilPour, coquillePour, routeAutorisee } from "./roles";
+
+describe("coquillePour", () => {
+  it("n'affiche aucune coquille sur les pages publiques", () => {
+    expect(coquillePour(null, "/login")).toBe("aucune");
+    expect(coquillePour("eleve", "/inscription")).toBe("aucune");
+  });
+
+  it("donne la coquille élève à un élève, quelle que soit l'URL affichée", () => {
+    // Après une redirection d'action serveur, l'URL peut rester « / ».
+    expect(coquillePour("eleve", "/")).toBe("eleve");
+    expect(coquillePour("eleve", "/espace")).toBe("eleve");
+  });
+
+  it("donne la coquille coach au coach", () => {
+    expect(coquillePour("coach", "/")).toBe("coach");
+  });
+
+  it("n'affiche aucune coquille sans rôle", () => {
+    expect(coquillePour(null, "/")).toBe("aucune");
+  });
+});
+
+describe("accueilPour", () => {
+  it("envoie le coach sur / et l'élève sur /espace", () => {
+    expect(accueilPour("coach")).toBe("/");
+    expect(accueilPour("eleve")).toBe("/espace");
+  });
+});
 
 describe("routeAutorisee", () => {
   it("laisse un visiteur non connecté sur les pages publiques", () => {

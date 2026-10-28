@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { CalendarDays, Home, Users, Wallet } from "lucide-react";
-import { isActive } from "@/lib/nav";
+import { coquillePour, type Role } from "@/lib/auth/roles";
 import { Coquille } from "@/components/coquille";
 import { EleveShell } from "@/components/eleve-shell";
 
@@ -14,15 +14,14 @@ const ITEMS = [
   { href: "/finances", label: "Finances", icon: Wallet },
 ] as const;
 
-export function AppShell({ children }: { children: ReactNode }) {
+// Le menu dépend du rôle de la session (fourni par le layout serveur), pas de l'URL.
+export function AppShell({ role, children }: { role: Role | null; children: ReactNode }) {
   const pathname = usePathname();
+  const coquille = coquillePour(role, pathname);
 
-  // Les pages publiques (connexion, inscription) restent hors coquille.
-  if (pathname === "/login" || pathname === "/inscription") {
-    return <>{children}</>;
-  }
+  if (coquille === "aucune") return <>{children}</>;
 
-  if (isActive(pathname, "/espace")) {
+  if (coquille === "eleve") {
     return <EleveShell onglets={pathname !== "/espace/attente"}>{children}</EleveShell>;
   }
 
