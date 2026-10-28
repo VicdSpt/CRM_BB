@@ -2,20 +2,29 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parseEleveForm } from "@/lib/eleves/schema";
+import { estDoublonUnique } from "@/lib/prisma-erreurs";
 
 export type EleveFormState = { errors?: Record<string, string>; message?: string };
 
 const EMAIL_DEJA_PRIS: EleveFormState = {
   errors: { email: "Cet email est déjà utilisé par un autre élève." },
 };
+const EMAIL_DU_COACH: EleveFormState = {
+  errors: { email: "Cet email est celui du compte coach." },
+};
 
-// L'email est unique (identifiant de connexion élève) : Prisma lève P2002 en cas de doublon.
-function estDoublonEmail(e: unknown): boolean {
-  return e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
+// L'email sert d'identifiant de connexion : celui du coach ne peut pas aller sur une fiche
+// élève (le coach étant cherché en premier, l'élève ne pourrait jamais se connecter).
+async function estEmailDuCoach(email: string | undefined): Promise<boolean> {
+  if (!email) return false;
+  const coach = await prisma.coach.findFirst({
+    where: { email: { equals: email, mode: "insensitive" } },
+    select: { id: true },
+  });
+  return !!coach;
 }
 
 export async function createEleve(
@@ -27,10 +36,11 @@ export async function createEleve(
   if (!result.success) {
     return { errors: result.errors };
   }
+  if (await estEmailDuCoach(result.data.email)) return EMAIL_DU_COACH;
   try {
     await prisma.eleve.create({ data: result.data });
   } catch (e) {
-    if (estDoublonEmail(e)) return EMAIL_DEJA_PRIS;
+    if (estDoublonUnique(e)) return EMAIL_DEJA_PRIS;
     throw e;
   }
   revalidatePath("/eleves");
@@ -47,10 +57,11 @@ export async function updateEleve(
   if (!result.success) {
     return { errors: result.errors };
   }
+  if (await estEmailDuCoach(result.data.email)) return EMAIL_DU_COACH;
   try {
     await prisma.eleve.update({ where: { id }, data: result.data });
   } catch (e) {
-    if (estDoublonEmail(e)) return EMAIL_DEJA_PRIS;
+    if (estDoublonUnique(e)) return EMAIL_DEJA_PRIS;
     throw e;
   }
   revalidatePath("/eleves");
