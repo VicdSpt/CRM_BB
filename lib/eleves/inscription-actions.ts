@@ -41,11 +41,16 @@ export async function inscrireEleve(
     });
   } else {
     // Fiche du coach : on garde son prénom/nom, on complète le téléphone s'il manque.
+    // L'identité saisie est conservée à part pour que le coach la compare à la fiche
+    // avant de valider (n'importe qui peut taper l'email d'un autre élève).
     await prisma.eleve.update({
       where: { id: decision.eleveId },
       data: {
         motDePasse: hash,
         statutCompte: "EN_ATTENTE",
+        inscriptionPrenom: prenom,
+        inscriptionNom: nom,
+        inscriptionTelephone: telephone,
         ...(existant?.telephone ? {} : { telephone }),
       },
     });

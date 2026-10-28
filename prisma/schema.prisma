@@ -43,21 +43,26 @@ model Coach {
 }
 
 model Eleve {
-  id                 String          @id @default(cuid())
-  prenom             String
-  nom                String
-  telephone          String?
-  email              String?         @unique
-  adresse            String?
-  notes              String?
-  archive            Boolean         @default(false)
-  motDePasse         String?
-  statutCompte       StatutCompte    @default(AUCUN)
-  creeParInscription Boolean         @default(false)
-  dateAjout          DateTime        @default(now())
-  participations     Participation[]
-  packs              Pack[]
-  paiements          Paiement[]
+  id                   String          @id @default(cuid())
+  prenom               String
+  nom                  String
+  telephone            String?
+  email                String?         @unique
+  adresse              String?
+  notes                String?
+  archive              Boolean         @default(false)
+  motDePasse           String?
+  statutCompte         StatutCompte    @default(AUCUN)
+  creeParInscription   Boolean         @default(false)
+  // Identité saisie lors d'un rattachement à une fiche existante (contrôle d'usurpation
+  // par le coach) ; effacée à la validation ou au refus.
+  inscriptionPrenom    String?
+  inscriptionNom       String?
+  inscriptionTelephone String?
+  dateAjout            DateTime        @default(now())
+  participations       Participation[]
+  packs                Pack[]
+  paiements            Paiement[]
 }
 
 model Seance {

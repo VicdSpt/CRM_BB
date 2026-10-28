@@ -1,6 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { BoutonSuppression } from "@/components/bouton-suppression";
 import { refuserCompte, validerCompte } from "@/lib/eleves/actions";
+import { ecartsIdentite } from "@/lib/eleves/inscription";
+
+// Rattachement à une fiche existante : la personne a tapé l'email de cette fiche.
+// On montre ce qu'elle a saisi pour que le coach repère une usurpation.
+function ControleIdentite({ eleve }: { eleve: EleveAValider }) {
+  const ecarts = ecartsIdentite(eleve, {
+    prenom: eleve.inscriptionPrenom,
+    nom: eleve.inscriptionNom,
+    telephone: eleve.inscriptionTelephone,
+  });
+  return (
+    <div className="mt-1 flex flex-col gap-1 text-sm text-amber-600">
+      <span>Correspond à une fiche existante — vérifie qu&apos;il s&apos;agit bien de cet élève.</span>
+      {ecarts.length === 0 ? (
+        <span className="text-muted-foreground">Identité saisie identique à la fiche.</span>
+      ) : (
+        <ul className="list-disc pl-5">
+          {ecarts.map((x) => (
+            <li key={x.champ}>
+              {x.champ} saisi : <strong>{x.saisie}</strong> (fiche : {x.fiche})
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 type EleveAValider = {
   id: string;
@@ -9,6 +36,9 @@ type EleveAValider = {
   email: string | null;
   telephone: string | null;
   creeParInscription: boolean;
+  inscriptionPrenom: string | null;
+  inscriptionNom: string | null;
+  inscriptionTelephone: string | null;
 };
 
 // Section en tête de « Élèves » : comptes créés par les élèves, en attente du coach.
@@ -29,9 +59,7 @@ export function ElevesAValider({ eleves }: { eleves: EleveAValider[] }) {
               {e.telephone ? (
                 <span className="text-muted-foreground text-sm">{e.telephone}</span>
               ) : null}
-              {!e.creeParInscription ? (
-                <span className="text-sm text-amber-600">Correspond à une fiche existante</span>
-              ) : null}
+              {!e.creeParInscription ? <ControleIdentite eleve={e} /> : null}
             </div>
             <div className="flex gap-2">
               <form action={validerCompte.bind(null, e.id)} className="flex-1">

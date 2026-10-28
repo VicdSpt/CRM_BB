@@ -35,6 +35,24 @@ export function parseInscriptionForm(formData: FormData): ParseResult {
   return { success: false, errors };
 }
 
+type Identite = { prenom: string | null; nom: string | null; telephone: string | null };
+export type EcartIdentite = { champ: string; fiche: string; saisie: string };
+
+const normaliser = (v: string) => v.toLowerCase().replace(/\s+/g, "");
+
+// Lors d'un rattachement, compare l'identité saisie à la fiche existante pour que le
+// coach repère une usurpation (quelqu'un qui s'inscrit avec l'email d'un autre élève).
+export function ecartsIdentite(fiche: Identite, saisie: Identite): EcartIdentite[] {
+  const champs = [
+    ["Prénom", fiche.prenom, saisie.prenom],
+    ["Nom", fiche.nom, saisie.nom],
+    ["Téléphone", fiche.telephone, saisie.telephone],
+  ] as const;
+  return champs
+    .filter(([, f, s]) => s !== null && normaliser(f ?? "") !== normaliser(s))
+    .map(([champ, f, s]) => ({ champ, fiche: f ?? "—", saisie: s as string }));
+}
+
 export type DecisionInscription =
   | { type: "creer" }
   | { type: "rattacher"; eleveId: string }

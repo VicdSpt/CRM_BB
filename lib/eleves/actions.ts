@@ -58,9 +58,19 @@ export async function updateEleve(
   redirect(`/eleves/${id}`);
 }
 
+// L'identité saisie à l'inscription ne sert qu'à la décision du coach.
+const IDENTITE_INSCRIPTION_EFFACEE = {
+  inscriptionPrenom: null,
+  inscriptionNom: null,
+  inscriptionTelephone: null,
+};
+
 export async function validerCompte(id: string): Promise<void> {
   await requireCoach();
-  await prisma.eleve.update({ where: { id }, data: { statutCompte: "VALIDE" } });
+  await prisma.eleve.update({
+    where: { id },
+    data: { statutCompte: "VALIDE", ...IDENTITE_INSCRIPTION_EFFACEE },
+  });
   revalidatePath("/eleves");
 }
 
@@ -75,7 +85,7 @@ export async function refuserCompte(id: string): Promise<void> {
   } else {
     await prisma.eleve.update({
       where: { id },
-      data: { motDePasse: null, statutCompte: "AUCUN" },
+      data: { motDePasse: null, statutCompte: "AUCUN", ...IDENTITE_INSCRIPTION_EFFACEE },
     });
   }
   revalidatePath("/eleves");

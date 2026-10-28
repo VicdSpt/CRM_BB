@@ -1,5 +1,26 @@
 import { describe, it, expect } from "vitest";
-import { decideInscription, parseInscriptionForm } from "./inscription";
+import { decideInscription, ecartsIdentite, parseInscriptionForm } from "./inscription";
+
+describe("ecartsIdentite", () => {
+  const fiche = { prenom: "Sam", nom: "Dupont", telephone: "0470 12 34 56" };
+
+  it("ne signale rien quand l'identité saisie correspond (casse et espaces ignorés)", () => {
+    expect(
+      ecartsIdentite(fiche, { prenom: " sam ", nom: "DUPONT", telephone: "0470123456" }),
+    ).toEqual([]);
+  });
+
+  it("signale chaque champ qui diffère de la fiche existante", () => {
+    expect(ecartsIdentite(fiche, { prenom: "Alex", nom: "Dupont", telephone: "0499 00 00 00" })).toEqual([
+      { champ: "Prénom", fiche: "Sam", saisie: "Alex" },
+      { champ: "Téléphone", fiche: "0470 12 34 56", saisie: "0499 00 00 00" },
+    ]);
+  });
+
+  it("ignore un champ non saisi", () => {
+    expect(ecartsIdentite(fiche, { prenom: null, nom: null, telephone: null })).toEqual([]);
+  });
+});
 
 function fd(entries: Record<string, string>): FormData {
   const f = new FormData();

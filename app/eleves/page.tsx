@@ -45,6 +45,9 @@ export default async function ElevesPage({
         email: true,
         telephone: true,
         creeParInscription: true,
+        inscriptionPrenom: true,
+        inscriptionNom: true,
+        inscriptionTelephone: true,
       },
     }),
   ]);
