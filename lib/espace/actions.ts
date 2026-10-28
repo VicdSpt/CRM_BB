@@ -5,8 +5,36 @@ import { prisma } from "@/lib/prisma";
 import { requireEleve } from "@/lib/auth/require-eleve";
 import { peutSeDesinscrire } from "./regles";
 import { reserverDansTransaction } from "./reservation";
+import { parseProfilForm, verifierEmailLibre } from "./profil";
 
 export type ResultatAction = { erreur?: string };
+export type ProfilState = { errors?: Record<string, string>; message?: string };
+
+export async function updateProfil(_prev: ProfilState, formData: FormData): Promise<ProfilState> {
+  const { eleve } = await requireEleve();
+  const result = parseProfilForm(formData);
+  if (!result.success) return { errors: result.errors };
+  const { email, telephone, adresse } = result.data;
+
+  const [eleveAvecEmail, coach] = await Promise.all([
+    prisma.eleve.findUnique({ where: { email }, select: { id: true } }),
+    prisma.coach.findFirst({ where: { email: { equals: email, mode: "insensitive" } } }),
+  ]);
+  const erreurEmail = verifierEmailLibre(email, {
+    eleveIdCourant: eleve.id,
+    eleveAvecEmail,
+    emailEstCoach: !!coach,
+  });
+  if (erreurEmail) return { errors: { email: erreurEmail } };
+
+  // Uniquement ces trois champs : jamais prénom, nom ni les notes du coach.
+  await prisma.eleve.update({
+    where: { id: eleve.id },
+    data: { email, telephone, adresse: adresse ?? null },
+  });
+  revalidatePath("/espace/profil");
+  return { message: "Profil enregistré." };
+}
 
 // Toutes les actions élève agissent sur l'élève de la SESSION, jamais sur un id reçu.
 export async function reserverCours(seanceId: string): Promise<ResultatAction> {
