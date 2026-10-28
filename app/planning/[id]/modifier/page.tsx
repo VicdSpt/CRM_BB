@@ -22,7 +22,8 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
   if (!seance) notFound();
 
   const eleves = await prisma.eleve.findMany({
-    where: { archive: false },
+    // Les comptes élèves en attente de validation ne sont pas encore sélectionnables.
+    where: { archive: false, statutCompte: { not: "EN_ATTENTE" } },
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     select: { id: true, prenom: true, nom: true },
   });
@@ -34,6 +35,7 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
     dureeMinutes: seance.dureeMinutes,
     lieu: seance.lieu,
     prixReference: seance.prixReference.toString(),
+    capacite: seance.capacite,
     eleveIds: seance.participations.map((p) => p.eleveId),
   };
 

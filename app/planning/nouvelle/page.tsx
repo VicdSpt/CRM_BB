@@ -7,7 +7,8 @@ import { SeanceForm } from "../seance-form";
 export default async function NouvelleSeancePage() {
   await requireCoach();
   const eleves = await prisma.eleve.findMany({
-    where: { archive: false },
+    // Les comptes élèves en attente de validation ne sont pas encore sélectionnables.
+    where: { archive: false, statutCompte: { not: "EN_ATTENTE" } },
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     select: { id: true, prenom: true, nom: true },
   });

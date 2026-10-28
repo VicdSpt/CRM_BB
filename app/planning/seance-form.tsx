@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import type { SeanceFormState } from "@/lib/planning/actions";
+import { CAPACITE_PAR_DEFAUT } from "@/lib/planning/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +15,7 @@ type SeanceInitial = {
   dureeMinutes?: number;
   lieu?: string | null;
   prixReference?: number | string;
+  capacite?: number;
   eleveIds?: string[];
 };
 
@@ -27,15 +29,28 @@ type Props = {
 export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const selected = new Set(initial?.eleveIds ?? []);
+  const [type, setType] = useState(initial?.type ?? "PRIVE");
+  const [capacite, setCapacite] = useState(initial?.capacite ?? CAPACITE_PAR_DEFAUT);
+  const [nbCoches, setNbCoches] = useState(selected.size);
+  const collectif = type === "COLLECTIF";
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form
+      action={formAction}
+      className="flex flex-col gap-4"
+      // Compte les élèves cochés pour avertir d'un dépassement de capacité.
+      onChange={(e) => {
+        const form = e.currentTarget;
+        setNbCoches(form.querySelectorAll('input[name="eleveIds"]:checked').length);
+      }}
+    >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="type">Type</Label>
         <select
           id="type"
           name="type"
-          defaultValue={initial?.type ?? "PRIVE"}
+          value={type}
+          onChange={(e) => setType(e.target.value as "PRIVE" | "COLLECTIF")}
           className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
         >
           <option value="PRIVE">Cours privé</option>
@@ -85,6 +100,23 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
         <Input id="lieu" name="lieu" defaultValue={initial?.lieu ?? ""} />
       </div>
 
+      {collectif ? (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="capacite">Places</Label>
+          <Input
+            id="capacite"
+            name="capacite"
+            type="number"
+            min={1}
+            value={capacite}
+            onChange={(e) => setCapacite(Number(e.target.value))}
+          />
+          {state.errors?.capacite ? (
+            <p className="text-sm text-red-600">{state.errors.capacite}</p>
+          ) : null}
+        </div>
+      ) : null}
+
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-medium">Élèves</legend>
         {eleves.length === 0 ? (
@@ -104,6 +136,11 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
             </label>
           ))
         )}
+        {collectif && nbCoches > capacite ? (
+          <p className="text-sm text-amber-600">
+            Au-delà de la capacité ({nbCoches} / {capacite}).
+          </p>
+        ) : null}
         {state.errors?.eleveIds ? (
           <p className="text-sm text-red-600">{state.errors.eleveIds}</p>
         ) : null}
