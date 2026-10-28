@@ -10,9 +10,12 @@ export const eleveSchema = z.object({
   prenom: z.string().trim().min(1, "Le prénom est obligatoire"),
   nom: z.string().trim().min(1, "Le nom est obligatoire"),
   telephone: optionalText,
+  adresse: optionalText,
+  // L'email sert d'identifiant de connexion élève : toujours en minuscules.
   email: z
     .string()
     .trim()
+    .toLowerCase()
     .optional()
     .transform((v) => (v ? v : undefined))
     .pipe(z.string().email("Email invalide").optional()),
@@ -30,6 +33,7 @@ export function parseEleveForm(formData: FormData): ParseResult {
     prenom: String(formData.get("prenom") ?? ""),
     nom: String(formData.get("nom") ?? ""),
     telephone: String(formData.get("telephone") ?? ""),
+    adresse: String(formData.get("adresse") ?? ""),
     email: String(formData.get("email") ?? ""),
     notes: String(formData.get("notes") ?? ""),
   };

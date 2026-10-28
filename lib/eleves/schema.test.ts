@@ -28,6 +28,21 @@ describe("eleveSchema", () => {
     expect(r.telephone).toBeUndefined();
     expect(r.email).toBeUndefined();
   });
+
+  it("transforme une adresse vide (espaces) en undefined", () => {
+    const r = eleveSchema.parse({ prenom: "Jean", nom: "Dupont", adresse: "  " });
+    expect(r.adresse).toBeUndefined();
+  });
+
+  it("conserve l'adresse saisie", () => {
+    const r = eleveSchema.parse({ prenom: "Jean", nom: "Dupont", adresse: "Rue X 1" });
+    expect(r.adresse).toBe("Rue X 1");
+  });
+
+  it("met l'email en minuscules et retire les espaces", () => {
+    const r = eleveSchema.parse({ prenom: "Jean", nom: "Dupont", email: " Sam@Exemple.BE " });
+    expect(r.email).toBe("sam@exemple.be");
+  });
 });
 
 describe("parseEleveForm", () => {

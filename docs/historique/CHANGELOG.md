@@ -1,5 +1,15 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-28 — Espace élève V1
+
+- **Rôles coach / élève** : la session porte le rôle ; le proxy et les gardes serveur (`requireCoach`, `requireEleve`) le vérifient (ADR 0012). Un élève n'a accès à aucune page ni action coach.
+- **Inscription publique** (`/inscription`) : prénom, nom, email, téléphone, mot de passe. Le compte est « en attente » jusqu'à validation par le coach ; une fiche existante avec le même email est réutilisée (ADR 0013).
+- **Côté coach** : section « À valider » dans Élèves (Valider / Refuser), champ adresse, email unique (minuscules), comptes en attente exclus des listes du planning.
+- **Cours collectifs** : nombre de places (4 par défaut), création sans élève, remplissage « n / c » dans le planning (ADR 0014).
+- **Espace élève** (`/espace`) : liste des cours collectifs des 4 prochaines semaines, inscription (sans dépassement, même en simultané), désinscription jusqu'à 24 h avant ; page profil (email, téléphone, adresse) ; page d'attente pour les comptes non validés.
+- **Trois onglets élève** : Profil (page d’arrivée), Réserver (cours collectifs) et Mes cours (à venir et passés, séances privées incluses, avec statut de règlement). Le menu dépend du rôle de la session.
+- Paiement en ligne, packs côté élève et connexion Google : hors V1.
+
 ## 2026-07-16 — Suppressions : modale de confirmation
 
 - Les confirmations de suppression (élève, séance, pack) passent du `confirm()` natif du navigateur à une vraie modale stylée (alert-dialog shadcn), cohérente mobile/PC et avec le thème.

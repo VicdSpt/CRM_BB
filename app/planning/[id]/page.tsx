@@ -49,6 +49,9 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
         <Info label="Durée" value={`${seance.dureeMinutes} min`} />
         <Info label="Lieu" value={seance.lieu} />
         <Info label="Prix" value={`${seance.prixReference.toString()} €`} />
+        {seance.type === "COLLECTIF" ? (
+          <Info label="Places" value={`${seance.participations.length} / ${seance.capacite}`} />
+        ) : null}
       </dl>
 
       <h2 className="mb-2 text-sm font-semibold">Élèves ({seance.participations.length})</h2>

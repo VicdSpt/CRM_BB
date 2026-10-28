@@ -28,8 +28,16 @@ describe("seanceSchema", () => {
     expect(seanceSchema.safeParse({ ...base, prixReference: "-5" }).success).toBe(false);
   });
 
-  it("rejette une séance sans élève", () => {
-    expect(seanceSchema.safeParse({ ...base, eleveIds: [] }).success).toBe(false);
+  it("accepte un cours collectif sans élève (les élèves s'inscrivent eux-mêmes)", () => {
+    expect(seanceSchema.safeParse({ ...base, eleveIds: [] }).success).toBe(true);
+  });
+
+  it("rejette un cours privé sans élève", () => {
+    const res = seanceSchema.safeParse({ ...base, type: "PRIVE", eleveIds: [] });
+    expect(res.success).toBe(false);
+    if (!res.success) {
+      expect(res.error.issues[0].message).toBe("Un cours privé doit avoir exactement un élève");
+    }
   });
 
   it("rejette un cours privé avec 2 élèves", () => {
@@ -64,16 +72,42 @@ describe("parseSeanceForm", () => {
     }
   });
 
-  it("renvoie une erreur si aucun élève sélectionné", () => {
+  it("renvoie une erreur si aucun élève sélectionné pour un cours privé", () => {
     const res = parseSeanceForm(
       fd([
-        ["type", "COLLECTIF"],
+        ["type", "PRIVE"],
         ["dateHeureDebut", "2026-06-20T18:00"],
         ["dureeMinutes", "60"],
         ["prixReference", "15"],
       ]),
     );
     expect(res.success).toBe(false);
-    if (!res.success) expect(res.errors.eleveIds).toBeTruthy();
+    if (!res.success) {
+      expect(res.errors.eleveIds).toBe("Un cours privé doit avoir exactement un élève");
+    }
+  });
+
+  const collectif = (capacite: string): Array<[string, string]> => [
+    ["type", "COLLECTIF"],
+    ["dateHeureDebut", "2026-06-20T18:00"],
+    ["dureeMinutes", "60"],
+    ["prixReference", "15"],
+    ["capacite", capacite],
+  ];
+
+  it("met 4 places par défaut quand la capacité est vide", () => {
+    const res = parseSeanceForm(fd(collectif("")));
+    expect(res.success && res.data.capacite).toBe(4);
+  });
+
+  it("lit la capacité saisie", () => {
+    const res = parseSeanceForm(fd(collectif("6")));
+    expect(res.success && res.data.capacite).toBe(6);
+  });
+
+  it("rejette une capacité de 0", () => {
+    const res = parseSeanceForm(fd(collectif("0")));
+    expect(res.success).toBe(false);
+    if (!res.success) expect(res.errors.capacite).toBe("Au moins 1 place");
   });
 });

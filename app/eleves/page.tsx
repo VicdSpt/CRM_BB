@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Initiales } from "@/components/initiales";
 import { AnimItem } from "@/components/anim-item";
 import { RechercheEleves } from "./recherche";
+import { ElevesAValider } from "./a-valider";
 
 export default async function ElevesPage({
   searchParams,
@@ -17,7 +18,11 @@ export default async function ElevesPage({
   const { q, archives } = await searchParams;
   const showArchived = archives === "1";
 
-  const where: Prisma.EleveWhereInput = { archive: showArchived };
+  // Les comptes en attente apparaissent dans « À valider », pas dans les onglets.
+  const where: Prisma.EleveWhereInput = {
+    archive: showArchived,
+    statutCompte: { not: "EN_ATTENTE" },
+  };
   if (q) {
     where.OR = [
       { prenom: { contains: q, mode: "insensitive" } },
@@ -25,10 +30,27 @@ export default async function ElevesPage({
     ];
   }
 
-  const eleves = await prisma.eleve.findMany({
-    where,
-    orderBy: [{ nom: "asc" }, { prenom: "asc" }],
-  });
+  const [eleves, aValider] = await Promise.all([
+    prisma.eleve.findMany({
+      where,
+      orderBy: [{ nom: "asc" }, { prenom: "asc" }],
+    }),
+    prisma.eleve.findMany({
+      where: { statutCompte: "EN_ATTENTE" },
+      orderBy: { dateAjout: "asc" },
+      select: {
+        id: true,
+        prenom: true,
+        nom: true,
+        email: true,
+        telephone: true,
+        creeParInscription: true,
+        inscriptionPrenom: true,
+        inscriptionNom: true,
+        inscriptionTelephone: true,
+      },
+    }),
+  ]);
 
   // Liens d'onglets (on conserve la recherche en cours).
   const actifsHref = q ? `/eleves?q=${encodeURIComponent(q)}` : "/eleves";
@@ -44,6 +66,8 @@ export default async function ElevesPage({
         <h1 className="text-2xl font-semibold">Élèves</h1>
         <Button render={<Link href="/eleves/nouveau" />}>Nouvel élève</Button>
       </div>
+
+      <ElevesAValider eleves={aValider} />
 
       <div className="mb-3">
         <RechercheEleves />

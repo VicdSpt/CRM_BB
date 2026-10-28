@@ -241,3 +241,13 @@ livré.
 
 Après la V1 : **connexion Google** pour les élèves (Auth.js provider Google), puis reprise de
 la discussion **paiement en ligne** (Stripe / QR code) avec le coach.
+
+---
+
+## 8. Évolution du 2026-10-28 (retour de Victor après test)
+
+- **Trois onglets élève** : **Profil** (`/espace`, page d’arrivée, coordonnées modifiables), **Réserver** (`/espace/cours`, catalogue des cours collectifs) et **Mes cours** (`/espace/mes-cours`, tous ses cours à venir puis passés, avec le statut de règlement : à régler / payé / pack).
+- **Les séances privées de l'élève apparaissent dans son historique** (décision de Victor :
+  « pour que les 2 ont un historique précis »). Cela revient sur le § 2 (« invisibles pour
+  les élèves ») : l'élève voit **ses** séances privées, jamais celles des autres, et ne
+  peut pas s'en désinscrire lui-même (elles restent gérées par le coach).

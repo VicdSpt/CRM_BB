@@ -92,6 +92,7 @@ export async function dupliquerSeance(id: string): Promise<void> {
       dureeMinutes: source.dureeMinutes,
       lieu: source.lieu,
       prixReference: source.prixReference,
+      capacite: source.capacite,
     },
   });
 

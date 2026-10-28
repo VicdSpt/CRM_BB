@@ -92,6 +92,9 @@ export default async function PlanningPage({
                         <span className="flex min-w-0 flex-col">
                           <span className="font-medium">
                             {formatHeureFr(s.dateHeureDebut)} · {libelleType(s.type)}
+                            {s.type === "COLLECTIF"
+                              ? ` · ${s.participations.length} / ${s.capacite}`
+                              : ""}
                           </span>
                           <span className="text-muted-foreground truncate text-sm">
                             {s.participations.map((p) => p.eleve.prenom).join(", ") ||

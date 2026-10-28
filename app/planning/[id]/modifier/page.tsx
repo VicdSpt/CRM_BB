@@ -4,6 +4,7 @@ import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { updateSeance } from "@/lib/planning/actions";
 import { toDateParam } from "@/lib/planning/format";
+import { whereElevesSelectionnables } from "@/lib/planning/selection";
 import { SeanceForm } from "../../seance-form";
 
 function toDatetimeLocal(d: Date): string {
@@ -22,7 +23,7 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
   if (!seance) notFound();
 
   const eleves = await prisma.eleve.findMany({
-    where: { archive: false },
+    where: whereElevesSelectionnables(seance.participations.map((p) => p.eleveId)),
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     select: { id: true, prenom: true, nom: true },
   });
@@ -34,6 +35,7 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
     dureeMinutes: seance.dureeMinutes,
     lieu: seance.lieu,
     prixReference: seance.prixReference.toString(),
+    capacite: seance.capacite,
     eleveIds: seance.participations.map((p) => p.eleveId),
   };
 

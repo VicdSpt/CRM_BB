@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { montantSchema } from "@/lib/finances/money";
 
+export const CAPACITE_PAR_DEFAUT = 4;
+
 export const seanceSchema = z
   .object({
     type: z.enum(["PRIVE", "COLLECTIF"]),
@@ -12,7 +14,14 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? v : undefined)),
     prixReference: montantSchema,
-    eleveIds: z.array(z.string().min(1)).min(1, "Sélectionnez au moins un élève"),
+    // Vide → capacité par défaut (4 places) ; utile surtout pour les cours collectifs.
+    capacite: z
+      .string()
+      .optional()
+      .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
+      .pipe(z.number().int().min(1, "Au moins 1 place")),
+    // Un cours collectif peut être créé vide : les élèves s'y inscrivent eux-mêmes.
+    eleveIds: z.array(z.string().min(1)),
   })
   .refine((v) => v.type !== "PRIVE" || v.eleveIds.length === 1, {
     message: "Un cours privé doit avoir exactement un élève",
@@ -32,6 +41,7 @@ export function parseSeanceForm(formData: FormData): ParseResult {
     dureeMinutes: String(formData.get("dureeMinutes") ?? ""),
     lieu: String(formData.get("lieu") ?? ""),
     prixReference: String(formData.get("prixReference") ?? ""),
+    capacite: String(formData.get("capacite") ?? ""),
     eleveIds: formData.getAll("eleveIds").map((v) => String(v)),
   };
   const parsed = seanceSchema.safeParse(raw);

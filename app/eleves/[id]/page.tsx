@@ -75,6 +75,7 @@ async function OngletFiche({
     id: string;
     telephone: string | null;
     email: string | null;
+    adresse: string | null;
     notes: string | null;
     archive: boolean;
   };
@@ -105,6 +106,7 @@ async function OngletFiche({
         <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
           <Info label="Téléphone" value={eleve.telephone} />
           <Info label="Email" value={eleve.email} />
+          <Info label="Adresse" value={eleve.adresse} />
           <Info label="Notes" value={eleve.notes} />
         </dl>
       </AnimBloc>

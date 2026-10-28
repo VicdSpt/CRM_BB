@@ -1,17 +1,30 @@
 import type { NextAuthConfig } from "next-auth";
+import { routeAutorisee } from "@/lib/auth/roles";
 
 export const authConfig = {
   pages: { signIn: "/login" },
   providers: [], // les providers avec accès DB restent dans auth.ts
   callbacks: {
-    authorized({ auth, request }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnLogin = request.nextUrl.pathname.startsWith("/login");
-      if (isOnLogin) {
-        if (isLoggedIn) return Response.redirect(new URL("/", request.nextUrl));
-        return true;
+    // À la connexion, on copie l'id et le rôle dans le jeton…
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
       }
-      return isLoggedIn; // protège tout le reste (redirige vers pages.signIn si false)
+      return token;
+    },
+    // …puis du jeton vers la session lue par les pages.
+    session({ session, token }) {
+      if (token.id) session.user.id = token.id;
+      session.user.role = token.role;
+      return session;
+    },
+    authorized({ auth, request }) {
+      const decision = routeAutorisee(request.nextUrl.pathname, auth?.user?.role ?? null);
+      if ("redirect" in decision) {
+        return Response.redirect(new URL(decision.redirect, request.nextUrl));
+      }
+      return true;
     },
   },
 } satisfies NextAuthConfig;
