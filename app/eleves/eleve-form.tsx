@@ -13,6 +13,7 @@ type EleveInitial = {
   nom?: string;
   telephone?: string | null;
   email?: string | null;
+  adresse?: string | null;
   notes?: string | null;
 };
 
@@ -63,12 +64,20 @@ export function EleveForm({ action, initial, submitLabel }: Props) {
         />
       </AnimBloc>
       <AnimBloc index={4}>
+        <Field
+          label="Adresse"
+          name="adresse"
+          defaultValue={initial?.adresse ?? ""}
+          error={state.errors?.adresse}
+        />
+      </AnimBloc>
+      <AnimBloc index={5}>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="notes">Notes</Label>
           <Textarea id="notes" name="notes" defaultValue={initial?.notes ?? ""} rows={4} />
         </div>
       </AnimBloc>
-      <AnimBloc index={5}>
+      <AnimBloc index={6}>
         <Button type="submit" disabled={pending} className="w-full">
           {pending ? "Enregistrement…" : submitLabel}
         </Button>
