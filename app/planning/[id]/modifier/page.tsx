@@ -4,6 +4,7 @@ import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { updateSeance } from "@/lib/planning/actions";
 import { toDateParam } from "@/lib/planning/format";
+import { whereElevesSelectionnables } from "@/lib/planning/selection";
 import { SeanceForm } from "../../seance-form";
 
 function toDatetimeLocal(d: Date): string {
@@ -22,8 +23,7 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
   if (!seance) notFound();
 
   const eleves = await prisma.eleve.findMany({
-    // Les comptes élèves en attente de validation ne sont pas encore sélectionnables.
-    where: { archive: false, statutCompte: { not: "EN_ATTENTE" } },
+    where: whereElevesSelectionnables(seance.participations.map((p) => p.eleveId)),
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     select: { id: true, prenom: true, nom: true },
   });

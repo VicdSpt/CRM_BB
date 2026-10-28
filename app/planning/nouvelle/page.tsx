@@ -2,13 +2,13 @@ import Link from "next/link";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { createSeance } from "@/lib/planning/actions";
+import { whereElevesSelectionnables } from "@/lib/planning/selection";
 import { SeanceForm } from "../seance-form";
 
 export default async function NouvelleSeancePage() {
   await requireCoach();
   const eleves = await prisma.eleve.findMany({
-    // Les comptes élèves en attente de validation ne sont pas encore sélectionnables.
-    where: { archive: false, statutCompte: { not: "EN_ATTENTE" } },
+    where: whereElevesSelectionnables([]),
     orderBy: [{ nom: "asc" }, { prenom: "asc" }],
     select: { id: true, prenom: true, nom: true },
   });
