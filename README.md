@@ -158,3 +158,13 @@ dossier `docs/` garde la trace du raisonnement :
 - Connexion Google pour les élèves.
 - Paiement en ligne des cours (Stripe ou virement par QR code) — à définir avec le coach.
 - Rappels avant les séances.
+
+---
+
+## Droits
+
+© 2026 Victor dS — tous droits réservés.
+
+Ce dépôt est public **à titre de démonstration** (projet vitrine). Le code n'est publié sous
+aucune licence libre : il peut être consulté, mais pas copié, modifié, redistribué ni réutilisé
+sans autorisation écrite de l'auteur.
