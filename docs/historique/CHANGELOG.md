@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-29 — Correctifs de sécurité urgents
+
+- Next.js 16.3.8 → 16.4.3 : corrige des failles critiques (exécution de code à distance via l’optimisation d’images et `use cache`, déni de service sur les Server Actions).
+- Optimisation d’images désactivée (non utilisée) et SVG d’exemple inutilisés supprimés.
+- Zod mis à jour (4.6.7) ; `npm audit` des dépendances de production : 0 vulnérabilité.
+- La page « Modifier l’élève » ne transmet plus que les champs du formulaire au navigateur (l’empreinte du mot de passe n’en sort plus).
+
 ## 2026-10-29 — Connexion Google des élèves
 
 - Bouton « Continuer avec Google » sur la page de connexion, réservé aux élèves ayant déjà un compte avec la même adresse (Google ne crée pas de compte).
