@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-29 — Inscription sécurisée
+
+- Mot de passe exigé : au moins 8 caractères, une minuscule, une majuscule, un chiffre et un symbole (vérifié côté serveur, message listant ce qui manque).
+- Champ de confirmation du mot de passe.
+- Page d’inscription revue : jauge de force, règles cochées en direct, bouton afficher/masquer, champs conservés après une erreur.
+
 ## 2026-10-28 — Espace élève : durcissement après relecture
 
 - Inscription refusée avec l’email d’une fiche archivée ; fiches archivées exclues de « À valider ».
