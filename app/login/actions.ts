@@ -27,3 +27,9 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
     return { error: "Email ou mot de passe incorrect." };
   }
 }
+
+// Connexion Google (élèves uniquement) : la décision se prend dans le callback `signIn`
+// d'auth.ts, qui renvoie vers /login?erreur=… si le compte n'est pas accepté.
+export async function loginGoogle(): Promise<void> {
+  await signIn("google", { redirectTo: accueilPour("eleve") });
+}
