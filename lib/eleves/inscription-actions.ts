@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import { decideInscription, parseInscriptionForm } from "@/lib/eleves/inscription";
 import { estDoublonUnique } from "@/lib/prisma-erreurs";
+import { headers } from "next/headers";
+import { messageTropDeTentatives } from "@/lib/securite/limite";
+import { enregistrerInscription, verifierInscription } from "@/lib/securite/tentatives";
 
 const COMPTE_EXISTANT = "Un compte existe déjà avec cet email.";
 
@@ -15,6 +18,11 @@ export async function inscrireEleve(
   _prev: InscriptionState,
   formData: FormData,
 ): Promise<InscriptionState> {
+  // Au plus 5 inscriptions par heure depuis une même adresse IP (faux comptes en masse).
+  const entetes = await headers();
+  const limite = await verifierInscription(entetes);
+  if (limite.bloque) return { message: messageTropDeTentatives(limite.minutesRestantes) };
+
   const result = parseInscriptionForm(formData);
   if (!result.success) return { errors: result.errors };
   const { prenom, nom, email, telephone, motDePasse } = result.data;
@@ -67,6 +75,7 @@ export async function inscrireEleve(
     });
     if (count === 0) return { errors: { email: COMPTE_EXISTANT } };
   }
+  await enregistrerInscription(entetes);
 
   try {
     await signIn("credentials", { email, password: motDePasse, redirectTo: "/espace/attente" });

@@ -117,3 +117,21 @@ model Paiement {
   pack            Pack?           @relation(fields: [packId], references: [id])
   packId          String?         @unique
 }
+
+enum TypeTentative {
+  CONNEXION_ECHEC
+  INSCRIPTION
+}
+
+// Compteurs de la limitation des tentatives (connexion, inscription).
+// `cle` = email en minuscules ou empreinte SHA-256 de l'IP (jamais l'IP en clair).
+// Les lignes de plus de 24 h sont purgées.
+model TentativeAcces {
+  id     String        @id @default(cuid())
+  type   TypeTentative
+  cle    String
+  creeLe DateTime      @default(now())
+
+  @@index([type, cle, creeLe])
+  @@index([creeLe])
+}

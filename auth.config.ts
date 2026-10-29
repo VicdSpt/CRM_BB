@@ -3,6 +3,9 @@ import { routeAutorisee } from "@/lib/auth/roles";
 
 export const authConfig = {
   pages: { signIn: "/login" },
+  // Sessions JWT de 7 jours (30 par défaut) : l'outil contient des données personnelles
+  // et financières. Partagé avec le proxy pour une durée identique partout.
+  session: { strategy: "jwt", maxAge: 7 * 24 * 60 * 60 },
   providers: [], // les providers avec accès DB restent dans auth.ts
   callbacks: {
     // À la connexion, on copie l'id et le rôle dans le jeton…

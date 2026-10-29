@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-29 — Durcissement de l’accès
+
+- Limite de tentatives : connexion (5 échecs / 15 min par email, 20 par adresse IP) et inscription (5 / heure par adresse IP), message « Trop de tentatives. Réessaie dans N minutes. » (ADR 0015).
+- En-têtes de sécurité : politique de contenu, interdiction de l’affichage en iframe, `nosniff`, `Referrer-Policy`, `Permissions-Policy` ; `X-Powered-By` supprimé.
+- Sessions de 7 jours au lieu de 30.
+
 ## 2026-10-29 — Correctifs de sécurité urgents
 
 - Next.js 16.3.8 → 16.4.3 : corrige des failles critiques (exécution de code à distance via l’optimisation d’images et `use cache`, déni de service sur les Server Actions).

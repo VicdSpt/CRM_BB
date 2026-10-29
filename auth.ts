@@ -4,6 +4,11 @@ import Google from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/auth/credentials";
 import { decisionConnexionGoogle } from "@/lib/auth/connexion-google";
+import {
+  effacerEchecsConnexion,
+  enregistrerEchecConnexion,
+  verifierConnexion,
+} from "@/lib/securite/tentatives";
 import { authConfig } from "@/auth.config";
 
 // Google n'est activé que si ses identifiants sont configurés (AUTH_GOOGLE_ID / _SECRET,
@@ -21,15 +26,25 @@ const emailGoogle = (profile: { email?: string | null } | undefined) =>
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  session: { strategy: "jwt" },
   providers: [
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Mot de passe", type: "password" },
       },
-      authorize: (credentials) =>
-        authenticate(credentials, { findCoach: trouverCoach, findEleve: trouverEleve }),
+      // La limite de tentatives est appliquée ICI (et pas seulement dans le formulaire) :
+      // l'adresse de connexion d'Auth.js peut être appelée directement.
+      authorize: async (credentials, request) => {
+        const email = String(credentials?.email ?? "");
+        if ((await verifierConnexion(email, request.headers)).bloque) return null;
+        const utilisateur = await authenticate(credentials, {
+          findCoach: trouverCoach,
+          findEleve: trouverEleve,
+        });
+        if (utilisateur) await effacerEchecsConnexion(email);
+        else await enregistrerEchecConnexion(email, request.headers);
+        return utilisateur;
+      },
     }),
     ...(googleActif ? [Google] : []),
   ],
