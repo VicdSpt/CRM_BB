@@ -1,15 +1,35 @@
 import { z } from "zod";
 import type { StatutCompte } from "@prisma/client";
+import { messageMotDePasseFaible } from "@/lib/auth/force-mot-de-passe";
 
 const texteObligatoire = (message: string) => z.string().trim().min(1, message);
 
-export const inscriptionSchema = z.object({
-  prenom: texteObligatoire("Le prénom est obligatoire"),
-  nom: texteObligatoire("Le nom est obligatoire"),
-  email: z.string().trim().toLowerCase().email("Email invalide"),
-  telephone: texteObligatoire("Le téléphone est obligatoire"),
-  motDePasse: z.string().min(8, "8 caractères minimum"),
-});
+export const inscriptionSchema = z
+  .object({
+    prenom: texteObligatoire("Le prénom est obligatoire"),
+    nom: texteObligatoire("Le nom est obligatoire"),
+    email: z.string().trim().toLowerCase().email("Email invalide"),
+    telephone: texteObligatoire("Le téléphone est obligatoire"),
+    // Minuscule, majuscule, chiffre, symbole et 8 caractères : vérifié ici, côté serveur,
+    // même si la page l'affiche déjà en direct.
+    motDePasse: z.string().superRefine((mdp, ctx) => {
+      const message = messageMotDePasseFaible(mdp);
+      if (message) ctx.addIssue({ code: "custom", message });
+    }),
+    confirmation: z.string(),
+  })
+  .refine((v) => v.confirmation === v.motDePasse, {
+    message: "Les mots de passe ne correspondent pas.",
+    path: ["confirmation"],
+  })
+  // La confirmation ne sert qu'à la vérification : elle ne sort pas du schéma.
+  .transform(({ prenom, nom, email, telephone, motDePasse }) => ({
+    prenom,
+    nom,
+    email,
+    telephone,
+    motDePasse,
+  }));
 
 export type InscriptionInput = z.infer<typeof inscriptionSchema>;
 
@@ -25,6 +45,7 @@ export function parseInscriptionForm(formData: FormData): ParseResult {
     email: champ("email"),
     telephone: champ("telephone"),
     motDePasse: champ("motDePasse"),
+    confirmation: champ("confirmation"),
   });
   if (parsed.success) return { success: true, data: parsed.data };
   const errors: Record<string, string> = {};

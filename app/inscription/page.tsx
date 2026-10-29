@@ -1,13 +1,16 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InscriptionForm } from "./inscription-form";
 
 export default function InscriptionPage() {
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Créer mon compte</CardTitle>
+          <CardTitle className="text-2xl">Crée ton compte</CardTitle>
+          <CardDescription>
+            Ton coach validera ton inscription avant que tu accèdes aux cours.
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <InscriptionForm />
