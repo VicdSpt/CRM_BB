@@ -17,6 +17,11 @@ describe("coquillePour", () => {
     expect(coquillePour("coach", "/")).toBe("coach");
   });
 
+  it("n'affiche aucune coquille sur la page de confidentialité", () => {
+    expect(coquillePour("eleve", "/confidentialite")).toBe("aucune");
+    expect(coquillePour("coach", "/confidentialite")).toBe("aucune");
+  });
+
   it("n'affiche aucune coquille sans rôle", () => {
     expect(coquillePour(null, "/")).toBe("aucune");
   });
@@ -33,6 +38,12 @@ describe("routeAutorisee", () => {
   it("laisse un visiteur non connecté sur les pages publiques", () => {
     expect(routeAutorisee("/login", null)).toEqual({ ok: true });
     expect(routeAutorisee("/inscription", null)).toEqual({ ok: true });
+  });
+
+  it("laisse la page de confidentialité ouverte à tous, connecté ou non", () => {
+    expect(routeAutorisee("/confidentialite", null)).toEqual({ ok: true });
+    expect(routeAutorisee("/confidentialite", "eleve")).toEqual({ ok: true });
+    expect(routeAutorisee("/confidentialite", "coach")).toEqual({ ok: true });
   });
 
   it("renvoie un visiteur non connecté vers /login", () => {
