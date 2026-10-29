@@ -22,7 +22,7 @@ supprimer une fiche, et une fiche avec historique ne pouvait qu'être archivée 
   2. s'il ne reste ni cours, ni pack, ni paiement, la fiche est supprimée ;
   3. sinon elle est **anonymisée** : « Élève supprimé », email, téléphone, adresse, notes,
      mot de passe et identité d'inscription effacés, compte fermé et archivé.
-     Puis son compteur d'échecs de connexion est effacé et il est déconnecté.
+  4. enfin, son compteur d'échecs de connexion est effacé et il est déconnecté.
 - Règles pures testées dans `lib/espace/suppression-compte.ts`.
 
 ## Alternatives écartées
