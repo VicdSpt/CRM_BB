@@ -35,7 +35,8 @@ const valide = {
   nom: "Dupont",
   email: "sam@exemple.be",
   telephone: "0470 12 34 56",
-  motDePasse: "motdepasse",
+  motDePasse: "Motdepasse1!",
+  confirmation: "Motdepasse1!",
 };
 
 describe("decideInscription", () => {
@@ -76,10 +77,29 @@ describe("parseInscriptionForm", () => {
     expect(parseInscriptionForm(fd(valide)).success).toBe(true);
   });
 
-  it("exige 8 caractères minimum pour le mot de passe", () => {
-    const res = parseInscriptionForm(fd({ ...valide, motDePasse: "7caract" }));
+  it("refuse un mot de passe trop faible en disant ce qui manque", () => {
+    const res = parseInscriptionForm(
+      fd({ ...valide, motDePasse: "motdepasse1", confirmation: "motdepasse1" }),
+    );
     expect(res.success).toBe(false);
-    if (!res.success) expect(res.errors.motDePasse).toBe("8 caractères minimum");
+    if (!res.success) {
+      expect(res.errors.motDePasse).toBe(
+        "Mot de passe trop faible : il manque une majuscule et un symbole.",
+      );
+    }
+  });
+
+  it("refuse une confirmation différente du mot de passe", () => {
+    const res = parseInscriptionForm(fd({ ...valide, confirmation: "Autre1!motdepasse" }));
+    expect(res.success).toBe(false);
+    if (!res.success) {
+      expect(res.errors.confirmation).toBe("Les mots de passe ne correspondent pas.");
+    }
+  });
+
+  it("ne renvoie pas la confirmation dans les données validées", () => {
+    const res = parseInscriptionForm(fd(valide));
+    expect(res.success && "confirmation" in res.data).toBe(false);
   });
 
   it("exige un téléphone", () => {
