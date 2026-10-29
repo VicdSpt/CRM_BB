@@ -8,7 +8,12 @@ import { EleveForm } from "../../eleve-form";
 export default async function ModifierElevePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
   const { id } = await params;
-  const eleve = await prisma.eleve.findUnique({ where: { id } });
+  // Uniquement les champs du formulaire : EleveForm s'exécute dans le navigateur, la fiche
+  // complète y enverrait l'empreinte du mot de passe et les données de compte.
+  const eleve = await prisma.eleve.findUnique({
+    where: { id },
+    select: { prenom: true, nom: true, telephone: true, email: true, adresse: true, notes: true },
+  });
   if (!eleve) notFound();
 
   const action = updateEleve.bind(null, id);
