@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-29 — Connexion Google des élèves
+
+- Bouton « Continuer avec Google » sur la page de connexion, réservé aux élèves ayant déjà un compte avec la même adresse (Google ne crée pas de compte).
+- Refus avec message clair : email inconnu, compte refusé/archivé, compte coach, adresse Google non vérifiée.
+- Bouton masqué tant que `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` ne sont pas configurés.
+
 ## 2026-10-29 — Inscription sécurisée
 
 - Mot de passe exigé : au moins 8 caractères, une minuscule, une majuscule, un chiffre et un symbole (vérifié côté serveur, message listant ce qui manque).
