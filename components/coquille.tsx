@@ -84,6 +84,12 @@ export function Coquille({
         )}
       >
         {children}
+        {/* Pied de page : la politique de confidentialité reste accessible partout. */}
+        <footer className="px-4 py-6 text-center text-xs">
+          <Link href="/confidentialite" className="text-muted-foreground underline">
+            Confidentialité
+          </Link>
+        </footer>
       </div>
 
       {/* Onglets (mobile) — marge safe-area : reste au-dessus de la barre d'accueil iPhone */}

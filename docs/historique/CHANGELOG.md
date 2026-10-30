@@ -1,8 +1,10 @@
 # Journal de bord — CRM-BB
 
-## 2026-10-30 — Confidentialité : le responsable est le gestionnaire du site
+## 2026-10-30 — Confidentialité : texte simplifié et lien en pied de page
 
-- La politique de confidentialité désigne le gestionnaire du site, et non plus le coach, comme responsable du traitement ayant accès à toutes les données ; le coach voit ce qui sert à ses cours. Nom et email lus dans `RESPONSABLE_NOM` et `RESPONSABLE_EMAIL`, jamais dans le dépôt.
+- Politique réécrite en termes simples, avec un résumé « En bref » ; aucun nom de personne : le site est géré par son administrateur, qui a accès à toutes les données, le coach voit ce qui concerne les cours.
+- Contact optionnel via `CONTACT_EMAIL` (sinon : « demande au coach ») ; lien vers l'Autorité de protection des données.
+- Lien « Confidentialité » en pied de page des espaces coach et élève.
 
 ## 2026-10-30 — Sauvegarde de la base
 
