@@ -13,8 +13,9 @@ supprimer une fiche, et une fiche avec historique ne pouvait qu'être archivée 
 ## Décision
 
 - **Page `/confidentialite`**, ouverte à tous, connecté ou non (nouvelle catégorie « pages
-  libres » dans `lib/auth/roles.ts`, sans redirection ni menu). Le nom et l'email du coach,
-  responsable du traitement, sont lus en base : aucune donnée personnelle dans le dépôt.
+  libres » dans `lib/auth/roles.ts`, sans redirection ni menu). Le responsable du traitement
+  est le gestionnaire du site, pas le coach (révisé le 2026-10-30) : son nom et son email
+  viennent de `RESPONSABLE_NOM` et `RESPONSABLE_EMAIL`, aucune donnée personnelle dans le dépôt.
   Liens depuis la connexion, l'inscription et le profil.
 - **Suppression du compte par l'élève** (`supprimerMonCompte`, profil), après avoir tapé
   « SUPPRIMER » (vérifié côté serveur), dans une transaction :

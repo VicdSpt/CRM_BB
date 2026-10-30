@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-30 — Confidentialité : le responsable est le gestionnaire du site
+
+- La politique de confidentialité désigne le gestionnaire du site, et non plus le coach, comme responsable du traitement ayant accès à toutes les données ; le coach voit ce qui sert à ses cours. Nom et email lus dans `RESPONSABLE_NOM` et `RESPONSABLE_EMAIL`, jamais dans le dépôt.
+
 ## 2026-10-30 — Sauvegarde de la base
 
 - `npm run sauvegarde` : export complet de la base de production (coach, élèves, séances, packs, participations, paiements) dans un fichier JSON daté du dossier `sauvegardes/`, ignoré par git. Neon ne garde que 6 h d'historique sur le plan gratuit.

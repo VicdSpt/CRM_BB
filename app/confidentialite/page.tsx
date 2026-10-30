@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { connection } from "next/server";
 
 export const metadata: Metadata = { title: "Confidentialité" };
 
 // Politique de confidentialité (RGPD), ouverte à tous. Le responsable du traitement
-// est le coach : son nom et son email sont lus en base, jamais écrits dans le code.
+// est le gestionnaire du site, pas le coach : son nom et son email viennent des
+// variables d'environnement, jamais écrits dans le code (dépôt public).
 export default async function ConfidentialitePage() {
-  const coach = await prisma.coach.findFirst({ select: { nom: true, email: true } });
-  const responsable = coach?.nom ?? "le coach";
+  // Lues à la requête : un changement de variable sur Vercel suffit, sans rebuild.
+  await connection();
+  const nom = process.env.RESPONSABLE_NOM?.trim() || "le responsable du site";
+  const email = process.env.RESPONSABLE_EMAIL?.trim() || null;
 
   return (
     <main className="mx-auto w-full max-w-2xl p-4 pb-16">
@@ -17,20 +20,20 @@ export default async function ConfidentialitePage() {
         ← Retour
       </Link>
       <h1 className="mt-4 mb-1 text-2xl font-semibold">Politique de confidentialité</h1>
-      <p className="text-muted-foreground mb-8 text-sm">Dernière mise à jour : 29 octobre 2026</p>
+      <p className="text-muted-foreground mb-8 text-sm">Dernière mise à jour : 30 octobre 2026</p>
 
       <div className="flex flex-col gap-8 text-sm leading-relaxed [&_h2]:mb-2 [&_h2]:text-base [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:pl-5">
         <section>
           <h2>Qui s&apos;occupe de tes données ?</h2>
           <p>
-            Ce site sert à la gestion des cours de boxe de {responsable}, responsable du traitement
-            de tes données.
-            {coach ? (
+            Ce site sert à la gestion des cours de boxe du coach. Il est géré par {nom}, responsable
+            du traitement de tes données.
+            {email ? (
               <>
                 {" "}
                 Pour toute question :{" "}
-                <a href={`mailto:${coach.email}`} className="text-primary underline">
-                  {coach.email}
+                <a href={`mailto:${email}`} className="text-primary underline">
+                  {email}
                 </a>
                 .
               </>
@@ -74,9 +77,11 @@ export default async function ConfidentialitePage() {
         <section>
           <h2>Qui y a accès ?</h2>
           <p>
-            Uniquement le coach. Le site est hébergé par Vercel et la base de données par Neon, qui
-            stockent les données pour son compte sans les utiliser. Si tu te connectes avec Google,
-            Google confirme seulement ton adresse email au site.
+            Le responsable du site, qui a accès à toutes les données pour faire fonctionner le site.
+            Le coach voit ce qui sert à ses cours : ta fiche, tes réservations et tes paiements. Le
+            site est hébergé par Vercel et la base de données par Neon, qui stockent les données
+            sans les utiliser. Si tu te connectes avec Google, Google confirme seulement ton adresse
+            email au site.
           </p>
         </section>
 
@@ -105,7 +110,7 @@ export default async function ConfidentialitePage() {
             <li>Supprimer ton compte : bouton « Supprimer mon compte » dans ton profil.</li>
             <li>
               Obtenir une copie de tes données, t&apos;opposer à un traitement ou poser une question
-              : en écrivant au coach.
+              : en écrivant au responsable du site.
             </li>
             <li>
               Introduire une réclamation auprès de l&apos;Autorité de protection des données
