@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-30 — Confidentialité : texte simplifié et lien en pied de page
+
+- Politique réécrite en termes simples, avec un résumé « En bref » ; aucun nom de personne : le site est géré par son administrateur, qui a accès à toutes les données, le coach voit ce qui concerne les cours.
+- Contact optionnel via `CONTACT_EMAIL` (sinon : « demande au coach ») ; lien vers l'Autorité de protection des données.
+- Lien « Confidentialité » en pied de page des espaces coach et élève.
+
 ## 2026-10-30 — Sauvegarde de la base
 
 - `npm run sauvegarde` : export complet de la base de production (coach, élèves, séances, packs, participations, paiements) dans un fichier JSON daté du dossier `sauvegardes/`, ignoré par git. Neon ne garde que 6 h d'historique sur le plan gratuit.
