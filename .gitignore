@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Artefacts de la subagent-driven-development
 .superpowers/
+
+# sauvegardes de la base (données personnelles, jamais dans git)
+/sauvegardes/
