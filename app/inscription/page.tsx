@@ -20,6 +20,13 @@ export default function InscriptionPage() {
               Se connecter
             </Link>
           </p>
+          <p className="text-muted-foreground text-center text-xs">
+            Tes données servent uniquement à la gestion de tes cours :{" "}
+            <Link href="/confidentialite" className="underline">
+              politique de confidentialité
+            </Link>
+            .
+          </p>
         </CardContent>
       </Card>
     </main>

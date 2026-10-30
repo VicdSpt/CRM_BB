@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-29 — RGPD : confidentialité et suppression du compte
+
+- Page « Politique de confidentialité » ouverte à tous, liée depuis la connexion, l'inscription et le profil ; le coach y apparaît comme responsable (nom et email lus en base).
+- « Supprimer mon compte » dans le profil élève, après avoir tapé SUPPRIMER : réservations futures non payées annulées, puis fiche supprimée, ou anonymisée si elle a un historique (ADR 0016).
+- Message « Ton compte a bien été supprimé » sur la page de connexion.
+
 ## 2026-10-29 — Durcissement de l’accès
 
 - Limite de tentatives : connexion (5 échecs / 15 min par email, 20 par adresse IP) et inscription (5 / heure par adresse IP), message « Trop de tentatives. Réessaie dans N minutes. » (ADR 0015).

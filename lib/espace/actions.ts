@@ -8,6 +8,9 @@ import { reserverDansTransaction } from "./reservation";
 import { parseProfilForm, verifierEmailLibre } from "./profil";
 import { parseSeanceId } from "./ids";
 import { estDoublonUnique } from "@/lib/prisma-erreurs";
+import { signOut } from "@/auth";
+import { effacerEchecsConnexion } from "@/lib/securite/tentatives";
+import { DONNEES_ANONYMISEES, confirmationValide, modeSuppression } from "./suppression-compte";
 
 export type ResultatAction = { erreur?: string };
 export type ProfilState = { errors?: Record<string, string>; message?: string };
@@ -42,6 +45,44 @@ export async function updateProfil(_prev: ProfilState, formData: FormData): Prom
   }
   revalidatePath("/espace");
   return { message: "Profil enregistré." };
+}
+
+// Suppression du compte par l'élève lui-même (RGPD). Ses réservations futures non payées
+// sont d'abord annulées (la place se libère) ; ensuite la fiche est supprimée si rien ne
+// reste, sinon anonymisée pour préserver la comptabilité du coach.
+export async function supprimerMonCompte(
+  _prev: ResultatAction,
+  formData: FormData,
+): Promise<ResultatAction> {
+  const { eleve } = await requireEleve();
+  if (!confirmationValide(formData.get("confirmation"))) {
+    return { erreur: "Tape SUPPRIMER pour confirmer." };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.participation.deleteMany({
+      where: {
+        eleveId: eleve.id,
+        statutReglement: "A_REGLER",
+        packId: null,
+        seance: { statut: "PLANIFIEE", dateHeureDebut: { gt: new Date() } },
+      },
+    });
+    const [participations, packs, paiements] = await Promise.all([
+      tx.participation.count({ where: { eleveId: eleve.id } }),
+      tx.pack.count({ where: { eleveId: eleve.id } }),
+      tx.paiement.count({ where: { eleveId: eleve.id } }),
+    ]);
+    if (modeSuppression({ participations, packs, paiements }) === "supprimer") {
+      await tx.eleve.delete({ where: { id: eleve.id } });
+    } else {
+      await tx.eleve.update({ where: { id: eleve.id }, data: DONNEES_ANONYMISEES });
+    }
+  });
+  if (eleve.email) await effacerEchecsConnexion(eleve.email);
+
+  await signOut({ redirectTo: "/login?compte=supprime" });
+  return {};
 }
 
 // Toutes les actions élève agissent sur l'élève de la SESSION, jamais sur un id reçu.

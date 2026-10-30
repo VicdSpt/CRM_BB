@@ -11,9 +11,9 @@ export { type LoginState } from "./actions";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ erreur?: string }>;
+  searchParams: Promise<{ erreur?: string; compte?: string }>;
 }) {
-  const { erreur } = await searchParams;
+  const { erreur, compte } = await searchParams;
   const messageGoogle = estCodeErreurGoogle(erreur) ? MESSAGES_ERREUR_GOOGLE[erreur] : null;
 
   return (
@@ -29,6 +29,11 @@ export default async function LoginPage({
               className="rounded-md border border-red-500/40 p-3 text-sm text-red-600"
             >
               {messageGoogle}
+            </p>
+          ) : null}
+          {compte === "supprime" ? (
+            <p role="status" className="rounded-md border p-3 text-sm">
+              Ton compte a bien été supprimé.
             </p>
           ) : null}
           <LoginForm />
@@ -54,6 +59,11 @@ export default async function LoginPage({
             Pas encore de compte ?{" "}
             <Link href="/inscription" className="text-primary underline">
               Créer un compte élève
+            </Link>
+          </p>
+          <p className="text-center text-xs">
+            <Link href="/confidentialite" className="text-muted-foreground underline">
+              Confidentialité
             </Link>
           </p>
         </CardContent>

@@ -12,13 +12,17 @@ export function accueilPour(role: Role): string {
 }
 const accueil = accueilPour;
 
+// Pages ouvertes à tous, connecté ou non, sans redirection (ex. politique de confidentialité).
+const PAGES_LIBRES = ["/confidentialite"];
+
 const estPublique = (pathname: string) => PAGES_PUBLIQUES.some((p) => isActive(pathname, p));
+const estLibre = (pathname: string) => PAGES_LIBRES.some((p) => isActive(pathname, p));
 
 // Coquille (menu) à afficher. Elle dépend du RÔLE de la session, pas de l'URL :
 // après la redirection d'une action serveur, l'URL affichée peut rester « / »
 // alors qu'un élève est connecté.
 export function coquillePour(role: Role | null, pathname: string): "aucune" | "coach" | "eleve" {
-  if (estPublique(pathname) || role === null) return "aucune";
+  if (estPublique(pathname) || estLibre(pathname) || role === null) return "aucune";
   return role;
 }
 
@@ -26,6 +30,7 @@ export function coquillePour(role: Role | null, pathname: string): "aucune" | "c
 // `role === null` couvre le visiteur non connecté ET un jeton émis avant
 // l'introduction des rôles : dans les deux cas, on le traite comme déconnecté.
 export function routeAutorisee(pathname: string, role: Role | null): DecisionRoute {
+  if (estLibre(pathname)) return { ok: true };
   const publique = estPublique(pathname);
 
   if (role === null) {

@@ -30,7 +30,10 @@ pensé d'abord pour le mobile.
 
 - **Inscription et connexion** (email + mot de passe). Le compte reste **en attente** jusqu'à
   la validation par le coach.
-- **Profil** : coordonnées modifiables (email, téléphone, adresse).
+- **Profil** : coordonnées modifiables (email, téléphone, adresse) et suppression du compte
+  par l'élève lui-même (fiche anonymisée si elle a un historique, pour garder la comptabilité).
+- **Confidentialité** : page publique décrivant les données conservées, leur usage et les
+  droits de l'élève (RGPD).
 - **Réserver** : les cours collectifs des 4 prochaines semaines, avec les places restantes.
   Deux élèves qui visent la dernière place au même moment ne peuvent pas la prendre tous
   les deux.
@@ -155,7 +158,6 @@ dossier `docs/` garde la trace du raisonnement :
 
 ## Feuille de route
 
-- Connexion Google pour les élèves.
 - Paiement en ligne des cours (Stripe ou virement par QR code) — à définir avec le coach.
 - Rappels avant les séances.
 
