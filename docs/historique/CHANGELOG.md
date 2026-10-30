@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-10-30 — Sauvegarde de la base
+
+- `npm run sauvegarde` : export complet de la base de production (coach, élèves, séances, packs, participations, paiements) dans un fichier JSON daté du dossier `sauvegardes/`, ignoré par git. Neon ne garde que 6 h d'historique sur le plan gratuit.
+- L'URL de production est lue dans la ligne commentée du `.env`, jamais affichée ; `-- --dev` sauvegarde la base de dev.
+
 ## 2026-10-29 — RGPD : confidentialité et suppression du compte
 
 - Page « Politique de confidentialité » ouverte à tous, liée depuis la connexion, l'inscription et le profil ; le coach y apparaît comme responsable (nom et email lus en base).

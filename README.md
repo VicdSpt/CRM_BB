@@ -117,16 +117,17 @@ npm run dev                 # http://localhost:3000
 
 ## Scripts
 
-| Commande                                           | Effet                                                                                                                     |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                                      | Serveur de développement                                                                                                  |
-| `npm run build` / `npm start`                      | Build et serveur de production                                                                                            |
-| `npm run test:run`                                 | Tests unitaires (une passe) — `npm test` en mode surveillance                                                             |
-| `npm run lint`                                     | ESLint                                                                                                                    |
-| `npm run format`                                   | Prettier                                                                                                                  |
-| `npm run seed`                                     | Crée ou met à jour le compte coach                                                                                        |
-| `npx tsx scripts/verif-reservation-concurrente.ts` | Vérifie qu'une dernière place réservée simultanément par deux élèves n'est attribuée qu'une fois (base de dev uniquement) |
-| `npx prisma studio`                                | Explorer la base                                                                                                          |
+| Commande                                           | Effet                                                                                                                                 |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                                      | Serveur de développement                                                                                                              |
+| `npm run build` / `npm start`                      | Build et serveur de production                                                                                                        |
+| `npm run test:run`                                 | Tests unitaires (une passe) — `npm test` en mode surveillance                                                                         |
+| `npm run lint`                                     | ESLint                                                                                                                                |
+| `npm run format`                                   | Prettier                                                                                                                              |
+| `npm run seed`                                     | Crée ou met à jour le compte coach                                                                                                    |
+| `npx tsx scripts/verif-reservation-concurrente.ts` | Vérifie qu'une dernière place réservée simultanément par deux élèves n'est attribuée qu'une fois (base de dev uniquement)             |
+| `npm run sauvegarde`                               | Sauvegarde complète de la base de production dans `sauvegardes/` (fichier JSON daté, ignoré par git) — `-- --dev` pour la base de dev |
+| `npx prisma studio`                                | Explorer la base                                                                                                                      |
 
 ---
 
@@ -138,6 +139,10 @@ déclenche le déploiement.
 Les migrations Prisma ne sont **pas** appliquées par le build : quand une PR en contient,
 elles sont appliquées à la base de production avec `npx prisma migrate deploy` **avant** le
 merge, pour que le code déployé trouve les colonnes qu'il attend.
+
+Neon ne permet de revenir en arrière que sur les 6 dernières heures (plan gratuit) : une
+sauvegarde complète est faite régulièrement avec `npm run sauvegarde`, et conservée hors du
+dépôt.
 
 ---
 

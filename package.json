@@ -11,7 +11,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "postinstall": "prisma generate",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "sauvegarde": "tsx scripts/sauvegarde.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
