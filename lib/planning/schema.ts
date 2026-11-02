@@ -2,6 +2,10 @@ import { z } from "zod";
 import { montantSchema } from "@/lib/finances/money";
 
 export const CAPACITE_PAR_DEFAUT = 4;
+// Cours collectif : la même séance chaque semaine. Le formulaire propose « 1 mois »
+// (4 séances) ; le serveur accepte jusqu'à 12 semaines pour élargir plus tard.
+export const REPETITION_MAX = 12;
+export const REPETITION_UN_MOIS = 4;
 
 export const seanceSchema = z
   .object({
@@ -20,11 +24,24 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
       .pipe(z.number().int().min(1, "Au moins 1 place")),
-    // Un cours collectif peut être créé vide : les élèves s'y inscrivent eux-mêmes.
+    // Nombre de semaines (1 = une seule séance) ; appliqué aux cours collectifs seulement.
+    repetition: z
+      .string()
+      .optional()
+      .transform((v) => (v ? Number(v) : 1))
+      .pipe(
+        z
+          .number()
+          .int()
+          .min(1, "Au moins une séance")
+          .max(REPETITION_MAX, `${REPETITION_MAX} semaines au maximum`),
+      ),
+    // Cours privé : l'élève choisi dans le menu. Cours collectif : toujours vide,
+    // les élèves réservent eux-mêmes depuis leur espace.
     eleveIds: z.array(z.string().min(1)),
   })
   .refine((v) => v.type !== "PRIVE" || v.eleveIds.length === 1, {
-    message: "Un cours privé doit avoir exactement un élève",
+    message: "Choisis l'élève du cours privé.",
     path: ["eleveIds"],
   });
 
@@ -42,8 +59,11 @@ export function parseSeanceForm(formData: FormData): ParseResult {
     lieu: String(formData.get("lieu") ?? ""),
     prixReference: String(formData.get("prixReference") ?? ""),
     capacite: String(formData.get("capacite") ?? ""),
-    eleveIds: formData.getAll("eleveIds").map((v) => String(v)),
+    repetition: String(formData.get("repetition") ?? ""),
+    eleveIds: [] as string[],
   };
+  const eleveId = String(formData.get("eleveId") ?? "");
+  if (raw.type === "PRIVE" && eleveId) raw.eleveIds = [eleveId];
   const parsed = seanceSchema.safeParse(raw);
   if (parsed.success) {
     return { success: true, data: parsed.data };

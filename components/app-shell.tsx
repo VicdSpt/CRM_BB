@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Home, Users, Wallet } from "lucide-react";
+import { CalendarDays, Home, User, Users } from "lucide-react";
 import { coquillePour, type Role } from "@/lib/auth/roles";
 import { Coquille } from "@/components/coquille";
 import { EleveShell } from "@/components/eleve-shell";
@@ -11,7 +11,8 @@ const ITEMS = [
   { href: "/", label: "Accueil", icon: Home },
   { href: "/planning", label: "Planning", icon: CalendarDays },
   { href: "/eleves", label: "Élèves", icon: Users },
-  { href: "/finances", label: "Finances", icon: Wallet },
+  // Le profil du coach contient ses finances.
+  { href: "/profil", label: "Profil", icon: User },
 ] as const;
 
 // Le menu dépend du rôle de la session (fourni par le layout serveur), pas de l'URL.

@@ -89,14 +89,14 @@ export default async function HomePage() {
       <AnimBloc index={4}>
         <section className="grid grid-cols-2 gap-3">
           <Link
-            href="/finances"
+            href="/profil#finances"
             className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
           >
             <p className="text-muted-foreground text-xs">Encaissé ce mois</p>
             <p className="text-xl font-semibold">{formatEuros(encaisseMois.toString())}</p>
           </Link>
           <Link
-            href="/finances"
+            href="/profil#finances"
             className="hover:bg-muted rounded-lg border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm active:scale-[0.98]"
           >
             <p className="text-muted-foreground text-xs">Impayés</p>

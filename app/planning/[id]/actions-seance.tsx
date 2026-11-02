@@ -1,6 +1,6 @@
 "use client";
 
-import { setStatutSeance, deleteSeance, dupliquerSeance } from "@/lib/planning/actions";
+import { setStatutSeance, deleteSeance } from "@/lib/planning/actions";
 import { Button } from "@/components/ui/button";
 import { BoutonSuppression } from "@/components/bouton-suppression";
 
@@ -31,11 +31,6 @@ export function ActionsSeance({
         </form>
       </div>
       <div className="flex flex-wrap gap-2">
-        <form action={() => dupliquerSeance(id)}>
-          <Button type="submit" variant="outline" size="sm">
-            Dupliquer (semaine suivante)
-          </Button>
-        </form>
         <BoutonSuppression
           action={() => deleteSeance(id)}
           titre="Supprimer cette séance ?"

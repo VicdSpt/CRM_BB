@@ -22,7 +22,8 @@ pensé d'abord pour le mobile.
   « À valider » ; si l'email correspond à une fiche existante, le coach voit l'identité saisie
   à côté de celle de la fiche avant de valider.
 - **Règlements** : chaque participation est « à régler » ou « payée » (espèces / carte).
-- **Finances** : total encaissé, répartition privé / collectif, évolution sur la
+- **Profil coach** : ses finances, son nom, son email de connexion et son mot de passe.
+- **Finances** (dans le profil coach) : total encaissé, répartition privé / collectif, évolution sur la
   période, impayés.
 
 ### Côté élève
@@ -63,7 +64,7 @@ app/                 Pages (App Router)
   page.tsx           Accueil du coach
   planning/          Séances (coach)
   eleves/            Fiches élèves et validation des comptes (coach)
-  finances/          Tableau de bord financier (coach)
+  profil/            Profil du coach : finances, informations, mot de passe
   espace/            Espace élève : profil, réserver, mes cours, attente
   login/ inscription/  Pages publiques
 lib/                 Logique métier, par domaine (auth, eleves, planning, finances, espace)
@@ -123,7 +124,7 @@ npm run dev                 # http://localhost:3000
 | `npm run test:run`                                 | Tests unitaires (une passe) — `npm test` en mode surveillance                                                                         |
 | `npm run lint`                                     | ESLint                                                                                                                                |
 | `npm run format`                                   | Prettier                                                                                                                              |
-| `npm run seed`                                     | Crée ou met à jour le compte coach                                                                                                    |
+| `npm run seed`                                     | Crée ou met à jour le compte coach (à ne pas relancer si le coach a changé son email ou son mot de passe dans l'app)                  |
 | `npx tsx scripts/verif-reservation-concurrente.ts` | Vérifie qu'une dernière place réservée simultanément par deux élèves n'est attribuée qu'une fois (base de dev uniquement)             |
 | `npm run sauvegarde`                               | Sauvegarde complète de la base de production dans `sauvegardes/` (fichier JSON daté, ignoré par git) — `-- --dev` pour la base de dev |
 | `npx prisma studio`                                | Explorer la base                                                                                                                      |

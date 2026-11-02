@@ -1,5 +1,32 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Lien WhatsApp sur la fiche élève
+
+- Le téléphone de la fiche élève ouvre une conversation WhatsApp (lien `wa.me`), sur l'appli mobile ou WhatsApp Web.
+- Le numéro saisi librement est converti au format international ; un numéro national (0…) prend l'indicatif belge +32. Un numéro incompréhensible reste affiché sans lien.
+- Icônes devant Téléphone, Email, Adresse et Notes sur la fiche élève.
+- Logo WhatsApp (Simple Icons, CC0) à côté du numéro cliquable.
+
+## 2026-11-02 — Formulaire de séance : date, heure et élève
+
+- Le champ natif « jj/mm/aaaa --:-- » est remplacé par un calendrier du mois (lundi en premier, aujourd'hui entouré, jours passés grisés) et un menu déroulant pour l'heure, de 06:00 à 22:00 par demi-heure.
+- Récapitulatif « Mardi 10 novembre 2026 à 18:30 » ; message si le jour ou l'heure manque. La valeur envoyée au serveur ne change pas.
+- Plus de liste d'élèves à cocher : un cours collectif se crée sans élève (ils réservent eux-mêmes), un cours privé a un menu « Élève » pour choisir son élève.
+- Modifier un cours collectif ne touche plus aux inscriptions des élèves.
+- Case « Répéter chaque semaine pendant 1 mois » pour les cours collectifs (4 séances, même heure locale y compris au changement d'heure), à la création ou à la modification (copies vides ajoutées après la séance modifiée). Le bouton « Dupliquer (semaine suivante) » de la fiche séance est retiré.
+
+## 2026-11-02 — Boutons de retour plus visibles
+
+- Les petits liens gris « ← Retour… » deviennent un bouton arrondi avec chevron (`BoutonRetour`), au libellé court : « Élèves », « Planning », « Séance », « Fiche de l'élève », « Tableau de bord ».
+
+## 2026-11-02 — Profil du coach
+
+- L'onglet « Finances » devient « Profil » : la page `/profil` a trois onglets, Finances (par défaut ; mêmes filtres, graphiques et impayés), Informations et Mot de passe.
+- Informations et Mot de passe : modifier son nom et son email de connexion (refusé s'il est déjà celui d'un élève), et changer son mot de passe (mot de passe actuel vérifié, mêmes règles fortes que les élèves).
+- `/finances` redirige vers le profil ; les cartes du tableau de bord y mènent aussi.
+- Jauge de force et règles du mot de passe partagées entre l'inscription et le profil coach.
+- Attention : `npm run seed` recrée ou réinitialise le coach depuis `COACH_EMAIL` / `COACH_PASSWORD` ; ne pas le relancer après un changement fait dans l'app.
+
 ## 2026-11-02 — Aperçu mobile de VS Code en développement
 
 - En développement uniquement, le site peut s'afficher dans un cadre (aperçu mobile de VS Code) : `frame-ancestors` et `X-Frame-Options` ne sont envoyés qu'en production, où la protection contre le clickjacking reste entière.
