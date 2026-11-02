@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Notifications de confirmation
+
+- Après chaque action (archiver, supprimer, créer, enregistrer un paiement, réserver…), une notification de confirmation s'affiche en haut de l'écran (sonner).
+- Message « flash » : l'action dépose un cookie de 10 secondes, le layout l'affiche puis le navigateur l'efface ; fonctionne aussi après une redirection.
+- Les messages verts sous les formulaires de pack et de profil sont remplacés par la notification.
+
 ## 2026-10-30 — Confidentialité : texte simplifié et lien en pied de page
 
 - Politique réécrite en termes simples, avec un résumé « En bref » ; aucun nom de personne : le site est géré par son administrateur, qui a accès à toutes les données, le coach voit ce qui concerne les cours.

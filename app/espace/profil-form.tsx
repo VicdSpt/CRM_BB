@@ -34,7 +34,6 @@ export function ProfilForm({ email, telephone, adresse }: Props) {
           ) : null}
         </div>
       ))}
-      {state.message ? <p className="text-sm text-emerald-600">{state.message}</p> : null}
       <Button type="submit" disabled={pending}>
         {pending ? "Enregistrement…" : "Enregistrer"}
       </Button>

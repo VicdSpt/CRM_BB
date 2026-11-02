@@ -48,7 +48,6 @@ export function PackForm({ eleveId }: { eleveId: string }) {
       {state.errors?.nbSeancesTotal ? (
         <p className="text-sm text-red-600">{state.errors.nbSeancesTotal}</p>
       ) : null}
-      {state.message ? <p className="text-sm text-green-700">{state.message}</p> : null}
       <Button type="submit" disabled={pending}>
         {pending ? "Création…" : "Créer le pack"}
       </Button>

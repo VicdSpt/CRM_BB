@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { MethodePaiement } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { flash } from "@/lib/flash-serveur";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parsePackForm } from "@/lib/finances/pack-schema";
 
@@ -52,6 +53,7 @@ export async function marquerPaye(
     throw error;
   }
 
+  await flash("Paiement enregistré.");
   revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
@@ -68,6 +70,7 @@ export async function annulerPaiement(participationId: string): Promise<void> {
     }),
   ]);
 
+  await flash("Paiement annulé.");
   revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
@@ -97,9 +100,10 @@ export async function creerPack(
     },
   });
 
+  await flash("Pack créé.");
   revalidatePath(`/eleves/${eleveId}`);
   revalidatePath("/finances");
-  return { message: "Pack créé." };
+  return {};
 }
 
 export async function modifierPack(
@@ -134,9 +138,10 @@ export async function modifierPack(
     prisma.paiement.updateMany({ where: { packId }, data: { montant: montantPaye, methode } }),
   ]);
 
+  await flash("Pack modifié.");
   revalidatePath(`/eleves/${pack.eleveId}`);
   revalidatePath("/finances");
-  return { message: "Pack modifié." };
+  return {};
 }
 
 export async function supprimerPack(packId: string): Promise<void> {
@@ -154,6 +159,7 @@ export async function supprimerPack(packId: string): Promise<void> {
     prisma.pack.delete({ where: { id: packId } }),
   ]);
 
+  await flash("Pack supprimé.");
   revalidatePath(`/eleves/${pack.eleveId}`);
   revalidatePath("/finances");
   revalidatePath("/planning");
@@ -181,6 +187,7 @@ export async function reglerAvecPack(participationId: string): Promise<void> {
     }),
   ]);
 
+  await flash("Séance réglée avec le pack.");
   revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
 
@@ -206,5 +213,6 @@ export async function annulerPack(participationId: string): Promise<void> {
     }),
   ]);
 
+  await flash("Règlement par pack annulé.");
   revaliderApresReglement(participation.seanceId, participation.eleveId);
 }

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { flash } from "@/lib/flash-serveur";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parseEleveForm } from "@/lib/eleves/schema";
 import { estDoublonUnique } from "@/lib/prisma-erreurs";
@@ -43,6 +44,7 @@ export async function createEleve(
     if (estDoublonUnique(e)) return EMAIL_DEJA_PRIS;
     throw e;
   }
+  await flash("Élève créé.");
   revalidatePath("/eleves");
   redirect("/eleves");
 }
@@ -65,6 +67,7 @@ export async function updateEleve(
     throw e;
   }
   revalidatePath("/eleves");
+  await flash("Modifications enregistrées.");
   revalidatePath(`/eleves/${id}`);
   redirect(`/eleves/${id}`);
 }
@@ -82,6 +85,7 @@ export async function validerCompte(id: string): Promise<void> {
     where: { id },
     data: { statutCompte: "VALIDE", ...IDENTITE_INSCRIPTION_EFFACEE },
   });
+  await flash("Compte validé.");
   revalidatePath("/eleves");
 }
 
@@ -99,12 +103,14 @@ export async function refuserCompte(id: string): Promise<void> {
       data: { motDePasse: null, statutCompte: "AUCUN", ...IDENTITE_INSCRIPTION_EFFACEE },
     });
   }
+  await flash("Demande refusée.");
   revalidatePath("/eleves");
 }
 
 export async function setArchiveEleve(id: string, archive: boolean): Promise<void> {
   await requireCoach();
   await prisma.eleve.update({ where: { id }, data: { archive } });
+  await flash(archive ? "Élève archivé." : "Élève désarchivé.");
   revalidatePath("/eleves");
   revalidatePath(`/eleves/${id}`);
 }
@@ -119,11 +125,13 @@ export async function deleteEleve(id: string): Promise<void> {
   if (participations + packs + paiements > 0) {
     // Sécurité : un élève avec historique ne peut pas être supprimé → on archive.
     await prisma.eleve.update({ where: { id }, data: { archive: true } });
+    await flash("Élève archivé : il a un historique, il ne peut pas être supprimé.");
     revalidatePath("/eleves");
     revalidatePath(`/eleves/${id}`);
     redirect(`/eleves/${id}`);
   }
   await prisma.eleve.delete({ where: { id } });
+  await flash("Élève supprimé.");
   revalidatePath("/eleves");
   redirect("/eleves");
 }

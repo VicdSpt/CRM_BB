@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { flash } from "@/lib/flash-serveur";
 import { requireEleve } from "@/lib/auth/require-eleve";
 import { peutSeDesinscrire } from "./regles";
 import { reserverDansTransaction } from "./reservation";
@@ -43,8 +44,9 @@ export async function updateProfil(_prev: ProfilState, formData: FormData): Prom
     if (estDoublonUnique(e)) return { errors: { email: "Cet email est déjà utilisé." } };
     throw e;
   }
+  await flash("Profil enregistré.");
   revalidatePath("/espace");
-  return { message: "Profil enregistré." };
+  return {};
 }
 
 // Suppression du compte par l'élève lui-même (RGPD). Ses réservations futures non payées
@@ -91,6 +93,7 @@ export async function reserverCours(seanceIdRecu: unknown): Promise<ResultatActi
   const seanceId = parseSeanceId(seanceIdRecu);
   if (!seanceId) return { erreur: "Cours introuvable." };
   const resultat = await reserverDansTransaction(seanceId, eleve.id, new Date());
+  if (!resultat.erreur) await flash("Cours réservé.");
   // Le profil (/espace) et le catalogue (/espace/cours) affichent tous deux les inscriptions.
   revalidatePath("/espace", "layout");
   return resultat;
@@ -123,6 +126,7 @@ export async function annulerReservation(seanceIdRecu: unknown): Promise<Resulta
   if (!verdict.ok) return { erreur: verdict.raison };
 
   await prisma.participation.delete({ where: { id: participation.id } });
+  await flash("Réservation annulée.");
   revalidatePath("/espace", "layout");
   return {};
 }
