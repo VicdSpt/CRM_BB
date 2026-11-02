@@ -21,9 +21,10 @@ export async function createSeance(
     return { errors: result.errors };
   }
   const { eleveIds, prixReference, repetition, dateHeureDebut, ...seanceData } = result.data;
-  // Une séance par semaine demandée, toutes créées ou aucune.
+  // Cours collectif : une séance par semaine demandée, toutes créées ou aucune.
+  const nb = seanceData.type === "COLLECTIF" ? repetition : 1;
   await prisma.$transaction(
-    datesRepetees(dateHeureDebut, repetition).map((date) =>
+    datesRepetees(dateHeureDebut, nb).map((date) =>
       prisma.seance.create({
         data: {
           ...seanceData,
@@ -36,7 +37,7 @@ export async function createSeance(
       }),
     ),
   );
-  await flash(repetition > 1 ? `${repetition} séances créées.` : "Séance créée.");
+  await flash(nb > 1 ? `${nb} séances créées.` : "Séance créée.");
   revalidatePath("/planning");
   redirect("/planning");
 }

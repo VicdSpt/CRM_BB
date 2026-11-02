@@ -2,8 +2,10 @@ import { z } from "zod";
 import { montantSchema } from "@/lib/finances/money";
 
 export const CAPACITE_PAR_DEFAUT = 4;
-// Création seulement : la même séance chaque semaine, jusqu'à 12 semaines.
+// Cours collectif : la même séance chaque semaine. Le formulaire propose « 1 mois »
+// (4 séances) ; le serveur accepte jusqu'à 12 semaines pour élargir plus tard.
 export const REPETITION_MAX = 12;
+export const REPETITION_UN_MOIS = 4;
 
 export const seanceSchema = z
   .object({
@@ -22,7 +24,7 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
       .pipe(z.number().int().min(1, "Au moins 1 place")),
-    // Nombre de semaines (1 = une seule séance). À la modification : cours collectifs seulement.
+    // Nombre de semaines (1 = une seule séance) ; appliqué aux cours collectifs seulement.
     repetition: z
       .string()
       .optional()

@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import type { SeanceFormState } from "@/lib/planning/actions";
-import { CAPACITE_PAR_DEFAUT, REPETITION_MAX } from "@/lib/planning/schema";
+import { CAPACITE_PAR_DEFAUT, REPETITION_UN_MOIS } from "@/lib/planning/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,8 +25,8 @@ type Props = {
   eleves: EleveOption[];
   initial?: SeanceInitial;
   submitLabel: string;
-  // Répéter la séance chaque semaine : toujours à la création, seulement pour un cours
-  // collectif à la modification (la séance modifiée compte pour la 1re semaine).
+  // Case « Répéter pendant 1 mois », pour les cours collectifs : à la création, ou à la
+  // modification (la séance modifiée compte pour la 1re semaine).
   repetition?: "creation" | "modification";
 };
 
@@ -70,29 +70,23 @@ export function SeanceForm({ action, eleves, initial, submitLabel, repetition }:
         />
       </div>
 
-      {repetition === "creation" || (repetition === "modification" && collectif) ? (
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="repetition">Répéter</Label>
-          <select
-            id="repetition"
+      {repetition && collectif ? (
+        <label className="flex items-start gap-3 rounded-md border p-3 text-sm">
+          <input
+            type="checkbox"
             name="repetition"
-            defaultValue="1"
-            className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
-          >
-            <option value="1">
-              {repetition === "creation" ? "Une seule fois" : "Non, seulement cette séance"}
-            </option>
-            {Array.from({ length: REPETITION_MAX - 1 }, (_, i) => i + 2).map((n) => (
-              <option key={n} value={n}>
-                Chaque semaine, {n} semaines de suite
-                {repetition === "modification" ? " (celle-ci comprise)" : ""}
-              </option>
-            ))}
-          </select>
-          {state.errors?.repetition ? (
-            <p className="text-sm text-red-600">{state.errors.repetition}</p>
-          ) : null}
-        </div>
+            value={REPETITION_UN_MOIS}
+            className="accent-primary mt-0.5 size-4"
+          />
+          <span>
+            <span className="font-medium">Répéter chaque semaine pendant 1 mois</span>
+            <span className="text-muted-foreground block text-xs">
+              {repetition === "creation"
+                ? `${REPETITION_UN_MOIS} séances au total, même jour et même heure.`
+                : `Cette séance et les ${REPETITION_UN_MOIS - 1} semaines suivantes (ajoutées vides).`}
+            </span>
+          </span>
+        </label>
       ) : null}
 
       <div className="flex gap-3">
