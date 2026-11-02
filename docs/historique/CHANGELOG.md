@@ -2,8 +2,8 @@
 
 ## 2026-11-02 — Profil du coach
 
-- L'onglet « Finances » devient « Profil » : la page `/profil` réunit les finances du coach (mêmes filtres, graphiques et impayés), puis « Mon compte ».
-- « Mon compte » : modifier son nom et son email de connexion (refusé s'il est déjà celui d'un élève), et changer son mot de passe (mot de passe actuel vérifié, mêmes règles fortes que les élèves).
+- L'onglet « Finances » devient « Profil » : la page `/profil` a trois onglets, Finances (par défaut ; mêmes filtres, graphiques et impayés), Informations et Mot de passe.
+- Informations et Mot de passe : modifier son nom et son email de connexion (refusé s'il est déjà celui d'un élève), et changer son mot de passe (mot de passe actuel vérifié, mêmes règles fortes que les élèves).
 - `/finances` redirige vers le profil ; les cartes du tableau de bord y mènent aussi.
 - Jauge de force et règles du mot de passe partagées entre l'inscription et le profil coach.
 - Attention : `npm run seed` recrée ou réinitialise le coach depuis `COACH_EMAIL` / `COACH_PASSWORD` ; ne pas le relancer après un changement fait dans l'app.

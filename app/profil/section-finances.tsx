@@ -38,8 +38,9 @@ export async function SectionFinances({ sp }: { sp: ParamsFinances }) {
   const totalImpayes = impayes.reduce((acc, i) => acc.add(i.total), repartition.prive.mul(0));
 
   return (
-    <section id="finances" aria-labelledby="titre-finances" className="mb-10 scroll-mt-4">
-      <h2 id="titre-finances" className="mb-4 text-xl font-semibold">
+    <section id="finances" aria-labelledby="titre-finances">
+      {/* Le nom de l'onglet sert de titre visible. */}
+      <h2 id="titre-finances" className="sr-only">
         Finances
       </h2>
 
