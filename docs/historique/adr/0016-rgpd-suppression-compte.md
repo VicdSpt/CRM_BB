@@ -16,7 +16,7 @@ supprimer une fiche, et une fiche avec historique ne pouvait qu'être archivée 
   libres » dans `lib/auth/roles.ts`, sans redirection ni menu). Révisé le 2026-10-30 : texte
   en termes simples, sans nom de personne (« l'administrateur du site », qui a accès à tout ;
   le coach voit ce qui concerne les cours) ; email de contact optionnel via `CONTACT_EMAIL`,
-  jamais dans le dépôt. Lien « Confidentialité » en pied de page des espaces coach et élève.
+  jamais dans le dépôt. Liens depuis la connexion, l'inscription et le profil élève uniquement (pas sur chaque page).
   Liens depuis la connexion, l'inscription et le profil.
 - **Suppression du compte par l'élève** (`supprimerMonCompte`, profil), après avoir tapé
   « SUPPRIMER » (vérifié côté serveur), dans une transaction :

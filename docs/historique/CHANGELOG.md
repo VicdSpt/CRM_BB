@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Confidentialité : lien retiré du pied de page
+
+- Le lien « Confidentialité » n'apparaît plus en bas de chaque page des espaces coach et élève ; il reste sur la connexion, l'inscription et le profil élève.
+
 ## 2026-11-02 — Retrait des packs
 
 - Le système de packs de séances est supprimé (ADR 0017, remplace l'ADR 0008) : plus de création de pack sur la fiche élève, plus de bouton « Pack » sur la séance, plus de part « Packs » dans les finances ni de badge « Pack » côté élève.
