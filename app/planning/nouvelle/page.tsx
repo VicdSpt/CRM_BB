@@ -19,7 +19,12 @@ export default async function NouvelleSeancePage() {
         ← Retour au planning
       </Link>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Nouvelle séance</h1>
-      <SeanceForm action={createSeance} eleves={eleves} submitLabel="Créer la séance" />
+      <SeanceForm
+        action={createSeance}
+        eleves={eleves}
+        submitLabel="Créer la séance"
+        avecRepetition
+      />
     </main>
   );
 }

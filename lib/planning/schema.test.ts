@@ -124,3 +124,25 @@ describe("parseSeanceForm", () => {
     if (!res.success) expect(res.errors.capacite).toBe("Au moins 1 place");
   });
 });
+
+describe("répétition", () => {
+  const champs = (repetition?: string): Array<[string, string]> => [
+    ["type", "COLLECTIF"],
+    ["dateHeureDebut", "2026-06-20T18:00"],
+    ["dureeMinutes", "60"],
+    ["prixReference", "15"],
+    ...(repetition === undefined ? [] : ([["repetition", repetition]] as Array<[string, string]>)),
+  ];
+
+  it("vaut 1 (une seule séance) sans choix", () => {
+    const res = parseSeanceForm(fd(champs()));
+    expect(res.success && res.data.repetition).toBe(1);
+  });
+
+  it("accepte de 1 à 12 semaines", () => {
+    const res = parseSeanceForm(fd(champs("8")));
+    expect(res.success && res.data.repetition).toBe(8);
+    expect(parseSeanceForm(fd(champs("13"))).success).toBe(false);
+    expect(parseSeanceForm(fd(champs("0"))).success).toBe(false);
+  });
+});

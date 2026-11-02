@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import type { SeanceFormState } from "@/lib/planning/actions";
-import { CAPACITE_PAR_DEFAUT } from "@/lib/planning/schema";
+import { CAPACITE_PAR_DEFAUT, REPETITION_MAX } from "@/lib/planning/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,9 +25,11 @@ type Props = {
   eleves: EleveOption[];
   initial?: SeanceInitial;
   submitLabel: string;
+  // Création seulement : propose de répéter la séance chaque semaine.
+  avecRepetition?: boolean;
 };
 
-export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
+export function SeanceForm({ action, eleves, initial, submitLabel, avecRepetition }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const [type, setType] = useState(initial?.type ?? "PRIVE");
   const [erreurDate, setErreurDate] = useState<string>();
@@ -66,6 +68,28 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
           erreur={erreurDate ?? state.errors?.dateHeureDebut}
         />
       </div>
+
+      {avecRepetition ? (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="repetition">Répéter</Label>
+          <select
+            id="repetition"
+            name="repetition"
+            defaultValue="1"
+            className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
+          >
+            <option value="1">Une seule fois</option>
+            {Array.from({ length: REPETITION_MAX - 1 }, (_, i) => i + 2).map((n) => (
+              <option key={n} value={n}>
+                Chaque semaine, {n} semaines de suite
+              </option>
+            ))}
+          </select>
+          {state.errors?.repetition ? (
+            <p className="text-sm text-red-600">{state.errors.repetition}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="flex gap-3">
         <div className="flex flex-1 flex-col gap-1.5">

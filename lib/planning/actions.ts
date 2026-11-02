@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { flash } from "@/lib/flash-serveur";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parseSeanceForm } from "@/lib/planning/schema";
+import { datesRepetees } from "@/lib/planning/dates";
 
 export type SeanceFormState = { errors?: Record<string, string>; message?: string };
 
@@ -19,17 +20,23 @@ export async function createSeance(
   if (!result.success) {
     return { errors: result.errors };
   }
-  const { eleveIds, prixReference, ...seanceData } = result.data;
-  await prisma.seance.create({
-    data: {
-      ...seanceData,
-      prixReference,
-      participations: {
-        create: eleveIds.map((eleveId) => ({ eleveId, montant: prixReference })),
-      },
-    },
-  });
-  await flash("Séance créée.");
+  const { eleveIds, prixReference, repetition, dateHeureDebut, ...seanceData } = result.data;
+  // Une séance par semaine demandée, toutes créées ou aucune.
+  await prisma.$transaction(
+    datesRepetees(dateHeureDebut, repetition).map((date) =>
+      prisma.seance.create({
+        data: {
+          ...seanceData,
+          dateHeureDebut: date,
+          prixReference,
+          participations: {
+            create: eleveIds.map((eleveId) => ({ eleveId, montant: prixReference })),
+          },
+        },
+      }),
+    ),
+  );
+  await flash(repetition > 1 ? `${repetition} séances créées.` : "Séance créée.");
   revalidatePath("/planning");
   redirect("/planning");
 }
@@ -44,7 +51,10 @@ export async function updateSeance(
   if (!result.success) {
     return { errors: result.errors };
   }
-  const { eleveIds, prixReference, ...seanceData } = result.data;
+  // La répétition ne concerne que la création : on ne reprend que les champs de la séance.
+  const { eleveIds, prixReference, type, dateHeureDebut, dureeMinutes, lieu, capacite } =
+    result.data;
+  const seanceData = { type, dateHeureDebut, dureeMinutes, lieu, capacite };
 
   // Cours collectif : les inscriptions sont faites par les élèves, on n'y touche pas.
   if (seanceData.type === "COLLECTIF") {
@@ -73,41 +83,6 @@ export async function updateSeance(
   revalidatePath("/planning");
   revalidatePath(`/planning/${id}`);
   redirect(`/planning/${id}`);
-}
-
-export async function dupliquerSeance(id: string): Promise<void> {
-  await requireCoach();
-  const source = await prisma.seance.findUnique({ where: { id } });
-  if (!source) return;
-
-  // Duplique vers la semaine suivante, à la même heure locale, SANS les élèves :
-  // chaque séance n'a pas forcément les mêmes participants. On construit la date
-  // à partir des composants locaux pour éviter toute dérive d'heure (DST).
-  const d = source.dateHeureDebut;
-  const dateHeureDebut = new Date(
-    d.getFullYear(),
-    d.getMonth(),
-    d.getDate() + 7,
-    d.getHours(),
-    d.getMinutes(),
-    0,
-    0,
-  );
-
-  const nouvelle = await prisma.seance.create({
-    data: {
-      type: source.type,
-      dateHeureDebut,
-      dureeMinutes: source.dureeMinutes,
-      lieu: source.lieu,
-      prixReference: source.prixReference,
-      capacite: source.capacite,
-    },
-  });
-
-  await flash("Séance dupliquée à la semaine suivante.");
-  revalidatePath("/planning");
-  redirect(`/planning/${nouvelle.id}/modifier`);
 }
 
 const MESSAGE_STATUT: Record<StatutSeance, string> = {

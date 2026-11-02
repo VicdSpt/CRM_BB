@@ -2,6 +2,8 @@ import { z } from "zod";
 import { montantSchema } from "@/lib/finances/money";
 
 export const CAPACITE_PAR_DEFAUT = 4;
+// Création seulement : la même séance chaque semaine, jusqu'à 12 semaines.
+export const REPETITION_MAX = 12;
 
 export const seanceSchema = z
   .object({
@@ -20,6 +22,18 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
       .pipe(z.number().int().min(1, "Au moins 1 place")),
+    // Nombre de semaines (1 = une seule séance). Ignoré à la modification.
+    repetition: z
+      .string()
+      .optional()
+      .transform((v) => (v ? Number(v) : 1))
+      .pipe(
+        z
+          .number()
+          .int()
+          .min(1, "Au moins une séance")
+          .max(REPETITION_MAX, `${REPETITION_MAX} semaines au maximum`),
+      ),
     // Cours privé : l'élève choisi dans le menu. Cours collectif : toujours vide,
     // les élèves réservent eux-mêmes depuis leur espace.
     eleveIds: z.array(z.string().min(1)),
@@ -43,6 +57,7 @@ export function parseSeanceForm(formData: FormData): ParseResult {
     lieu: String(formData.get("lieu") ?? ""),
     prixReference: String(formData.get("prixReference") ?? ""),
     capacite: String(formData.get("capacite") ?? ""),
+    repetition: String(formData.get("repetition") ?? ""),
     eleveIds: [] as string[],
   };
   const eleveId = String(formData.get("eleveId") ?? "");
