@@ -6,6 +6,7 @@ import { CAPACITE_PAR_DEFAUT } from "@/lib/planning/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ChoixDateHeure } from "./choix-date-heure";
 
 type EleveOption = { id: string; prenom: string; nom: string };
 
@@ -32,6 +33,7 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
   const [type, setType] = useState(initial?.type ?? "PRIVE");
   const [capacite, setCapacite] = useState(initial?.capacite ?? CAPACITE_PAR_DEFAUT);
   const [nbCoches, setNbCoches] = useState(selected.size);
+  const [erreurDate, setErreurDate] = useState<string>();
   const collectif = type === "COLLECTIF";
 
   return (
@@ -42,6 +44,12 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
       onChange={(e) => {
         const form = e.currentTarget;
         setNbCoches(form.querySelectorAll('input[name="eleveIds"]:checked').length);
+      }}
+      // Le jour et l'heure sont choisis par boutons : on vérifie qu'ils le sont avant l'envoi.
+      onSubmit={(e) => {
+        const manque = !new FormData(e.currentTarget).get("dateHeureDebut");
+        setErreurDate(manque ? "Choisis un jour et une heure." : undefined);
+        if (manque) e.preventDefault();
       }}
     >
       <div className="flex flex-col gap-1.5">
@@ -59,13 +67,11 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="dateHeureDebut">Date et heure</Label>
-        <Input
-          id="dateHeureDebut"
+        <span className="text-sm font-medium">Date et heure</span>
+        <ChoixDateHeure
           name="dateHeureDebut"
-          type="datetime-local"
-          defaultValue={initial?.dateHeureDebutLocal}
-          required
+          valeurInitiale={initial?.dateHeureDebutLocal}
+          erreur={erreurDate ?? state.errors?.dateHeureDebut}
         />
       </div>
 
