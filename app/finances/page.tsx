@@ -11,6 +11,7 @@ import { CamembertRepartition } from "@/components/finances/camembert-repartitio
 import { CourbeEvolution } from "@/components/finances/courbe-evolution";
 import { Initiales } from "@/components/initiales";
 import { AnimBloc } from "@/components/anim-item";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 const METHODES_VALIDES = ["ESPECES", "CB"] as const;
 
@@ -43,9 +44,7 @@ export default async function FinancesPage({
 
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
-      <Link href="/" className="text-muted-foreground text-sm">
-        ← Tableau de bord
-      </Link>
+      <BoutonRetour href="/">Tableau de bord</BoutonRetour>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Finances</h1>
 
       <div className="mb-4">

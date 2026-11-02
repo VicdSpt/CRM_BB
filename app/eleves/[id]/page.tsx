@@ -14,6 +14,7 @@ import { ActionsEleve } from "./actions-eleve";
 import { Initiales } from "@/components/initiales";
 import { IconeWhatsApp } from "@/components/icone-whatsapp";
 import { AnimItem, AnimBloc } from "@/components/anim-item";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 export default async function FicheElevePage({
   params,
@@ -37,9 +38,7 @@ export default async function FicheElevePage({
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
-      <Link href="/eleves" className="text-muted-foreground text-sm">
-        ← Retour à la liste
-      </Link>
+      <BoutonRetour href="/eleves">Élèves</BoutonRetour>
       <div className="mt-2 mb-4 flex items-center gap-3">
         <Initiales prenom={eleve.prenom} nom={eleve.nom} className="size-12 text-base" />
         <div className="flex min-w-0 flex-1 flex-col">

@@ -15,6 +15,10 @@
 - Modifier un cours collectif ne touche plus aux inscriptions des élèves.
 - Case « Répéter chaque semaine pendant 1 mois » pour les cours collectifs (4 séances, même heure locale y compris au changement d'heure), à la création ou à la modification (copies vides ajoutées après la séance modifiée). Le bouton « Dupliquer (semaine suivante) » de la fiche séance est retiré.
 
+## 2026-11-02 — Boutons de retour plus visibles
+
+- Les petits liens gris « ← Retour… » deviennent un bouton arrondi avec chevron (`BoutonRetour`), au libellé court : « Élèves », « Planning », « Séance », « Fiche de l'élève », « Tableau de bord ».
+
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 
 - Le lien « Confidentialité » n'apparaît plus en bas de chaque page des espaces coach et élève ; il reste sur la connexion, l'inscription et le profil élève.

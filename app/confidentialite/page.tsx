@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { connection } from "next/server";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 export const metadata: Metadata = { title: "Confidentialité" };
 
@@ -22,9 +22,7 @@ export default async function ConfidentialitePage() {
   return (
     <main className="mx-auto w-full max-w-2xl p-4 pb-16">
       {/* « / » renvoie chacun vers son accueil (connexion, espace élève ou tableau de bord). */}
-      <Link href="/" className="text-primary text-sm underline">
-        ← Retour
-      </Link>
+      <BoutonRetour href="/">Retour</BoutonRetour>
       <h1 className="mt-4 mb-1 text-2xl font-semibold">Politique de confidentialité</h1>
       <p className="text-muted-foreground mb-6 text-sm">Dernière mise à jour : 30 octobre 2026</p>
 
