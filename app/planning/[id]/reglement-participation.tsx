@@ -1,7 +1,7 @@
 "use client";
 
 import type { MethodePaiement, StatutReglement } from "@prisma/client";
-import { marquerPaye, annulerPaiement, reglerAvecPack, annulerPack } from "@/lib/finances/actions";
+import { marquerPaye, annulerPaiement } from "@/lib/finances/actions";
 import { Button } from "@/components/ui/button";
 
 const METHODES: Array<[MethodePaiement, string]> = [
@@ -18,12 +18,10 @@ export function ReglementParticipation({
   participationId,
   statut,
   methode,
-  packDisponible,
 }: {
   participationId: string;
   statut: StatutReglement;
   methode: MethodePaiement | null;
-  packDisponible: boolean;
 }) {
   if (statut === "PAYE") {
     return (
@@ -32,19 +30,6 @@ export function ReglementParticipation({
           Payé{methode ? ` · ${LIBELLE_METHODE[methode]}` : ""}
         </span>
         <form action={annulerPaiement.bind(null, participationId)}>
-          <Button type="submit" variant="ghost" size="sm">
-            Annuler
-          </Button>
-        </form>
-      </span>
-    );
-  }
-
-  if (statut === "COUVERT_PAR_PACK") {
-    return (
-      <span className="flex items-center gap-2">
-        <span className="text-sm text-blue-700">Couvert par un pack</span>
-        <form action={annulerPack.bind(null, participationId)}>
           <Button type="submit" variant="ghost" size="sm">
             Annuler
           </Button>
@@ -62,13 +47,6 @@ export function ReglementParticipation({
           </Button>
         </form>
       ))}
-      {packDisponible ? (
-        <form action={reglerAvecPack.bind(null, participationId)}>
-          <Button type="submit" variant="outline" size="sm">
-            Pack
-          </Button>
-        </form>
-      ) : null}
     </span>
   );
 }

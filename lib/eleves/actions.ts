@@ -117,12 +117,11 @@ export async function setArchiveEleve(id: string, archive: boolean): Promise<voi
 
 export async function deleteEleve(id: string): Promise<void> {
   await requireCoach();
-  const [participations, packs, paiements] = await Promise.all([
+  const [participations, paiements] = await Promise.all([
     prisma.participation.count({ where: { eleveId: id } }),
-    prisma.pack.count({ where: { eleveId: id } }),
     prisma.paiement.count({ where: { eleveId: id } }),
   ]);
-  if (participations + packs + paiements > 0) {
+  if (participations + paiements > 0) {
     // Sécurité : un élève avec historique ne peut pas être supprimé → on archive.
     await prisma.eleve.update({ where: { id }, data: { archive: true } });
     await flash("Élève archivé : il a un historique, il ne peut pas être supprimé.");

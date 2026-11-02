@@ -8,13 +8,12 @@ import {
 
 describe("modeSuppression", () => {
   it("supprime la fiche d'un élève sans aucun historique", () => {
-    expect(modeSuppression({ participations: 0, packs: 0, paiements: 0 })).toBe("supprimer");
+    expect(modeSuppression({ participations: 0, paiements: 0 })).toBe("supprimer");
   });
 
-  it("anonymise dès qu'il reste un cours, un pack ou un paiement", () => {
-    expect(modeSuppression({ participations: 1, packs: 0, paiements: 0 })).toBe("anonymiser");
-    expect(modeSuppression({ participations: 0, packs: 1, paiements: 0 })).toBe("anonymiser");
-    expect(modeSuppression({ participations: 0, packs: 0, paiements: 1 })).toBe("anonymiser");
+  it("anonymise dès qu'il reste un cours ou un paiement", () => {
+    expect(modeSuppression({ participations: 1, paiements: 0 })).toBe("anonymiser");
+    expect(modeSuppression({ participations: 0, paiements: 1 })).toBe("anonymiser");
   });
 });
 

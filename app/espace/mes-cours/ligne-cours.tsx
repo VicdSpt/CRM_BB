@@ -13,7 +13,7 @@ export type LigneCoursProps = {
   type: "PRIVE" | "COLLECTIF";
   lieu: string | null;
   montant: string;
-  reglement: "A_REGLER" | "PAYE" | "COUVERT_PAR_PACK";
+  reglement: "A_REGLER" | "PAYE";
   annule: boolean;
   desinscriptionPossible: boolean;
 };
@@ -21,7 +21,6 @@ export type LigneCoursProps = {
 const REGLEMENTS = {
   A_REGLER: ["À régler", "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"],
   PAYE: ["Payé", "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"],
-  COUVERT_PAR_PACK: ["Pack", "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"],
 } as const;
 
 // Une ligne de l'historique de l'élève (cours privé ou collectif).

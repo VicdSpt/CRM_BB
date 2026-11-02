@@ -1,14 +1,14 @@
 // Suppression du compte par l'élève (RGPD, droit à l'effacement).
-// Sans historique, la fiche disparaît. Avec des cours, packs ou paiements, elle est
+// Sans historique, la fiche disparaît. Avec des cours ou des paiements, elle est
 // anonymisée : le coach garde ses montants et ses dates (comptabilité), sans pouvoir
 // savoir de qui il s'agit.
 
 export const CONFIRMATION_SUPPRESSION = "SUPPRIMER";
 
-export type Historique = { participations: number; packs: number; paiements: number };
+export type Historique = { participations: number; paiements: number };
 
 export function modeSuppression(h: Historique): "supprimer" | "anonymiser" {
-  return h.participations + h.packs + h.paiements > 0 ? "anonymiser" : "supprimer";
+  return h.participations + h.paiements > 0 ? "anonymiser" : "supprimer";
 }
 
 export const DONNEES_ANONYMISEES = {

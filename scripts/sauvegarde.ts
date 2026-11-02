@@ -37,7 +37,6 @@ async function main() {
       coach: await prisma.coach.findMany(),
       eleve: await prisma.eleve.findMany(),
       seance: await prisma.seance.findMany(),
-      pack: await prisma.pack.findMany(),
       participation: await prisma.participation.findMany(),
       paiement: await prisma.paiement.findMany(),
     };

@@ -80,7 +80,6 @@ export default async function FinancesPage({
             <CamembertRepartition
               prive={repartition.prive.toString()}
               collectif={repartition.collectif.toString()}
-              pack={repartition.pack.toString()}
             />
           </div>
         </section>

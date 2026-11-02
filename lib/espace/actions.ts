@@ -66,16 +66,14 @@ export async function supprimerMonCompte(
       where: {
         eleveId: eleve.id,
         statutReglement: "A_REGLER",
-        packId: null,
         seance: { statut: "PLANIFIEE", dateHeureDebut: { gt: new Date() } },
       },
     });
-    const [participations, packs, paiements] = await Promise.all([
+    const [participations, paiements] = await Promise.all([
       tx.participation.count({ where: { eleveId: eleve.id } }),
-      tx.pack.count({ where: { eleveId: eleve.id } }),
       tx.paiement.count({ where: { eleveId: eleve.id } }),
     ]);
-    if (modeSuppression({ participations, packs, paiements }) === "supprimer") {
+    if (modeSuppression({ participations, paiements }) === "supprimer") {
       await tx.eleve.delete({ where: { id: eleve.id } });
     } else {
       await tx.eleve.update({ where: { id: eleve.id }, data: DONNEES_ANONYMISEES });

@@ -13,18 +13,9 @@ const config = {
   montant: { label: "Montant" },
   prive: { label: "Cours privés", color: "var(--primary)" },
   collectif: { label: "Cours collectifs", color: "oklch(0.6 0.15 230)" },
-  pack: { label: "Packs", color: "oklch(0.75 0.15 80)" },
 } satisfies ChartConfig;
 
-export function CamembertRepartition({
-  prive,
-  collectif,
-  pack,
-}: {
-  prive: string;
-  collectif: string;
-  pack: string;
-}) {
+export function CamembertRepartition({ prive, collectif }: { prive: string; collectif: string }) {
   const data = [
     { cle: "prive", montant: Number(prive), fill: "var(--color-prive)" },
     {
@@ -32,7 +23,6 @@ export function CamembertRepartition({
       montant: Number(collectif),
       fill: "var(--color-collectif)",
     },
-    { cle: "pack", montant: Number(pack), fill: "var(--color-pack)" },
   ];
   const total = data.reduce((acc, d) => acc + d.montant, 0);
 
@@ -50,7 +40,7 @@ export function CamembertRepartition({
                 nameKey="cle"
                 hideLabel
                 formatter={(value, _name, item) => {
-                  const cle = item.payload?.cle as "prive" | "collectif" | "pack";
+                  const cle = item.payload?.cle as "prive" | "collectif";
                   return (
                     <div className="flex w-full items-center gap-2">
                       <span
@@ -74,7 +64,7 @@ export function CamembertRepartition({
         {data.map((d) => (
           <li key={d.cle} className="flex items-center gap-2">
             <span className="size-3 rounded-full" style={{ backgroundColor: d.fill }} />
-            <span>{config[d.cle as "prive" | "collectif" | "pack"].label}</span>
+            <span>{config[d.cle as "prive" | "collectif"].label}</span>
             <span className="text-muted-foreground tabular-nums">{formatEuros(d.montant)}</span>
           </li>
         ))}
