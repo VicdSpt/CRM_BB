@@ -45,7 +45,13 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
         ← Retour à la séance
       </Link>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Modifier la séance</h1>
-      <SeanceForm action={action} eleves={eleves} initial={initial} submitLabel="Enregistrer" />
+      <SeanceForm
+        action={action}
+        eleves={eleves}
+        initial={initial}
+        submitLabel="Enregistrer"
+        repetition="modification"
+      />
     </main>
   );
 }

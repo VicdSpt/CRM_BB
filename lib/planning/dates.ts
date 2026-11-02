@@ -31,3 +31,9 @@ export function eachDayOfWeek(d: Date): Date[] {
   const start = startOfWeek(d);
   return Array.from({ length: 7 }, (_, i) => addDays(start, i));
 }
+
+// Une séance répétée chaque semaine : setDate garde l'heure locale, même au
+// changement d'heure (18:00 reste 18:00 après le passage à l'heure d'hiver).
+export function datesRepetees(debut: Date, nbSemaines: number): Date[] {
+  return Array.from({ length: nbSemaines }, (_, i) => addDays(debut, 7 * i));
+}
