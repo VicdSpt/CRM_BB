@@ -25,11 +25,12 @@ type Props = {
   eleves: EleveOption[];
   initial?: SeanceInitial;
   submitLabel: string;
-  // Création seulement : propose de répéter la séance chaque semaine.
-  avecRepetition?: boolean;
+  // Répéter la séance chaque semaine : toujours à la création, seulement pour un cours
+  // collectif à la modification (la séance modifiée compte pour la 1re semaine).
+  repetition?: "creation" | "modification";
 };
 
-export function SeanceForm({ action, eleves, initial, submitLabel, avecRepetition }: Props) {
+export function SeanceForm({ action, eleves, initial, submitLabel, repetition }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const [type, setType] = useState(initial?.type ?? "PRIVE");
   const [erreurDate, setErreurDate] = useState<string>();
@@ -69,7 +70,7 @@ export function SeanceForm({ action, eleves, initial, submitLabel, avecRepetitio
         />
       </div>
 
-      {avecRepetition ? (
+      {repetition === "creation" || (repetition === "modification" && collectif) ? (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="repetition">Répéter</Label>
           <select
@@ -78,10 +79,13 @@ export function SeanceForm({ action, eleves, initial, submitLabel, avecRepetitio
             defaultValue="1"
             className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
           >
-            <option value="1">Une seule fois</option>
+            <option value="1">
+              {repetition === "creation" ? "Une seule fois" : "Non, seulement cette séance"}
+            </option>
             {Array.from({ length: REPETITION_MAX - 1 }, (_, i) => i + 2).map((n) => (
               <option key={n} value={n}>
                 Chaque semaine, {n} semaines de suite
+                {repetition === "modification" ? " (celle-ci comprise)" : ""}
               </option>
             ))}
           </select>

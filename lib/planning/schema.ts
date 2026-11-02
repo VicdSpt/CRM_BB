@@ -22,7 +22,7 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
       .pipe(z.number().int().min(1, "Au moins 1 place")),
-    // Nombre de semaines (1 = une seule séance). Ignoré à la modification.
+    // Nombre de semaines (1 = une seule séance). À la modification : cours collectifs seulement.
     repetition: z
       .string()
       .optional()

@@ -23,7 +23,7 @@ export default async function NouvelleSeancePage() {
         action={createSeance}
         eleves={eleves}
         submitLabel="Créer la séance"
-        avecRepetition
+        repetition="creation"
       />
     </main>
   );

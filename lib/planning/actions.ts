@@ -51,14 +51,30 @@ export async function updateSeance(
   if (!result.success) {
     return { errors: result.errors };
   }
-  // La répétition ne concerne que la création : on ne reprend que les champs de la séance.
-  const { eleveIds, prixReference, type, dateHeureDebut, dureeMinutes, lieu, capacite } =
-    result.data;
+  const {
+    eleveIds,
+    prixReference,
+    repetition,
+    type,
+    dateHeureDebut,
+    dureeMinutes,
+    lieu,
+    capacite,
+  } = result.data;
   const seanceData = { type, dateHeureDebut, dureeMinutes, lieu, capacite };
+  let ajoutees = 0;
 
   // Cours collectif : les inscriptions sont faites par les élèves, on n'y touche pas.
+  // « Répéter » ajoute des copies vides les semaines suivantes (la séance modifiée est la 1re).
   if (seanceData.type === "COLLECTIF") {
-    await prisma.seance.update({ where: { id }, data: { ...seanceData, prixReference } });
+    const copies = datesRepetees(dateHeureDebut, repetition).slice(1);
+    ajoutees = copies.length;
+    await prisma.$transaction([
+      prisma.seance.update({ where: { id }, data: { ...seanceData, prixReference } }),
+      ...copies.map((date) =>
+        prisma.seance.create({ data: { ...seanceData, dateHeureDebut: date, prixReference } }),
+      ),
+    ]);
   } else {
     // Cours privé : la séance n'a que l'élève choisi dans le menu.
     const existing = await prisma.participation.findMany({
@@ -79,7 +95,11 @@ export async function updateSeance(
     ]);
   }
 
-  await flash("Séance modifiée.");
+  await flash(
+    ajoutees > 0
+      ? `Séance modifiée, ${ajoutees} séance${ajoutees > 1 ? "s" : ""} ajoutée${ajoutees > 1 ? "s" : ""} les semaines suivantes.`
+      : "Séance modifiée.",
+  );
   revalidatePath("/planning");
   revalidatePath(`/planning/${id}`);
   redirect(`/planning/${id}`);

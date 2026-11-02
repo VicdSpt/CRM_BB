@@ -7,6 +7,7 @@
 - Plus de liste d'élèves à cocher : un cours collectif se crée sans élève (ils réservent eux-mêmes), un cours privé a un menu « Élève » pour choisir son élève.
 - Modifier un cours collectif ne touche plus aux inscriptions des élèves.
 - « Répéter » à la création : la même séance chaque semaine, jusqu'à 12 semaines, créées en une fois (même heure locale, y compris au changement d'heure). Le bouton « Dupliquer (semaine suivante) » de la fiche séance est retiré.
+- À la modification d'un cours collectif, « Répéter » ajoute des copies vides les semaines suivantes (la séance modifiée compte pour la première).
 
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 
