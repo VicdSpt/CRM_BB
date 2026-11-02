@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Lien WhatsApp sur la fiche élève
+
+- Le téléphone de la fiche élève ouvre une conversation WhatsApp (lien `wa.me`), sur l'appli mobile ou WhatsApp Web.
+- Le numéro saisi librement est converti au format international ; un numéro national (0…) prend l'indicatif belge +32. Un numéro incompréhensible reste affiché sans lien.
+- Icônes devant Téléphone, Email, Adresse et Notes sur la fiche élève.
+- Logo WhatsApp (Simple Icons, CC0) à côté du numéro cliquable.
+
 ## 2026-11-02 — Formulaire de séance : date, heure et élève
 
 - Le champ natif « jj/mm/aaaa --:-- » est remplacé par un calendrier du mois (lundi en premier, aujourd'hui entouré, jours passés grisés) et un menu déroulant pour l'heure, de 06:00 à 22:00 par demi-heure.
