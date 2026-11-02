@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { startOfDay, endOfDay, addDays, startOfWeek, endOfWeek, eachDayOfWeek } from "./dates";
+import {
+  startOfDay,
+  endOfDay,
+  addDays,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfWeek,
+  datesRepetees,
+} from "./dates";
 
 describe("helpers de dates", () => {
   it("startOfDay met l'heure à 00:00:00.000", () => {
@@ -52,5 +60,22 @@ describe("helpers de dates", () => {
     expect(days).toHaveLength(7);
     expect(days[0].getDate()).toBe(15); // lundi
     expect(days[6].getDate()).toBe(21); // dimanche
+  });
+});
+
+describe("datesRepetees", () => {
+  it("répète la séance chaque semaine, à la même heure locale", () => {
+    // Fin de l'heure d'été le 25 octobre 2026 : 18:00 reste 18:00.
+    const dates = datesRepetees(new Date(2026, 9, 20, 18, 0), 3);
+    expect(dates.map((d) => [d.getDate(), d.getMonth(), d.getHours(), d.getMinutes()])).toEqual([
+      [20, 9, 18, 0],
+      [27, 9, 18, 0],
+      [3, 10, 18, 0],
+    ]);
+  });
+
+  it("ne renvoie que la date de départ sans répétition", () => {
+    const debut = new Date(2026, 10, 10, 9, 30);
+    expect(datesRepetees(debut, 1)).toEqual([debut]);
   });
 });

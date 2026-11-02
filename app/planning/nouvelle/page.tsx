@@ -17,7 +17,12 @@ export default async function NouvelleSeancePage() {
     <main className="mx-auto w-full max-w-md p-4">
       <BoutonRetour href="/planning">Planning</BoutonRetour>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Nouvelle séance</h1>
-      <SeanceForm action={createSeance} eleves={eleves} submitLabel="Créer la séance" />
+      <SeanceForm
+        action={createSeance}
+        eleves={eleves}
+        submitLabel="Créer la séance"
+        repetition="creation"
+      />
     </main>
   );
 }
