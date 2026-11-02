@@ -11,7 +11,7 @@ import { requireCoach } from "@/lib/auth/require-coach";
 function revaliderApresReglement(seanceId: string, eleveId: string): void {
   revalidatePath(`/planning/${seanceId}`);
   revalidatePath("/planning");
-  revalidatePath("/finances");
+  revalidatePath("/profil");
   revalidatePath(`/eleves/${eleveId}`);
 }
 

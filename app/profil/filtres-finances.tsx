@@ -32,7 +32,7 @@ export function FiltresFinances({
       date: next.date ?? date,
       methode: next.methode ?? methode,
     });
-    router.push(`/finances?${params.toString()}`);
+    router.push(`/profil?${params.toString()}`, { scroll: false });
   };
 
   return (
