@@ -36,7 +36,7 @@ describe("seanceSchema", () => {
     const res = seanceSchema.safeParse({ ...base, type: "PRIVE", eleveIds: [] });
     expect(res.success).toBe(false);
     if (!res.success) {
-      expect(res.error.issues[0].message).toBe("Un cours privé doit avoir exactement un élève");
+      expect(res.error.issues[0].message).toBe("Choisis l'élève du cours privé.");
     }
   });
 
@@ -52,7 +52,7 @@ describe("seanceSchema", () => {
 });
 
 describe("parseSeanceForm", () => {
-  it("valide un FormData correct (plusieurs eleveIds)", () => {
+  it("ignore tout élève envoyé pour un cours collectif (les élèves réservent eux-mêmes)", () => {
     const res = parseSeanceForm(
       fd([
         ["type", "COLLECTIF"],
@@ -60,16 +60,29 @@ describe("parseSeanceForm", () => {
         ["dureeMinutes", "60"],
         ["lieu", "Salle A"],
         ["prixReference", "15"],
-        ["eleveIds", "e1"],
-        ["eleveIds", "e2"],
+        ["eleveId", "e1"],
       ]),
     );
     expect(res.success).toBe(true);
     if (res.success) {
-      expect(res.data.eleveIds).toEqual(["e1", "e2"]);
+      expect(res.data.eleveIds).toEqual([]);
       expect(res.data.type).toBe("COLLECTIF");
       expect(res.data.dureeMinutes).toBe(60);
     }
+  });
+
+  it("prend l'élève choisi dans le menu pour un cours privé", () => {
+    const res = parseSeanceForm(
+      fd([
+        ["type", "PRIVE"],
+        ["dateHeureDebut", "2026-06-20T18:00"],
+        ["dureeMinutes", "60"],
+        ["prixReference", "15"],
+        ["eleveId", "e1"],
+      ]),
+    );
+    expect(res.success).toBe(true);
+    if (res.success) expect(res.data.eleveIds).toEqual(["e1"]);
   });
 
   it("renvoie une erreur si aucun élève sélectionné pour un cours privé", () => {
@@ -83,7 +96,7 @@ describe("parseSeanceForm", () => {
     );
     expect(res.success).toBe(false);
     if (!res.success) {
-      expect(res.errors.eleveIds).toBe("Un cours privé doit avoir exactement un élève");
+      expect(res.errors.eleveIds).toBe("Choisis l'élève du cours privé.");
     }
   });
 
@@ -109,5 +122,27 @@ describe("parseSeanceForm", () => {
     const res = parseSeanceForm(fd(collectif("0")));
     expect(res.success).toBe(false);
     if (!res.success) expect(res.errors.capacite).toBe("Au moins 1 place");
+  });
+});
+
+describe("répétition", () => {
+  const champs = (repetition?: string): Array<[string, string]> => [
+    ["type", "COLLECTIF"],
+    ["dateHeureDebut", "2026-06-20T18:00"],
+    ["dureeMinutes", "60"],
+    ["prixReference", "15"],
+    ...(repetition === undefined ? [] : ([["repetition", repetition]] as Array<[string, string]>)),
+  ];
+
+  it("vaut 1 (une seule séance) sans choix", () => {
+    const res = parseSeanceForm(fd(champs()));
+    expect(res.success && res.data.repetition).toBe(1);
+  });
+
+  it("accepte de 1 à 12 semaines", () => {
+    const res = parseSeanceForm(fd(champs("8")));
+    expect(res.success && res.data.repetition).toBe(8);
+    expect(parseSeanceForm(fd(champs("13"))).success).toBe(false);
+    expect(parseSeanceForm(fd(champs("0"))).success).toBe(false);
   });
 });

@@ -9,6 +9,7 @@ import { formatEuros } from "@/lib/finances/format";
 import { ReglementParticipation } from "./reglement-participation";
 import { BadgeStatut } from "@/components/badge-statut";
 import { libelleType } from "@/lib/planning/libelles";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 export default async function FicheSeancePage({ params }: { params: Promise<{ id: string }> }) {
   await requireCoach();
@@ -21,9 +22,7 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
-      <Link href="/planning" className="text-muted-foreground text-sm">
-        ← Retour au planning
-      </Link>
+      <BoutonRetour href="/planning">Planning</BoutonRetour>
       <div className="mt-2 mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold">{libelleType(seance.type)}</h1>
