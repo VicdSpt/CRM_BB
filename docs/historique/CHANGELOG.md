@@ -1,5 +1,12 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Lien WhatsApp sur la fiche élève
+
+- Le téléphone de la fiche élève ouvre une conversation WhatsApp (lien `wa.me`), sur l'appli mobile ou WhatsApp Web.
+- Le numéro saisi librement est converti au format international ; un numéro national (0…) prend l'indicatif belge +32. Un numéro incompréhensible reste affiché sans lien.
+- Icônes devant Téléphone, Email, Adresse et Notes sur la fiche élève.
+- Logo WhatsApp (Simple Icons, CC0) à côté du numéro cliquable.
+
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 
 - Le lien « Confidentialité » n'apparaît plus en bas de chaque page des espaces coach et élève ; il reste sur la connexion, l'inscription et le profil élève.
