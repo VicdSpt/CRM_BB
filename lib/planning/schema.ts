@@ -20,11 +20,12 @@ export const seanceSchema = z
       .optional()
       .transform((v) => (v ? Number(v) : CAPACITE_PAR_DEFAUT))
       .pipe(z.number().int().min(1, "Au moins 1 place")),
-    // Un cours collectif peut être créé vide : les élèves s'y inscrivent eux-mêmes.
+    // Cours privé : l'élève choisi dans le menu. Cours collectif : toujours vide,
+    // les élèves réservent eux-mêmes depuis leur espace.
     eleveIds: z.array(z.string().min(1)),
   })
   .refine((v) => v.type !== "PRIVE" || v.eleveIds.length === 1, {
-    message: "Un cours privé doit avoir exactement un élève",
+    message: "Choisis l'élève du cours privé.",
     path: ["eleveIds"],
   });
 
@@ -42,8 +43,10 @@ export function parseSeanceForm(formData: FormData): ParseResult {
     lieu: String(formData.get("lieu") ?? ""),
     prixReference: String(formData.get("prixReference") ?? ""),
     capacite: String(formData.get("capacite") ?? ""),
-    eleveIds: formData.getAll("eleveIds").map((v) => String(v)),
+    eleveIds: [] as string[],
   };
+  const eleveId = String(formData.get("eleveId") ?? "");
+  if (raw.type === "PRIVE" && eleveId) raw.eleveIds = [eleveId];
   const parsed = seanceSchema.safeParse(raw);
   if (parsed.success) {
     return { success: true, data: parsed.data };

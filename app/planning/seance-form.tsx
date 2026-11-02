@@ -29,10 +29,7 @@ type Props = {
 
 export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
-  const selected = new Set(initial?.eleveIds ?? []);
   const [type, setType] = useState(initial?.type ?? "PRIVE");
-  const [capacite, setCapacite] = useState(initial?.capacite ?? CAPACITE_PAR_DEFAUT);
-  const [nbCoches, setNbCoches] = useState(selected.size);
   const [erreurDate, setErreurDate] = useState<string>();
   const collectif = type === "COLLECTIF";
 
@@ -40,11 +37,6 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
     <form
       action={formAction}
       className="flex flex-col gap-4"
-      // Compte les élèves cochés pour avertir d'un dépassement de capacité.
-      onChange={(e) => {
-        const form = e.currentTarget;
-        setNbCoches(form.querySelectorAll('input[name="eleveIds"]:checked').length);
-      }}
       // Le jour et l'heure sont choisis par boutons : on vérifie qu'ils le sont avant l'envoi.
       onSubmit={(e) => {
         const manque = !new FormData(e.currentTarget).get("dateHeureDebut");
@@ -114,43 +106,47 @@ export function SeanceForm({ action, eleves, initial, submitLabel }: Props) {
             name="capacite"
             type="number"
             min={1}
-            value={capacite}
-            onChange={(e) => setCapacite(Number(e.target.value))}
+            defaultValue={initial?.capacite ?? CAPACITE_PAR_DEFAUT}
           />
+          <p className="text-muted-foreground text-xs">
+            Les élèves réservent eux-mêmes leur place depuis leur espace.
+          </p>
           {state.errors?.capacite ? (
             <p className="text-sm text-red-600">{state.errors.capacite}</p>
           ) : null}
         </div>
       ) : null}
 
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm font-medium">Élèves</legend>
-        {eleves.length === 0 ? (
-          <p className="text-muted-foreground text-sm">
-            Aucun élève actif. Ajoutez d&apos;abord un élève.
-          </p>
-        ) : (
-          eleves.map((e) => (
-            <label key={e.id} className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                name="eleveIds"
-                value={e.id}
-                defaultChecked={selected.has(e.id)}
-              />
-              {e.prenom} {e.nom}
-            </label>
-          ))
-        )}
-        {collectif && nbCoches > capacite ? (
-          <p className="text-sm text-amber-600">
-            Au-delà de la capacité ({nbCoches} / {capacite}).
-          </p>
-        ) : null}
-        {state.errors?.eleveIds ? (
-          <p className="text-sm text-red-600">{state.errors.eleveIds}</p>
-        ) : null}
-      </fieldset>
+      {/* Cours privé : un seul élève, choisi ici. Cours collectif : les élèves réservent eux-mêmes. */}
+      {collectif ? null : (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="eleveId">Élève</Label>
+          {eleves.length === 0 ? (
+            <p className="text-muted-foreground text-sm">
+              Aucun élève actif. Ajoutez d&apos;abord un élève.
+            </p>
+          ) : (
+            <select
+              id="eleveId"
+              name="eleveId"
+              defaultValue={initial?.eleveIds?.[0] ?? ""}
+              className="bg-background text-foreground h-9 rounded-md border px-3 text-sm"
+            >
+              <option value="" disabled>
+                Choisir un élève
+              </option>
+              {eleves.map((e) => (
+                <option key={e.id} value={e.id}>
+                  {e.prenom} {e.nom}
+                </option>
+              ))}
+            </select>
+          )}
+          {state.errors?.eleveIds ? (
+            <p className="text-sm text-red-600">{state.errors.eleveIds}</p>
+          ) : null}
+        </div>
+      )}
 
       {state.errors?.dureeMinutes ? (
         <p className="text-sm text-red-600">{state.errors.dureeMinutes}</p>

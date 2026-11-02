@@ -46,22 +46,28 @@ export async function updateSeance(
   }
   const { eleveIds, prixReference, ...seanceData } = result.data;
 
-  const existing = await prisma.participation.findMany({
-    where: { seanceId: id },
-    select: { eleveId: true },
-  });
-  const existingIds = new Set(existing.map((p) => p.eleveId));
-  const nextIds = new Set(eleveIds);
-  const toAdd = eleveIds.filter((e) => !existingIds.has(e));
-  const toRemove = [...existingIds].filter((e) => !nextIds.has(e));
+  // Cours collectif : les inscriptions sont faites par les élèves, on n'y touche pas.
+  if (seanceData.type === "COLLECTIF") {
+    await prisma.seance.update({ where: { id }, data: { ...seanceData, prixReference } });
+  } else {
+    // Cours privé : la séance n'a que l'élève choisi dans le menu.
+    const existing = await prisma.participation.findMany({
+      where: { seanceId: id },
+      select: { eleveId: true },
+    });
+    const existingIds = new Set(existing.map((p) => p.eleveId));
+    const nextIds = new Set(eleveIds);
+    const toAdd = eleveIds.filter((e) => !existingIds.has(e));
+    const toRemove = [...existingIds].filter((e) => !nextIds.has(e));
 
-  await prisma.$transaction([
-    prisma.seance.update({ where: { id }, data: { ...seanceData, prixReference } }),
-    prisma.participation.deleteMany({ where: { seanceId: id, eleveId: { in: toRemove } } }),
-    ...toAdd.map((eleveId) =>
-      prisma.participation.create({ data: { seanceId: id, eleveId, montant: prixReference } }),
-    ),
-  ]);
+    await prisma.$transaction([
+      prisma.seance.update({ where: { id }, data: { ...seanceData, prixReference } }),
+      prisma.participation.deleteMany({ where: { seanceId: id, eleveId: { in: toRemove } } }),
+      ...toAdd.map((eleveId) =>
+        prisma.participation.create({ data: { seanceId: id, eleveId, montant: prixReference } }),
+      ),
+    ]);
+  }
 
   await flash("Séance modifiée.");
   revalidatePath("/planning");
