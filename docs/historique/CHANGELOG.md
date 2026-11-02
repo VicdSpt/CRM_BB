@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Roue d'heure sur mobile
+
+- Sur mobile (moins de 768 px), l'heure d'une séance se choisit avec deux roues façon réveil de téléphone : heures de 00 à 23, minutes de 5 en 5 ; elle part de 18:00 pour une nouvelle séance. Sur ordinateur, le menu déroulant par demi-heure reste.
+- Roue sans librairie (scroll-snap du navigateur), utilisable au clavier (flèches haut/bas).
+
 ## 2026-11-02 — Lien WhatsApp sur la fiche élève
 
 - Le téléphone de la fiche élève ouvre une conversation WhatsApp (lien `wa.me`), sur l'appli mobile ou WhatsApp Web.
