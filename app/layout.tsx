@@ -3,7 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppShell } from "@/components/app-shell";
+import { cookies } from "next/headers";
 import { auth } from "@/auth";
+import { Notifications } from "@/components/notifications";
+import { COOKIE_FLASH, decoderFlash } from "@/lib/flash";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +39,8 @@ export default async function RootLayout({
   // Le rôle choisit le menu (coach ou élève), quelle que soit l'URL affichée.
   const session = await auth();
   const role = session?.user?.role ?? null;
+  // Message de confirmation déposé par la dernière action (voir lib/flash-serveur.ts).
+  const flash = decoderFlash((await cookies()).get(COOKIE_FLASH)?.value);
 
   return (
     <html
@@ -51,6 +56,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <AppShell role={role}>{children}</AppShell>
+          <Notifications flash={flash} />
         </ThemeProvider>
       </body>
     </html>

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { StatutSeance } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { flash } from "@/lib/flash-serveur";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { parseSeanceForm } from "@/lib/planning/schema";
 
@@ -28,6 +29,7 @@ export async function createSeance(
       },
     },
   });
+  await flash("Séance créée.");
   revalidatePath("/planning");
   redirect("/planning");
 }
@@ -61,6 +63,7 @@ export async function updateSeance(
     ),
   ]);
 
+  await flash("Séance modifiée.");
   revalidatePath("/planning");
   revalidatePath(`/planning/${id}`);
   redirect(`/planning/${id}`);
@@ -96,13 +99,21 @@ export async function dupliquerSeance(id: string): Promise<void> {
     },
   });
 
+  await flash("Séance dupliquée à la semaine suivante.");
   revalidatePath("/planning");
   redirect(`/planning/${nouvelle.id}/modifier`);
 }
 
+const MESSAGE_STATUT: Record<StatutSeance, string> = {
+  REALISEE: "Séance marquée comme réalisée.",
+  ANNULEE: "Séance annulée.",
+  PLANIFIEE: "Séance replanifiée.",
+};
+
 export async function setStatutSeance(id: string, statut: StatutSeance): Promise<void> {
   await requireCoach();
   await prisma.seance.update({ where: { id }, data: { statut } });
+  await flash(MESSAGE_STATUT[statut]);
   revalidatePath("/planning");
   revalidatePath(`/planning/${id}`);
 }
@@ -110,6 +121,7 @@ export async function setStatutSeance(id: string, statut: StatutSeance): Promise
 export async function deleteSeance(id: string): Promise<void> {
   await requireCoach();
   await prisma.seance.delete({ where: { id } });
+  await flash("Séance supprimée.");
   revalidatePath("/planning");
   redirect("/planning");
 }

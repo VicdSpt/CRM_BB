@@ -89,7 +89,6 @@ export function PackItem({ pack }: { pack: Pack }) {
         {state.errors?.montantPaye ? (
           <p className="text-sm text-red-600">{state.errors.montantPaye}</p>
         ) : null}
-        {state.message ? <p className="text-sm text-green-700">{state.message}</p> : null}
         <div className="flex gap-2">
           <Button type="submit" disabled={pending}>
             {pending ? "Enregistrement…" : "Enregistrer"}
