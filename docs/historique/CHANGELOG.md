@@ -4,6 +4,7 @@
 
 - Le téléphone de la fiche élève ouvre une conversation WhatsApp (lien `wa.me`), sur l'appli mobile ou WhatsApp Web.
 - Le numéro saisi librement est converti au format international ; un numéro national (0…) prend l'indicatif belge +32. Un numéro incompréhensible reste affiché sans lien.
+- Icônes devant Téléphone, Email, Adresse et Notes sur la fiche élève.
 
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 

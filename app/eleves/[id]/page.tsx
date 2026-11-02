@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone, StickyNote, type LucideIcon } from "lucide-react";
 import { Prisma, type StatutReglement } from "@prisma/client";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
@@ -98,10 +98,10 @@ async function OngletFiche({
     <>
       <AnimBloc index={0}>
         <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
-          <Info label="Téléphone" value={<Telephone numero={eleve.telephone} />} />
-          <Info label="Email" value={eleve.email} />
-          <Info label="Adresse" value={eleve.adresse} />
-          <Info label="Notes" value={eleve.notes} />
+          <Info icon={Phone} label="Téléphone" value={<Telephone numero={eleve.telephone} />} />
+          <Info icon={Mail} label="Email" value={eleve.email} />
+          <Info icon={MapPin} label="Adresse" value={eleve.adresse} />
+          <Info icon={StickyNote} label="Notes" value={eleve.notes} />
         </dl>
       </AnimBloc>
 
@@ -193,10 +193,13 @@ function Telephone({ numero }: { numero: string | null }) {
   );
 }
 
-function Info({ label, value }: { label: string; value: ReactNode }) {
+function Info({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: ReactNode }) {
   return (
     <div className="flex justify-between gap-4 border-b py-1">
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-muted-foreground flex shrink-0 items-center gap-2">
+        <Icon className="size-4" aria-hidden />
+        {label}
+      </dt>
       <dd className="text-right">{value ?? "—"}</dd>
     </div>
   );
