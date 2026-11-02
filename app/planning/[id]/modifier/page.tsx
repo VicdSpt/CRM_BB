@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
@@ -6,6 +5,7 @@ import { updateSeance } from "@/lib/planning/actions";
 import { toDateParam } from "@/lib/planning/format";
 import { whereElevesSelectionnables } from "@/lib/planning/selection";
 import { SeanceForm } from "../../seance-form";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 function toDatetimeLocal(d: Date): string {
   const h = String(d.getHours()).padStart(2, "0");
@@ -41,9 +41,7 @@ export default async function ModifierSeancePage({ params }: { params: Promise<{
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
-      <Link href={`/planning/${id}`} className="text-muted-foreground text-sm">
-        ← Retour à la séance
-      </Link>
+      <BoutonRetour href={`/planning/${id}`}>Séance</BoutonRetour>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Modifier la séance</h1>
       <SeanceForm action={action} eleves={eleves} initial={initial} submitLabel="Enregistrer" />
     </main>

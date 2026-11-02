@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { createSeance } from "@/lib/planning/actions";
 import { whereElevesSelectionnables } from "@/lib/planning/selection";
 import { SeanceForm } from "../seance-form";
+import { BoutonRetour } from "@/components/bouton-retour";
 
 export default async function NouvelleSeancePage() {
   await requireCoach();
@@ -15,9 +15,7 @@ export default async function NouvelleSeancePage() {
 
   return (
     <main className="mx-auto w-full max-w-md p-4">
-      <Link href="/planning" className="text-muted-foreground text-sm">
-        ← Retour au planning
-      </Link>
+      <BoutonRetour href="/planning">Planning</BoutonRetour>
       <h1 className="mt-2 mb-4 text-2xl font-semibold">Nouvelle séance</h1>
       <SeanceForm action={createSeance} eleves={eleves} submitLabel="Créer la séance" />
     </main>

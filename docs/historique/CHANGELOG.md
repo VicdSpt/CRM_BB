@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Boutons de retour plus visibles
+
+- Les petits liens gris « ← Retour… » deviennent un bouton arrondi avec chevron (`BoutonRetour`), au libellé court : « Élèves », « Planning », « Séance », « Fiche de l'élève », « Tableau de bord ».
+
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 
 - Le lien « Confidentialité » n'apparaît plus en bas de chaque page des espaces coach et élève ; il reste sur la connexion, l'inscription et le profil élève.
