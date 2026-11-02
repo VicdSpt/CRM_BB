@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { MessageCircle } from "lucide-react";
 import { Prisma, type StatutReglement } from "@prisma/client";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
@@ -7,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { formatEuros } from "@/lib/finances/format";
 import { formatJourFr } from "@/lib/planning/format";
 import { libelleType } from "@/lib/planning/libelles";
+import { lienWhatsApp } from "@/lib/eleves/whatsapp";
 import { ActionsEleve } from "./actions-eleve";
 import { Initiales } from "@/components/initiales";
 import { AnimItem, AnimBloc } from "@/components/anim-item";
@@ -95,7 +98,7 @@ async function OngletFiche({
     <>
       <AnimBloc index={0}>
         <dl className="mb-6 flex flex-col gap-2 rounded-lg border p-4 text-sm">
-          <Info label="Téléphone" value={eleve.telephone} />
+          <Info label="Téléphone" value={<Telephone numero={eleve.telephone} />} />
           <Info label="Email" value={eleve.email} />
           <Info label="Adresse" value={eleve.adresse} />
           <Info label="Notes" value={eleve.notes} />
@@ -171,7 +174,26 @@ function BadgeReglement({ statut }: { statut: StatutReglement }) {
   return <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${cls}`}>{label}</span>;
 }
 
-function Info({ label, value }: { label: string; value: string | null }) {
+// Le numéro ouvre une conversation WhatsApp (appli sur téléphone, WhatsApp Web sur PC).
+function Telephone({ numero }: { numero: string | null }) {
+  if (!numero) return "—";
+  const lien = lienWhatsApp(numero);
+  if (!lien) return numero;
+  return (
+    <a
+      href={lien}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary inline-flex items-center gap-1.5 underline"
+      title="Écrire sur WhatsApp"
+    >
+      <MessageCircle className="size-4" aria-hidden />
+      {numero}
+    </a>
+  );
+}
+
+function Info({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex justify-between gap-4 border-b py-1">
       <dt className="text-muted-foreground">{label}</dt>
