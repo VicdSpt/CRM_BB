@@ -47,7 +47,7 @@ export default async function ConfidentialitePage() {
           <ul>
             <li>Ton nom, ton email, ton téléphone et ton adresse si tu la donnes.</li>
             <li>Ton mot de passe, sous une forme illisible : personne ne peut le lire.</li>
-            <li>Tes réservations, tes cours, tes packs et tes paiements.</li>
+            <li>Tes réservations, tes cours et tes paiements.</li>
             <li>Les notes que le coach ajoute sur ta fiche.</li>
             <li>Les connexions ratées, pour bloquer les intrus (effacées après 24 heures).</li>
           </ul>

@@ -1,7 +1,7 @@
 # ADR 0008 — Consommation automatique du pack le plus ancien
 
 **Date :** 2026-06-19
-**Statut :** Accepté
+**Statut :** Remplacé par ADR-0017
 
 ## Contexte
 

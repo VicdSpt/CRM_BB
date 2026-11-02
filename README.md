@@ -21,9 +21,8 @@ pensé d'abord pour le mobile.
 - **Validation des inscriptions** : les élèves qui créent un compte arrivent dans une section
   « À valider » ; si l'email correspond à une fiche existante, le coach voit l'identité saisie
   à côté de celle de la fiche avant de valider.
-- **Règlements** : chaque participation est « à régler », « payée » (espèces / carte) ou
-  couverte par un pack de séances.
-- **Finances** : total encaissé, répartition privé / collectif / packs, évolution sur la
+- **Règlements** : chaque participation est « à régler » ou « payée » (espèces / carte).
+- **Finances** : total encaissé, répartition privé / collectif, évolution sur la
   période, impayés.
 
 ### Côté élève

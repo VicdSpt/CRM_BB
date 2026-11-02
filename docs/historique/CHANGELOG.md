@@ -1,5 +1,11 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Retrait des packs
+
+- Le système de packs de séances est supprimé (ADR 0017, remplace l'ADR 0008) : plus de création de pack sur la fiche élève, plus de bouton « Pack » sur la séance, plus de part « Packs » dans les finances ni de badge « Pack » côté élève.
+- Une participation est « à régler » ou « payée » (espèces / carte).
+- Migration `retrait_packs` : paiements de packs effacés, séances couvertes repassées « à régler », table et colonnes supprimées.
+
 ## 2026-11-02 — Notifications de confirmation
 
 - Après chaque action (archiver, supprimer, créer, enregistrer un paiement, réserver…), une notification de confirmation s'affiche en haut de l'écran (sonner).

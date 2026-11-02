@@ -19,11 +19,10 @@ export async function getRevenuTotal(
 export async function getRepartition(
   debut: Date,
   fin: Date,
-): Promise<{ prive: Prisma.Decimal; collectif: Prisma.Decimal; pack: Prisma.Decimal }> {
+): Promise<{ prive: Prisma.Decimal; collectif: Prisma.Decimal }> {
   const periode = { gte: debut, lte: fin };
-  // Invariant : un Paiement a soit participationId (marquerPaye), soit packId (creerPack),
-  // jamais les deux — les trois catégories sont donc mutuellement exclusives.
-  const [prive, collectif, pack] = await Promise.all([
+  // Chaque paiement est lié à une participation (marquerPaye) : privé ou collectif.
+  const [prive, collectif] = await Promise.all([
     prisma.paiement.aggregate({
       _sum: { montant: true },
       where: { date: periode, participation: { seance: { type: "PRIVE" } } },
@@ -32,15 +31,10 @@ export async function getRepartition(
       _sum: { montant: true },
       where: { date: periode, participation: { seance: { type: "COLLECTIF" } } },
     }),
-    prisma.paiement.aggregate({
-      _sum: { montant: true },
-      where: { date: periode, packId: { not: null } },
-    }),
   ]);
   return {
     prive: prive._sum.montant ?? ZERO,
     collectif: collectif._sum.montant ?? ZERO,
-    pack: pack._sum.montant ?? ZERO,
   };
 }
 

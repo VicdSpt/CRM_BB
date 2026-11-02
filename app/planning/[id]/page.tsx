@@ -19,13 +19,6 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
   });
   if (!seance) notFound();
 
-  const eleveIds = seance.participations.map((p) => p.eleveId);
-  const packsActifs = await prisma.pack.findMany({
-    where: { eleveId: { in: eleveIds }, nbSeancesRestantes: { gt: 0 } },
-    select: { eleveId: true },
-  });
-  const elevesAvecPack = new Set(packsActifs.map((p) => p.eleveId));
-
   return (
     <main className="mx-auto w-full max-w-md p-4">
       <Link href="/planning" className="text-muted-foreground text-sm">
@@ -70,7 +63,6 @@ export default async function FicheSeancePage({ params }: { params: Promise<{ id
                 participationId={p.id}
                 statut={p.statutReglement}
                 methode={p.paiement?.methode ?? null}
-                packDisponible={elevesAvecPack.has(p.eleveId)}
               />
             </span>
           </li>
