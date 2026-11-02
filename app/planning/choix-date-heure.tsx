@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
   creneauxHoraires,
@@ -23,7 +22,7 @@ const isoAujourdhui = () => {
 };
 const sansAbonnement = () => () => {};
 
-// Date et heure d'une séance : un calendrier du mois, puis un créneau (ou une heure libre).
+// Date et heure d'une séance : un calendrier du mois, puis l'heure dans un menu (par demi-heure).
 // Envoie « dateHeureDebut » au format datetime-local, comme l'ancien champ natif.
 export function ChoixDateHeure({
   name,
@@ -110,35 +109,29 @@ export function ChoixDateHeure({
         </div>
       </div>
 
-      {/* Créneaux */}
-      <div className="flex flex-col gap-2">
+      {/* Heure : toutes les demi-heures ; une heure hors grille (séance existante) reste proposée. */}
+      <label className="flex flex-col gap-1.5">
         <span className="text-sm font-medium">Heure</span>
-        <div className="grid max-h-48 grid-cols-4 gap-1.5 overflow-y-auto pr-1">
-          {CRENEAUX.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setHeure(c)}
-              aria-pressed={c === heure}
-              className={cn(
-                "hover:bg-muted rounded-md border py-1.5 text-sm tabular-nums transition-colors",
-                c === heure && "bg-primary text-primary-foreground border-primary hover:bg-primary",
-              )}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-        <label className="text-muted-foreground flex items-center gap-2 text-sm">
-          Autre heure
-          <Input
-            type="time"
+        <span className="relative">
+          <Clock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <select
             value={heure ?? ""}
             onChange={(e) => setHeure(e.target.value || null)}
-            className="w-32"
-          />
-        </label>
-      </div>
+            className="bg-background text-foreground h-9 w-full rounded-md border pr-3 pl-9 text-sm tabular-nums"
+          >
+            <option value="" disabled>
+              Choisir une heure
+            </option>
+            {(heure && !CRENEAUX.includes(heure) ? [heure, ...CRENEAUX].sort() : CRENEAUX).map(
+              (c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ),
+            )}
+          </select>
+        </span>
+      </label>
 
       {/* Récapitulatif */}
       <p

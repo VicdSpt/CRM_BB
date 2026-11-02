@@ -2,7 +2,7 @@
 
 ## 2026-11-02 — Choix de la date et de l'heure d'une séance
 
-- Le champ natif « jj/mm/aaaa --:-- » est remplacé par un calendrier du mois (lundi en premier, aujourd'hui entouré, jours passés grisés) et des créneaux de 06:00 à 22:00 toutes les 30 minutes, plus un champ « Autre heure ».
+- Le champ natif « jj/mm/aaaa --:-- » est remplacé par un calendrier du mois (lundi en premier, aujourd'hui entouré, jours passés grisés) et un menu déroulant pour l'heure, de 06:00 à 22:00 par demi-heure.
 - Récapitulatif « Mardi 10 novembre 2026 à 18:30 » ; message si le jour ou l'heure manque. La valeur envoyée au serveur ne change pas.
 
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
