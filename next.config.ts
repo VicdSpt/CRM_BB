@@ -22,6 +22,9 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // Dev seulement : autorise un téléphone du réseau local (http://192.168.x.y:3000) à
+  // charger les fichiers de développement (JavaScript, rechargement à chaud).
+  allowedDevOrigins: ["192.168.*.*"],
   // L'app n'utilise pas next/image : on désactive l'optimisation d'images, ce qui
   // retire une surface d'attaque (cf. failles du point d'accès /_next/image).
   images: { unoptimized: true },
