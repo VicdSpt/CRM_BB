@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore } from "react";
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { RoueHeure } from "@/components/roue-heure";
 import {
   creneauxHoraires,
   grilleMois,
@@ -22,7 +23,20 @@ const isoAujourdhui = () => {
 };
 const sansAbonnement = () => () => {};
 
-// Date et heure d'une séance : un calendrier du mois, puis l'heure dans un menu (par demi-heure).
+// Mobile = sous le point de rupture md de Tailwind (768 px), comme le reste de l'app.
+const MEDIA_MOBILE = "(max-width: 767px)";
+const abonnementMobile = (rappel: () => void) => {
+  const m = window.matchMedia(MEDIA_MOBILE);
+  m.addEventListener("change", rappel);
+  return () => m.removeEventListener("change", rappel);
+};
+const estMobile = () => window.matchMedia(MEDIA_MOBILE).matches;
+
+// Une roue affiche toujours une valeur : sans heure choisie, elle part de 08:00.
+const HEURE_ROUE_PAR_DEFAUT = "08:00";
+
+// Date et heure d'une séance : un calendrier du mois, puis l'heure : roue façon réveil sur
+// mobile, menu déroulant (par demi-heure) sur ordinateur.
 // Envoie « dateHeureDebut » au format datetime-local, comme l'ancien champ natif.
 export function ChoixDateHeure({
   name,
@@ -38,6 +52,10 @@ export function ChoixDateHeure({
   const [heure, setHeure] = useState(initial.heure);
   // « Aujourd'hui » selon le navigateur (le serveur est en UTC) : null au rendu serveur.
   const iso = useSyncExternalStore(sansAbonnement, isoAujourdhui, () => null);
+  // Ordinateur au rendu serveur, puis selon la largeur réelle de l'écran.
+  const mobile = useSyncExternalStore(abonnementMobile, estMobile, () => false);
+  // Sur mobile, l'heure affichée par la roue compte comme choisie.
+  const heureChoisie = heure ?? (mobile ? HEURE_ROUE_PAR_DEFAUT : null);
   const depart = date ? new Date(`${date}T12:00`) : new Date();
   const [mois, setMois] = useState({ annee: depart.getFullYear(), mois: depart.getMonth() });
 
@@ -48,7 +66,11 @@ export function ChoixDateHeure({
 
   return (
     <div className="flex flex-col gap-4">
-      <input type="hidden" name={name} value={date && heure ? `${date}T${heure}` : ""} />
+      <input
+        type="hidden"
+        name={name}
+        value={date && heureChoisie ? `${date}T${heureChoisie}` : ""}
+      />
 
       {/* Calendrier */}
       <div className="rounded-lg border p-3">
@@ -109,39 +131,47 @@ export function ChoixDateHeure({
         </div>
       </div>
 
-      {/* Heure : toutes les demi-heures ; une heure hors grille (séance existante) reste proposée. */}
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">Heure</span>
-        <span className="relative">
-          <Clock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <select
-            value={heure ?? ""}
-            onChange={(e) => setHeure(e.target.value || null)}
-            className="bg-background text-foreground h-9 w-full rounded-md border pr-3 pl-9 text-sm tabular-nums"
-          >
-            <option value="" disabled>
-              Choisir une heure
-            </option>
-            {(heure && !CRENEAUX.includes(heure) ? [heure, ...CRENEAUX].sort() : CRENEAUX).map(
-              (c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ),
-            )}
-          </select>
-        </span>
-      </label>
+      {/* Heure : roue sur mobile ; sur ordinateur, menu par demi-heure (une heure hors
+          grille d'une séance existante reste proposée). */}
+      {mobile ? (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium">Heure</span>
+          <RoueHeure valeur={heureChoisie ?? HEURE_ROUE_PAR_DEFAUT} onChange={setHeure} />
+        </div>
+      ) : (
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium">Heure</span>
+          <span className="relative">
+            <Clock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+            <select
+              value={heure ?? ""}
+              onChange={(e) => setHeure(e.target.value || null)}
+              className="bg-background text-foreground h-9 w-full rounded-md border pr-3 pl-9 text-sm tabular-nums"
+            >
+              <option value="" disabled>
+                Choisir une heure
+              </option>
+              {(heure && !CRENEAUX.includes(heure) ? [heure, ...CRENEAUX].sort() : CRENEAUX).map(
+                (c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ),
+              )}
+            </select>
+          </span>
+        </label>
+      )}
 
       {/* Récapitulatif */}
       <p
         className={cn(
           "rounded-md px-3 py-2 text-sm",
-          date && heure ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground",
+          date && heureChoisie ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground",
         )}
       >
-        {date ? libelleDateHeure(date, heure) : "Choisis un jour puis une heure."}
-        {date && !heure ? " — choisis une heure." : null}
+        {date ? libelleDateHeure(date, heureChoisie) : "Choisis un jour puis une heure."}
+        {date && !heureChoisie ? " — choisis une heure." : null}
       </p>
       {erreur ? <p className="text-sm text-red-600">{erreur}</p> : null}
     </div>
