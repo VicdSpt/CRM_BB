@@ -16,7 +16,9 @@ const csp = [
   "base-uri 'self'",
   // Connexion Google : le formulaire part vers Auth.js, qui redirige vers Google.
   "form-action 'self' https://accounts.google.com",
-  "frame-ancestors 'none'",
+  // Interdit l'affichage dans une iframe (clickjacking), sauf en dev : l'aperçu mobile
+  // de VS Code affiche le site dans un cadre (vscode-webview://, que « * » ne couvre pas).
+  ...(enDev ? [] : ["frame-ancestors 'none'"]),
 ].join("; ");
 
 const nextConfig: NextConfig = {
@@ -31,8 +33,8 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: [
           { key: "Content-Security-Policy", value: csp },
-          // Interdit l'affichage du site dans une iframe (clickjacking).
-          { key: "X-Frame-Options", value: "DENY" },
+          // Équivalent pour les anciens navigateurs ; absent en dev (aperçu mobile).
+          ...(enDev ? [] : [{ key: "X-Frame-Options", value: "DENY" }]),
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {

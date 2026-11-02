@@ -1,5 +1,9 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-02 — Aperçu mobile de VS Code en développement
+
+- En développement uniquement, le site peut s'afficher dans un cadre (aperçu mobile de VS Code) : `frame-ancestors` et `X-Frame-Options` ne sont envoyés qu'en production, où la protection contre le clickjacking reste entière.
+
 ## 2026-11-02 — Confidentialité : lien retiré du pied de page
 
 - Le lien « Confidentialité » n'apparaît plus en bas de chaque page des espaces coach et élève ; il reste sur la connexion, l'inscription et le profil élève.
