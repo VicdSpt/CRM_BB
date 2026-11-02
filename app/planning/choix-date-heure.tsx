@@ -32,8 +32,8 @@ const abonnementMobile = (rappel: () => void) => {
 };
 const estMobile = () => window.matchMedia(MEDIA_MOBILE).matches;
 
-// Une roue affiche toujours une valeur : sans heure choisie, elle part de 18:00.
-const HEURE_ROUE_PAR_DEFAUT = "18:00";
+// Une roue affiche toujours une valeur : sans heure choisie, elle part de 08:00.
+const HEURE_ROUE_PAR_DEFAUT = "08:00";
 
 // Date et heure d'une séance : un calendrier du mois, puis l'heure : roue façon réveil sur
 // mobile, menu déroulant (par demi-heure) sur ordinateur.

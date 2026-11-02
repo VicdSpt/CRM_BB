@@ -2,7 +2,7 @@
 
 ## 2026-11-02 — Roue d'heure sur mobile
 
-- Sur mobile (moins de 768 px), l'heure d'une séance se choisit avec deux roues façon réveil de téléphone : heures de 00 à 23, minutes de 5 en 5 ; elle part de 18:00 pour une nouvelle séance. Sur ordinateur, le menu déroulant par demi-heure reste.
+- Sur mobile (moins de 768 px), l'heure d'une séance se choisit avec deux roues façon réveil de téléphone : heures de 00 à 23, minutes de 5 en 5, « infinies » (après 23 vient 00) ; elle part de 08:00 pour une nouvelle séance. Sur ordinateur, le menu déroulant par demi-heure reste.
 - Roue sans librairie (scroll-snap du navigateur), utilisable au clavier (flèches haut/bas).
 - Développement : `allowedDevOrigins` autorise un téléphone du réseau local (`192.168.*.*`) à charger les fichiers de dev, sans quoi la page restait inerte sur le téléphone.
 

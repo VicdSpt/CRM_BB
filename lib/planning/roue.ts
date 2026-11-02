@@ -22,3 +22,18 @@ export function minutesRoue(minuteActuelle?: string): string[] {
 export function indexAuCentre(scrollTop: number, hauteurElement: number, nb: number): number {
   return Math.min(nb - 1, Math.max(0, Math.round(scrollTop / hauteurElement)));
 }
+
+// Roue « infinie » : la liste est répétée au-dessus et en dessous d'une copie centrale.
+// Assez de copies pour qu'un grand coup de doigt (≈ 3 000 px) n'atteigne pas le bord.
+const DEFILEMENT_MAX_ELEMENTS = 75; // 75 × 40 px = 3 000 px
+
+export function copiesParCote(nbValeurs: number): number {
+  return Math.max(3, Math.ceil(DEFILEMENT_MAX_ELEMENTS / nbValeurs));
+}
+
+// Après l'arrêt, on saute (sans animation) au même élément dans la copie centrale :
+// le contenu étant identique, le saut est invisible et la roue repart dans les deux sens.
+export function indexRecentre(index: number, nbValeurs: number, cote: number): number {
+  const modulo = ((index % nbValeurs) + nbValeurs) % nbValeurs;
+  return cote * nbValeurs + modulo;
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { HEURES_ROUE, indexAuCentre, minutesRoue } from "./roue";
+import { copiesParCote, HEURES_ROUE, indexAuCentre, indexRecentre, minutesRoue } from "./roue";
 
 describe("valeurs de la roue", () => {
   it("propose les heures de 00 à 23", () => {
@@ -41,5 +41,22 @@ describe("indexAuCentre", () => {
   it("reste dans les bornes (rebond du défilement sur mobile)", () => {
     expect(indexAuCentre(-30, 40, 24)).toBe(0);
     expect(indexAuCentre(5000, 40, 24)).toBe(23);
+  });
+});
+
+describe("roue infinie", () => {
+  it("répète assez les valeurs pour un grand coup de doigt (≈ 3 000 px de chaque côté)", () => {
+    expect(copiesParCote(24) * 24 * 40).toBeGreaterThanOrEqual(3000);
+    expect(copiesParCote(12) * 12 * 40).toBeGreaterThanOrEqual(2800);
+  });
+
+  it("ramène l'index dans la copie du milieu, sur la même valeur", () => {
+    const n = 24;
+    const cote = copiesParCote(n);
+    const milieu = cote * n;
+    expect(indexRecentre(milieu + 8, n, cote)).toBe(milieu + 8);
+    expect(indexRecentre(8, n, cote)).toBe(milieu + 8); // tout en haut
+    expect(indexRecentre(milieu + n + 3, n, cote)).toBe(milieu + 3); // après 23 → 00, 01, 02, 03
+    expect(indexRecentre(milieu - 1, n, cote)).toBe(milieu + n - 1); // avant 00 → 23
   });
 });
