@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { Mail, MapPin, MessageCircle, Phone, StickyNote, type LucideIcon } from "lucide-react";
+import { Mail, MapPin, Phone, StickyNote, type LucideIcon } from "lucide-react";
 import { Prisma, type StatutReglement } from "@prisma/client";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
@@ -12,6 +12,7 @@ import { libelleType } from "@/lib/planning/libelles";
 import { lienWhatsApp } from "@/lib/eleves/whatsapp";
 import { ActionsEleve } from "./actions-eleve";
 import { Initiales } from "@/components/initiales";
+import { IconeWhatsApp } from "@/components/icone-whatsapp";
 import { AnimItem, AnimBloc } from "@/components/anim-item";
 
 export default async function FicheElevePage({
@@ -187,7 +188,7 @@ function Telephone({ numero }: { numero: string | null }) {
       className="text-primary inline-flex items-center gap-1.5 underline"
       title="Écrire sur WhatsApp"
     >
-      <MessageCircle className="size-4" aria-hidden />
+      <IconeWhatsApp className="size-4" />
       {numero}
     </a>
   );
