@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, QrCode } from "lucide-react";
 import { requireCoach } from "@/lib/auth/require-coach";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
@@ -63,9 +63,15 @@ export default async function ElevesPage({
 
   return (
     <main className="mx-auto w-full max-w-2xl p-4">
-      <div className="mb-4 flex items-center justify-between gap-2">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-semibold">Élèves</h1>
-        <Button render={<Link href="/eleves/nouveau" />}>Nouvel élève</Button>
+        <div className="flex gap-2">
+          {/* QR code et lien vers l'inscription, à envoyer ou afficher à la salle. */}
+          <Button variant="outline" render={<Link href="/eleves/inviter" />}>
+            <QrCode className="size-4" /> Inviter
+          </Button>
+          <Button render={<Link href="/eleves/nouveau" />}>Nouvel élève</Button>
+        </div>
       </div>
 
       <ElevesAValider eleves={aValider} />
