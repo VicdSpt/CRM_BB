@@ -124,7 +124,7 @@ export async function annulerReservation(seanceIdRecu: unknown): Promise<Resulta
   if (!verdict.ok) return { erreur: verdict.raison };
 
   await prisma.participation.delete({ where: { id: participation.id } });
-  await flash("Réservation annulée.");
+  await flash("Réservation annulée.", "alerte");
   revalidatePath("/espace", "layout");
   return {};
 }

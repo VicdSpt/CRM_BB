@@ -69,6 +69,6 @@ export async function annulerPaiement(participationId: string): Promise<void> {
     }),
   ]);
 
-  await flash("Paiement annulé.");
+  await flash("Paiement annulé.", "alerte");
   revaliderApresReglement(participation.seanceId, participation.eleveId);
 }
