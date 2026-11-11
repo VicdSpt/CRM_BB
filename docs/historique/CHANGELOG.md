@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-11 — Inviter un élève (lien et QR code)
+
+- Bouton « Inviter » dans l'onglet Élèves : page avec un QR code vers l'inscription (à scanner, afficher ou imprimer), le lien, et les boutons Copier, Partager (WhatsApp, SMS… sur téléphone) et Télécharger le QR code (PNG).
+- L'adresse du site vient de la requête du coach, jamais du code. Librairie `qrcode` (MIT).
+
 ## 2026-11-11 — Notifications plus modernes
 
 - Fond en léger dégradé de la couleur, translucide avec flou, halo coloré, coins plus arrondis et icône dans une pastille ronde ; même rendu en thème clair et sombre.
