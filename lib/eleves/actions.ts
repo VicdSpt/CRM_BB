@@ -103,7 +103,7 @@ export async function refuserCompte(id: string): Promise<void> {
       data: { motDePasse: null, statutCompte: "AUCUN", ...IDENTITE_INSCRIPTION_EFFACEE },
     });
   }
-  await flash("Demande refusée.");
+  await flash("Demande refusée.", "alerte");
   revalidatePath("/eleves");
 }
 
@@ -130,7 +130,7 @@ export async function deleteEleve(id: string): Promise<void> {
     redirect(`/eleves/${id}`);
   }
   await prisma.eleve.delete({ where: { id } });
-  await flash("Élève supprimé.");
+  await flash("Élève supprimé.", "alerte");
   revalidatePath("/eleves");
   redirect("/eleves");
 }

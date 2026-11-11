@@ -1,5 +1,10 @@
 # Journal de bord — CRM-BB
 
+## 2026-11-11 — Notifications plus modernes
+
+- Fond en léger dégradé de la couleur, translucide avec flou, halo coloré, coins plus arrondis et icône dans une pastille ronde ; même rendu en thème clair et sombre.
+- Rouge pour les suppressions et annulations (élève ou séance supprimés, séance annulée, paiement ou réservation annulés, demande refusée), vert pour le reste. Le cookie flash transporte ce ton.
+
 ## 2026-11-02 — Roue d'heure sur mobile
 
 - Sur mobile (moins de 768 px), l'heure d'une séance se choisit avec deux roues façon réveil de téléphone : heures de 00 à 23, minutes de 5 en 5, « infinies » (après 23 vient 00) ; elle part de 08:00 pour une nouvelle séance. Sur ordinateur, le menu déroulant par demi-heure reste.

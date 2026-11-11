@@ -115,7 +115,7 @@ const MESSAGE_STATUT: Record<StatutSeance, string> = {
 export async function setStatutSeance(id: string, statut: StatutSeance): Promise<void> {
   await requireCoach();
   await prisma.seance.update({ where: { id }, data: { statut } });
-  await flash(MESSAGE_STATUT[statut]);
+  await flash(MESSAGE_STATUT[statut], statut === "ANNULEE" ? "alerte" : "succes");
   revalidatePath("/planning");
   revalidatePath(`/planning/${id}`);
 }
@@ -123,7 +123,7 @@ export async function setStatutSeance(id: string, statut: StatutSeance): Promise
 export async function deleteSeance(id: string): Promise<void> {
   await requireCoach();
   await prisma.seance.delete({ where: { id } });
-  await flash("Séance supprimée.");
+  await flash("Séance supprimée.", "alerte");
   revalidatePath("/planning");
   redirect("/planning");
 }
